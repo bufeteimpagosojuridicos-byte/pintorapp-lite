@@ -51,6 +51,9 @@ body{font-family:'Nunito',sans-serif;background:var(--gr);color:var(--tx);min-he
 .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 12px;background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;color:rgba(255,255,255,.5);font-size:10px;font-weight:700;gap:3px;transition:color .2s}
 .bnav-btn.active{color:var(--am)}
 .bnav-btn .ico{font-size:22px}
+.bnav-btn.bnav-pro{color:rgba(255,255,255,.35);position:relative}
+.bnav-btn.bnav-pro .ico{font-size:18px}
+.bnav-btn.bnav-pro::after{content:'PRO';position:absolute;top:6px;right:6px;font-size:7px;font-weight:800;background:var(--pro);color:white;padding:1px 4px;border-radius:4px}
 
 /* ══════════════════════════════════════════════
    PAGES
@@ -273,7 +276,7 @@ function entrar() {
 // ═══════════════════════════════════════════════════════════════
 // NAVEGACIÓN
 // ═══════════════════════════════════════════════════════════════
-var barSubs = ['Mis presupuestos', 'Nuevo presupuesto', 'Carta de colores', 'Calculadora de superficies'];
+var barSubs = ['Mis presupuestos', 'Nuevo presupuesto', 'Carta de colores', 'Calculadora de superficies', 'Tarifa Orientativa · PRO', 'Calculadora Pintura · PRO'];
 function goPage(id, idx) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
@@ -284,6 +287,19 @@ function goPage(id, idx) {
   if (id === 'colores') renderC(cFiltro);
 }
 function irNuevo() { goPage('nuevo', 1); }
+
+function goProPage(id) {
+  if (isPro) {
+    // Si tiene Pro, ir a la página real (futura implementación)
+    toast('⭐ Función Pro — próximamente en esta versión');
+    return;
+  }
+  // En Lite: mostrar página bloqueada con preview
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('bar-sub').textContent = id === 'tarifa' ? 'Tarifa Orientativa · PRO' : 'Calculadora Pintura · PRO';
+}
 
 // ═══════════════════════════════════════════════════════════════
 // TOAST
@@ -1161,12 +1177,109 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════════
+       PAGE: TARIFA ORIENTATIVA (PRO)
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-tarifa">
+    <div class="page-title">Tarifa Orientativa</div>
+    <div class="page-sub">43 conceptos profesionales · Obra Nueva y Rehabilitación</div>
+
+    <!-- PREVIEW bloqueado -->
+    <div style="position:relative;margin-bottom:12px">
+      <!-- Muestra real de la tarifa, borrosa -->
+      <div style="filter:blur(3px);pointer-events:none;opacity:.6">
+        <div class="card">
+          <div class="card-hdr">📐 1. Andamiaje y Plataforma Elevadora</div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Andamio tubular, montaje y desmontaje</div><div class="part-sub">m² · ON: 9,22 €/m²</div></div><div class="part-price">9,22 €</div></div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Andamio tubular, alquiler por día y m²</div><div class="part-sub">d/m² · ON: 0,14 €/d/m²</div></div><div class="part-price">0,14 €</div></div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Servicio plataforma elevadora (16m)</div><div class="part-sub">d · ON: 100 €/d</div></div><div class="part-price">100 €</div></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr">🖌️ 2. Preparación de Superficies</div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Lavado con agua a presión en fachadas</div><div class="part-sub">m² · ON: 1,85 €/m²</div></div><div class="part-price">1,85 €</div></div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Rascado y lijado de superficies</div><div class="part-sub">m² · ON: 2,40 €/m²</div></div><div class="part-price">2,40 €</div></div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Masillado y regularización</div><div class="part-sub">m² · ON: 3,20 €/m²</div></div><div class="part-price">3,20 €</div></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr">🏠 3. Pintura Interior</div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Pintura plástica blanca 2 manos</div><div class="part-sub">m² · ON: 6,50 €/m²</div></div><div class="part-price">6,50 €</div></div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Pintura plástica color 2 manos</div><div class="part-sub">m² · ON: 7,80 €/m²</div></div><div class="part-price">7,80 €</div></div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Pintura plástica lavable premium</div><div class="part-sub">m² · ON: 9,20 €/m²</div></div><div class="part-price">9,20 €</div></div>
+        </div>
+      </div>
+      <!-- Overlay de bloqueo -->
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,20,40,.7);border-radius:16px;padding:24px;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">🔒</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:white;letter-spacing:1px;margin-bottom:6px">Función PRO</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.8);margin-bottom:6px;font-weight:600">43 conceptos · Obra Nueva y Rehabilitación</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:20px;line-height:1.5">Precios de mercado con 20% dto aplicado<br>Añade al presupuesto en 1 toque</div>
+        <button class="btn btn-pro" style="padding:14px 32px;font-size:15px" onclick="openPro()">⭐ Desbloquear con Pro</button>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:10px">4,99€/mes · Cancela cuando quieras</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: CALCULADORA LITROS (PRO)
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-litros">
+    <div class="page-title">Calculadora de pintura</div>
+    <div class="page-sub">Litros exactos · Botes 15L y 4L · Manos</div>
+
+    <div style="position:relative;margin-bottom:12px">
+      <!-- Preview borroso real -->
+      <div style="filter:blur(3px);pointer-events:none;opacity:.6">
+        <div class="card">
+          <div class="card-hdr">⚡ Modo Rápido</div>
+          <div class="ig"><label class="il">Superficie de suelo (m²)</label>
+            <div style="display:flex;align-items:center;gap:8px"><input class="if" value="110" readonly style="max-width:100px"><span style="color:#64748b;font-size:13px">m²</span></div>
+          </div>
+          <div class="ig"><label class="il">¿Qué pintar?</label>
+            <select class="if" disabled><option>Paredes + techos (×2,85)</option></select>
+          </div>
+          <div style="background:#f0f4f8;border-radius:12px;padding:12px;margin-bottom:10px">
+            <div style="font-size:11px;color:#64748b;margin-bottom:2px">Estimación · 110 × 2,85 = 313,5</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--pro)">313,5 m²</div>
+          </div>
+          <div style="background:var(--az2);border-radius:12px;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+            <div><div style="font-size:10px;color:rgba(255,255,255,.6)">PAREDES</div><div style="font-size:20px;font-weight:900;color:white">123,8 m²</div></div>
+            <div><div style="font-size:10px;color:rgba(255,255,255,.6)">TECHOS</div><div style="font-size:20px;font-weight:900;color:white">47,8 m²</div></div>
+            <div><div style="font-size:10px;color:rgba(255,255,255,.6)">HUECOS</div><div style="font-size:20px;font-weight:900;color:white">0,0 m²</div></div>
+          </div>
+          <div style="background:var(--pro);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;margin-top:8px">
+            <span style="font-size:13px;font-weight:800;color:white">Total a pintar</span>
+            <span style="font-size:20px;font-weight:900;color:white">171,6 m²</span>
+          </div>
+          <div style="margin-top:10px;padding:12px;background:#f8fafc;border-radius:12px">
+            <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;margin-bottom:8px">Pintura necesaria</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+              <div style="background:var(--az2);border-radius:8px;padding:10px"><div style="font-size:10px;color:rgba(255,255,255,.6)">LITROS</div><div style="font-size:22px;font-weight:900;color:white">57 L</div></div>
+              <div style="background:var(--az2);border-radius:8px;padding:10px"><div style="font-size:10px;color:rgba(255,255,255,.6)">BOTES 15L</div><div style="font-size:22px;font-weight:900;color:white">3 uds</div></div>
+              <div style="background:var(--az2);border-radius:8px;padding:10px"><div style="font-size:10px;color:rgba(255,255,255,.6)">BOTES 4L</div><div style="font-size:22px;font-weight:900;color:white">3 uds</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Overlay bloqueo -->
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,20,40,.7);border-radius:16px;padding:24px;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">🔒</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:white;letter-spacing:1px;margin-bottom:6px">Función PRO</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.8);margin-bottom:6px;font-weight:600">Calculadora de litros exactos</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:20px;line-height:1.5">Calcula litros, botes 15L y 4L<br>Según m², número de manos y rendimiento</div>
+        <button class="btn btn-pro" style="padding:14px 32px;font-size:15px" onclick="openPro()">⭐ Desbloquear con Pro</button>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:10px">4,99€/mes · Cancela cuando quieras</div>
+      </div>
+    </div>
+  </div>
+
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
-    <button class="bnav-btn active" id="bn0" onclick="goPage('list',0)"><span class="ico">📋</span>Presupuestos</button>
+    <button class="bnav-btn active" id="bn0" onclick="goPage('list',0)"><span class="ico">📋</span>Presups.</button>
     <button class="bnav-btn" id="bn1" onclick="goPage('nuevo',1)"><span class="ico">➕</span>Nuevo</button>
     <button class="bnav-btn" id="bn2" onclick="goPage('colores',2)"><span class="ico">🎨</span>Colores</button>
     <button class="bnav-btn" id="bn3" onclick="goPage('calc',3)"><span class="ico">📐</span>Medidas</button>
+    <button class="bnav-btn bnav-pro" id="bn4" onclick="goProPage('tarifa')"><span class="ico">📋🔒</span>Tarifa</button>
+    <button class="bnav-btn bnav-pro" id="bn5" onclick="goProPage('litros')"><span class="ico">🧮🔒</span>Litros</button>
   </nav>
 </div>
 
@@ -1202,13 +1315,24 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="pro-modal-tit">PintorApp PRO</div>
       <div class="pro-modal-sub">Todo lo que necesita un pintor profesional</div>
     </div>
+    <!-- COMPARATIVA LITE vs PRO -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;text-align:center">
+      <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:10px 8px">
+        <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Lite · 5€</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.85);line-height:1.6">✓ Presupuestos básicos<br>✓ PDF sencillo<br>✓ WhatsApp<br>✓ Calc. superficies<br>✓ NCS + RAL<br>✓ 1 partida libre</div>
+      </div>
+      <div style="background:rgba(245,200,0,.15);border:1.5px solid rgba(245,200,0,.4);border-radius:12px;padding:10px 8px">
+        <div style="font-size:11px;font-weight:800;color:var(--am);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Pro · 4,99€/mes</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.9);line-height:1.6">✓ Todo lo anterior +<br>⭐ Tarifa Orientativa<br>⭐ Calc. pintura (litros)<br>⭐ Valentine & Bruguer<br>⭐ Historial clientes<br>⭐ Partidas ilimitadas</div>
+      </div>
+    </div>
     <div class="pro-feat-list">
-      <div class="pro-feat-item"><span>🎨</span><div>Carta Valentine & Bruguer<small>+500 colores de marca con referencia exacta</small></div></div>
-      <div class="pro-feat-item"><span>✏️</span><div>Partidas libres ilimitadas<small>Añade cualquier concepto personalizado</small></div></div>
+      <div class="pro-feat-item"><span>📋</span><div>Tarifa Orientativa profesional<small>43 conceptos · Obra Nueva y Rehabilitación · precios de mercado con descuento 20%</small></div></div>
+      <div class="pro-feat-item"><span>🧮</span><div>Calculadora de pintura (litros)<small>Calcula litros exactos, botes 15L y 4L según m², manos y rendimiento</small></div></div>
+      <div class="pro-feat-item"><span>🎨</span><div>Carta Valentine & Bruguer<small>+500 colores de marca con referencia exacta para presupuesto</small></div></div>
+      <div class="pro-feat-item"><span>✏️</span><div>Partidas libres ilimitadas<small>Añade cualquier concepto personalizado sin límite</small></div></div>
       <div class="pro-feat-item"><span>👥</span><div>Historial de clientes<small>Accede a todos tus clientes y obras anteriores</small></div></div>
-      <div class="pro-feat-item"><span>📄</span><div>PDF con tu logo y datos<small>Presupuestos 100% personalizados</small></div></div>
-      <div class="pro-feat-item"><span>📊</span><div>Estadísticas y facturación<small>Controla tus ingresos mes a mes</small></div></div>
-      <div class="pro-feat-item"><span>☁️</span><div>Copia de seguridad en la nube<small>Nunca pierdas tus presupuestos</small></div></div>
+      <div class="pro-feat-item"><span>📄</span><div>PDF profesional con tu logo<small>Presupuestos con tu marca, datos y firma digital</small></div></div>
     </div>
     <!-- OPCIONES DE PRECIO -->
     <div class="pro-price-box">
