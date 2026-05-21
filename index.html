@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PintorApp Lite</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--az:#003d8f;--az2:#002060;--am:#f5c800;--bl:#ffffff;--gr:#f0f4f8;--tx:#1a2340;--vd:#25D366}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--gr);color:var(--tx);min-height:100vh;overflow-x:hidden}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,var(--az2) 0%,var(--az) 60%,#1a5ea6 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px 80px;position:relative;overflow:hidden;text-align:center}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(245,200,0,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(255,255,255,.04) 0%,transparent 50%)}
+.hero-badge{background:rgba(245,200,0,.15);border:1.5px solid rgba(245,200,0,.4);color:var(--am);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:30px;margin-bottom:24px;display:inline-block;animation:fadeDown .6s ease both}
+.hero-titulo{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,14vw,72px);color:white;line-height:.95;letter-spacing:2px;margin-bottom:8px;animation:fadeUp .6s ease .2s both}
+.hero-titulo span{color:var(--am)}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.8);font-weight:600;margin-bottom:36px;line-height:1.5;animation:fadeUp .6s ease .3s both}
+.hero-cta{display:inline-block;background:var(--am);color:#002060;font-size:17px;font-weight:900;padding:18px 40px;border-radius:50px;text-decoration:none;letter-spacing:.5px;box-shadow:0 8px 24px rgba(245,200,0,.4);border:none;cursor:pointer;font-family:'Nunito',sans-serif;animation:fadeUp .6s ease .4s both;transition:transform .2s}
+.hero-cta:active{transform:scale(.97)}
+.hero-nota{margin-top:14px;font-size:12px;color:rgba(255,255,255,.45);animation:fadeUp .6s ease .5s both}
+.hero-feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px;width:100%;max-width:340px;animation:fadeUp .6s ease .6s both}
+.hero-feat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 10px;display:flex;align-items:center;gap:8px}
+.hero-feat-icon{font-size:20px;flex-shrink:0}
+.hero-feat-text{font-size:12px;color:rgba(255,255,255,.85);font-weight:700;text-align:left}
+
+/* ── APP (bottom nav) ── */
+.app-shell{display:none;flex-direction:column;min-height:100vh;padding-bottom:72px}
+.app-bar{background:var(--az2);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.app-bar-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:white;letter-spacing:1px}
+.app-bar-logo span{color:var(--am)}
+.app-bar-right{font-size:11px;color:rgba(255,255,255,.5);font-weight:600}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--az2);display:flex;z-index:100;border-top:1px solid rgba(255,255,255,.08)}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 12px;background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;color:rgba(255,255,255,.5);font-size:10px;font-weight:700;gap:3px;transition:color .2s}
+.bnav-btn.active{color:var(--am)}
+.bnav-btn .ico{font-size:22px}
+
+/* ── PAGES ── */
+.page{display:none;padding:16px;max-width:520px;margin:0 auto}
+.page.active{display:block}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--az2);letter-spacing:1px;margin-bottom:4px;margin-top:2px}
+.page-sub{font-size:12px;color:#64748b;margin-bottom:16px}
+
+/* ── CARDS ── */
+.card{background:white;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,32,96,.06)}
+.card-hdr{font-size:11px;font-weight:800;color:var(--az);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* ── INPUTS ── */
+.ig{margin-bottom:10px}
+.il{font-size:12px;font-weight:700;color:#64748b;margin-bottom:4px;display:block}
+.if{width:100%;border:1.5px solid #e2e8f0;border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Nunito',sans-serif;outline:none;transition:border .2s;color:var(--tx)}
+.if:focus{border-color:var(--az)}
+textarea.if{resize:none}
+.ir2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ir3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+
+/* ── BUTTONS ── */
+.btn{border:none;border-radius:12px;padding:13px 18px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:transform .15s;display:inline-flex;align-items:center;gap:6px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--az);color:white;width:100%;justify-content:center}
+.btn-am{background:var(--am);color:var(--az2)}
+.btn-vd{background:var(--vd);color:white}
+.btn-red{background:#ef4444;color:white}
+.btn-ghost{background:#e2e8f0;color:#475569}
+.btn-sm{padding:8px 13px;font-size:12px;border-radius:9px}
+.btn-row{display:flex;gap:8px;margin-top:10px}
+.btn-row .btn{flex:1;justify-content:center}
+
+/* ── TIPO WORK CHIPS ── */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{background:white;border:1.5px solid #e2e8f0;border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;color:var(--tx);transition:all .15s}
+.chip.active{border-color:var(--az);background:#e8f0fe;color:var(--az)}
+
+/* ── PARTIDAS ── */
+.part-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.part-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px}
+.part-info{flex:1}
+.part-desc{font-size:13px;font-weight:700;color:var(--tx)}
+.part-sub{font-size:11px;color:#64748b}
+.part-price{font-size:15px;font-weight:900;color:var(--az);min-width:76px;text-align:right}
+.part-del{background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;padding:2px;line-height:1}
+
+/* ── TOTAL BOX ── */
+.total-box{background:var(--az2);border-radius:14px;padding:14px 16px}
+.total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.total-row:last-child{margin-bottom:0;border-top:1px solid rgba(255,255,255,.15);padding-top:8px;margin-top:4px}
+.tl{font-size:12px;color:rgba(255,255,255,.7);font-weight:600}
+.tv{font-size:14px;font-weight:800;color:white}
+.tv.big{font-size:22px;color:var(--am)}
+
+/* ── TRAMOS ── */
+.tramo-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.tramo-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:8px}
+.tramo-info{flex:1}
+.tramo-name{font-size:13px;font-weight:700}
+.tramo-dim{font-size:11px;color:#64748b}
+.tramo-m2{font-size:15px;font-weight:900;color:var(--az)}
+.tramo-del{background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px}
+.calc-total{background:var(--am);border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.calc-total-l{font-size:13px;font-weight:800;color:var(--az2)}
+.calc-total-v{font-size:22px;font-weight:900;color:var(--az2)}
+
+/* ── COLORES ── */
+.color-tabs{display:flex;gap:6px;margin-bottom:12px}
+.ctab{flex:1;padding:9px 4px;border:1.5px solid #e2e8f0;background:white;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;color:#64748b;transition:all .15s}
+.ctab.active{border-color:var(--az);color:var(--az);background:#e8f0fe}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ccard{border-radius:12px;overflow:hidden;cursor:pointer;border:2.5px solid transparent;transition:border .15s}
+.ccard.sel{border-color:var(--az)}
+.cswatch{height:50px}
+.cinfo{background:white;padding:4px 6px}
+.ccode{font-size:10px;font-weight:800;color:var(--tx)}
+.cname{font-size:9px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cprev{background:white;border-radius:14px;padding:14px;border:1.5px solid #e2e8f0;display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.cprev-sw{width:52px;height:52px;border-radius:10px;flex-shrink:0;border:1px solid #e2e8f0}
+.cprev-cod{font-size:17px;font-weight:900;color:var(--tx)}
+.cprev-nom{font-size:12px;color:#64748b}
+
+/* ── PRESUP LIST ── */
+.presup-item{background:white;border-radius:14px;padding:14px;margin-bottom:8px;border:1px solid #e2e8f0;cursor:pointer;transition:box-shadow .15s}
+.presup-item:active{box-shadow:0 4px 16px rgba(0,32,96,.1)}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.pref{font-size:11px;font-weight:800;color:var(--az);text-transform:uppercase}
+.pfecha{font-size:11px;color:#94a3b8}
+.pcliente{font-size:15px;font-weight:800;color:var(--tx)}
+.pobra{font-size:12px;color:#64748b}
+.ptotal{font-size:20px;font-weight:900;color:var(--az)}
+.pacts{display:flex;gap:6px;margin-top:10px}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:40px 20px;color:#94a3b8}
+.empty-ico{font-size:48px;margin-bottom:10px}
+.empty-txt{font-size:15px;font-weight:700}
+.empty-hint{font-size:12px;margin-top:4px}
+
+/* ── TOGGLE ── */
+.toggle-wrap{display:flex;align-items:center;gap:10px}
+.toggle-lbl{font-size:13px;font-weight:700;color:var(--tx)}
+.sw{position:relative;width:44px;height:24px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0}
+.swt{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:24px;transition:.3s}
+.swt:before{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;left:3px;top:3px;transition:.3s}
+input:checked+.swt{background:var(--az)}
+input:checked+.swt:before{transform:translateX(20px)}
+
+/* ── MIC ── */
+.mic{background:rgba(0,61,143,.08);border:none;border-radius:9px;padding:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mic.on{background:#fef2f2;animation:pulse .8s infinite}
+
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:flex-end}
+.overlay.open{display:flex}
+.sheet{background:white;border-radius:22px 22px 0 0;padding:20px 16px 30px;width:100%;max-height:88vh;overflow-y:auto}
+.sheet-handle{width:40px;height:4px;background:#e2e8f0;border-radius:2px;margin:0 auto 16px}
+.sheet-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--tx);letter-spacing:.5px;margin-bottom:14px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:11px 22px;border-radius:22px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+
+/* ── ANIMS ── */
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║          HERO / LANDING      ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<section class="hero" id="hero">
+  <div class="hero-badge">🎨 La app del pintor profesional</div>
+  <h1 class="hero-titulo">Pintor<span>App</span><br><span style="font-size:.55em;letter-spacing:4px;color:rgba(255,255,255,.6)">LITE</span></h1>
+  <p class="hero-sub">Presupuestos en 2 minutos<br>directo desde tu móvil 📱</p>
+  <button class="hero-cta" onclick="entrar()">Entrar a la app</button>
+  <p class="hero-nota">Sin registro · Funciona sin internet · Gratis</p>
+  <div class="hero-feats">
+    <div class="hero-feat"><span class="hero-feat-icon">🎤</span><span class="hero-feat-text">Dicta por voz</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">📄</span><span class="hero-feat-text">PDF profesional</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">📱</span><span class="hero-feat-text">Envío WhatsApp</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">🎨</span><span class="hero-feat-text">Carta NCS + RAL</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">📐</span><span class="hero-feat-text">Calc. fachadas</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">💾</span><span class="hero-feat-text">Guarda todo</span></div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║           APP SHELL          ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div class="app-shell" id="appshell">
+
+  <!-- TOP BAR -->
+  <div class="app-bar">
+    <div class="app-bar-logo">Pintor<span>App</span> <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif">Lite</span></div>
+    <div class="app-bar-right" id="bar-sub">Mis presupuestos</div>
+  </div>
+
+  <!-- ── PAGE: PRESUPUESTOS ── -->
+  <div class="page active" id="page-list">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 16px">
+      <div>
+        <div class="page-title">Presupuestos</div>
+        <div class="page-sub" id="pcount">0 guardados</div>
+      </div>
+      <button class="btn btn-am btn-sm" onclick="irNuevo()">+ Nuevo</button>
+    </div>
+    <div id="plist"></div>
+  </div>
+
+  <!-- ── PAGE: NUEVO / EDITAR ── -->
+  <div class="page" id="page-nuevo">
+    <div class="page-title" id="ntit">Nuevo presupuesto</div>
+    <div class="page-sub">Rellena los datos y añade partidas</div>
+
+    <!-- CLIENTE -->
+    <div class="card">
+      <div class="card-hdr">📋 Cliente</div>
+      <div class="ig">
+        <label class="il">Nombre del cliente</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="cli-nombre" placeholder="Ej: Juan García" style="flex:1">
+          <button class="mic" onclick="mic('cli-nombre')" id="mic-cn">🎤</button>
+        </div>
+      </div>
+      <div class="ig">
+        <label class="il">Obra / Dirección</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="cli-obra" placeholder="Ej: C/ Mayor 5, 2º" style="flex:1">
+          <button class="mic" onclick="mic('cli-obra')" id="mic-co">🎤</button>
+        </div>
+      </div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Teléfono</label><input class="if" id="cli-tel" placeholder="600..." type="tel"></div>
+        <div class="ig"><label class="il">Fecha</label><input class="if" id="cli-fecha" type="date"></div>
+      </div>
+      <div class="ig"><label class="il">Notas</label><textarea class="if" id="cli-notas" rows="2" placeholder="Observaciones, colores acordados..."></textarea></div>
+      <!-- IMPUESTO -->
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">
+        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="igic" onchange="chkImp('igic')"><span class="swt"></span></label><span class="toggle-lbl">IGIC 7% (Canarias)</span></div>
+        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="iva" onchange="chkImp('iva')"><span class="swt"></span></label><span class="toggle-lbl">IVA 21%</span></div>
+      </div>
+    </div>
+
+    <!-- AÑADIR PARTIDA -->
+    <div class="card">
+      <div class="card-hdr">🔨 Añadir partida</div>
+      <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Tipo de trabajo</div>
+      <div class="chips" id="chips">
+        <span class="chip active" onclick="setTipo(this,'Pintura interior')">Interior</span>
+        <span class="chip" onclick="setTipo(this,'Pintura exterior')">Exterior</span>
+        <span class="chip" onclick="setTipo(this,'Esmalte puertas')">Esmalte</span>
+        <span class="chip" onclick="setTipo(this,'Techo')">Techo</span>
+        <span class="chip" onclick="setTipo(this,'Preparación superficie')">Preparación</span>
+        <span class="chip" onclick="setTipo(this,'Gotelé')">Gotelé</span>
+        <span class="chip" onclick="setTipo(this,'Barniz')">Barniz</span>
+        <span class="chip" onclick="setTipo(this,'Otro')">Otro</span>
+      </div>
+      <div class="ig">
+        <label class="il">Descripción</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="part-desc" placeholder="Ej: Pintura salón dos manos" style="flex:1">
+          <button class="mic" onclick="mic('part-desc')" id="mic-pd">🎤</button>
+        </div>
+      </div>
+      <div class="ir3">
+        <div class="ig"><label class="il">m² / Unid.</label><input class="if" id="part-m2" type="number" placeholder="0" step="0.01" oninput="calcP()"></div>
+        <div class="ig"><label class="il">€/m²</label><input class="if" id="part-eur" type="number" placeholder="0" step="0.01" oninput="calcP()"></div>
+        <div class="ig"><label class="il">Total €</label><input class="if" id="part-tot" type="number" placeholder="0" step="0.01" style="background:#f8fafc"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addPart()">+ Añadir partida</button>
+    </div>
+
+    <!-- RESUMEN -->
+    <div class="card" id="rescard" style="display:none">
+      <div class="card-hdr">📦 Partidas del presupuesto</div>
+      <div class="part-list" id="plist2"></div>
+      <div class="total-box">
+        <div class="total-row"><span class="tl">Subtotal</span><span class="tv" id="t-sub">0,00 €</span></div>
+        <div class="total-row" id="t-imp-row" style="display:none"><span class="tl" id="t-imp-lbl">IGIC 7%</span><span class="tv" id="t-imp">0,00 €</span></div>
+        <div class="total-row"><span class="tl">TOTAL</span><span class="tv big" id="t-tot">0,00 €</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-am" onclick="genPDF()">📄 PDF</button>
+        <button class="btn btn-vd" onclick="envWA()">📱 WhatsApp</button>
+      </div>
+      <button class="btn btn-primary" onclick="guardar()" style="margin-top:8px">💾 Guardar presupuesto</button>
+    </div>
+  </div>
+
+  <!-- ── PAGE: COLORES ── -->
+  <div class="page" id="page-colores">
+    <div class="page-title">Carta de colores</div>
+    <div class="page-sub">NCS · RAL · RGB — toca para copiar el código</div>
+
+    <div id="cprev-box" style="display:none" class="card">
+      <div class="card-hdr">🎨 Color seleccionado</div>
+      <div class="cprev">
+        <div class="cprev-sw" id="cprev-sw"></div>
+        <div style="flex:1">
+          <div class="cprev-cod" id="cprev-cod">—</div>
+          <div class="cprev-nom" id="cprev-nom">—</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="copiarC()">Copiar</button>
+      </div>
+    </div>
+
+    <div class="color-tabs">
+      <button class="ctab active" onclick="fltC('NCS',this)">NCS</button>
+      <button class="ctab" onclick="fltC('RAL',this)">RAL</button>
+      <button class="ctab" onclick="fltC('RGB',this)">RGB</button>
+      <button class="ctab" onclick="fltC('ALL',this)">Todos</button>
+    </div>
+    <div class="ig" style="margin-bottom:12px"><input class="if" id="csearch" placeholder="Buscar código o nombre..." oninput="buscarC()"></div>
+    <div class="cgrid" id="cgrid"></div>
+  </div>
+
+  <!-- ── PAGE: CALCULADORA ── -->
+  <div class="page" id="page-calc">
+    <div class="page-title">Calculadora</div>
+    <div class="page-sub">Superficie por tramos — fachadas y habitaciones</div>
+
+    <div class="card">
+      <div class="card-hdr">📐 Nuevo tramo</div>
+      <div class="ig"><label class="il">Nombre del tramo</label><input class="if" id="t-nom" placeholder="Ej: Fachada Norte, Salón..."></div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Ancho (m)</label><input class="if" id="t-a" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+        <div class="ig"><label class="il">Alto (m)</label><input class="if" id="t-h" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+      </div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Huecos a descontar (m²)</label><input class="if" id="t-huecos" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+        <div class="ig"><label class="il">Total tramo (m²)</label><input class="if" id="t-tot2" readonly style="background:#f8fafc;font-weight:800;color:var(--az)"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addT()">+ Añadir tramo</button>
+    </div>
+
+    <div class="card" id="tcard" style="display:none">
+      <div class="card-hdr">📊 Resumen</div>
+      <div class="tramo-list" id="tlist"></div>
+      <div class="calc-total">
+        <span class="calc-total-l">TOTAL SUPERFICIE</span>
+        <span class="calc-total-v" id="tsum">0,00 m²</span>
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px" onclick="usarEnPresup()">↗ Usar en presupuesto</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="bnav-btn active" id="bn0" onclick="goPage('list',0)"><span class="ico">📋</span>Presupuestos</button>
+    <button class="bnav-btn" id="bn1" onclick="goPage('nuevo',1)"><span class="ico">➕</span>Nuevo</button>
+    <button class="bnav-btn" id="bn2" onclick="goPage('colores',2)"><span class="ico">🎨</span>Colores</button>
+    <button class="bnav-btn" id="bn3" onclick="goPage('calc',3)"><span class="ico">📐</span>Medidas</button>
+  </nav>
+</div>
+
+<!-- MODAL VER PRESUPUESTO -->
+<div class="overlay" id="modal-ver">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closeM()">✕</button>
+    <div class="sheet-title" id="m-tit">Presupuesto</div>
+    <div id="m-body"></div>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn btn-am" onclick="genPDFid()">📄 PDF</button>
+      <button class="btn btn-vd" onclick="envWAid()">📱 WhatsApp</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="editarP()">✏️ Editar</button>
+      <button class="btn btn-red btn-sm" style="flex:1" onclick="eliminarP()">🗑️ Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATOS Y ESTADO
+// ═══════════════════════════════════════════════
+var partidas=[], tramos=[], editId=null, verId=null;
+var presups=JSON.parse(localStorage.getItem('pal_v1')||'[]');
+var cFiltro='NCS', cSel=null;
+
+function entrar(){
+  document.getElementById('hero').style.display='none';
+  var s=document.getElementById('appshell');
+  s.style.display='flex';
+  renderList();
+  renderC('NCS');
+}
+
+// ═══════════════════════════════════════════════
+// NAVEGACIÓN
+// ═══════════════════════════════════════════════
+var barSubs=['Mis presupuestos','Nuevo presupuesto','Carta de colores','Calculadora de superficies'];
+function goPage(id,idx){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('bn'+idx).classList.add('active');
+  document.getElementById('bar-sub').textContent=barSubs[idx];
+  if(id==='list')renderList();
+  if(id==='colores')renderC(cFiltro);
+}
+function irNuevo(){goPage('nuevo',1);}
+
+// ═══════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+
+// ═══════════════════════════════════════════════
+// MIC
+// ═══════════════════════════════════════════════
+var recog=null;
+function mic(id){
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){toast('Micrófono no disponible');return}
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  var btn=document.getElementById('mic-'+id.replace(/[^a-z]/g,''));
+  if(!btn){// fallback by map
+    var map={'cli-nombre':'cn','cli-obra':'co','part-desc':'pd'};
+    btn=document.getElementById('mic-'+map[id]);
+  }
+  if(recog){recog.stop();recog=null;if(btn)btn.classList.remove('on');return}
+  recog=new SR();
+  recog.lang='es-ES';recog.continuous=false;recog.interimResults=false;
+  if(btn)btn.classList.add('on');
+  recog.onresult=e=>{document.getElementById(id).value=e.results[0][0].transcript;if(id==='part-desc')calcP()};
+  recog.onend=()=>{recog=null;if(btn)btn.classList.remove('on')};
+  recog.onerror=()=>{recog=null;if(btn)btn.classList.remove('on');toast('Error micrófono')};
+  recog.start();
+}
+
+// ═══════════════════════════════════════════════
+// FECHA HOY
+// ═══════════════════════════════════════════════
+document.getElementById('cli-fecha').value=new Date().toISOString().split('T')[0];
+
+// ═══════════════════════════════════════════════
+// TIPO CHIP
+// ═══════════════════════════════════════════════
+function setTipo(el,tipo){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('part-desc').value=tipo;
+}
+
+// ═══════════════════════════════════════════════
+// IMPUESTO toggle
+// ═══════════════════════════════════════════════
+function chkImp(which){
+  if(which==='igic'&&document.getElementById('igic').checked)document.getElementById('iva').checked=false;
+  if(which==='iva'&&document.getElementById('iva').checked)document.getElementById('igic').checked=false;
+  recalc();
+}
+
+// ═══════════════════════════════════════════════
+// PARTIDAS
+// ═══════════════════════════════════════════════
+function calcP(){
+  var m=parseFloat(document.getElementById('part-m2').value)||0;
+  var e=parseFloat(document.getElementById('part-eur').value)||0;
+  if(m&&e)document.getElementById('part-tot').value=(m*e).toFixed(2);
+}
+function addPart(){
+  var desc=document.getElementById('part-desc').value.trim();
+  var m2=parseFloat(document.getElementById('part-m2').value)||0;
+  var eur=parseFloat(document.getElementById('part-eur').value)||0;
+  var tot=parseFloat(document.getElementById('part-tot').value)||(m2*eur);
+  if(!desc){toast('Escribe una descripción');return}
+  if(!tot){toast('Indica precio o importe');return}
+  partidas.push({id:Date.now(),desc,m2,eur,tot});
+  ['part-desc','part-m2','part-eur','part-tot'].forEach(id=>document.getElementById(id).value='');
+  renderParts();recalc();toast('✓ Partida añadida');
+}
+function delPart(id){partidas=partidas.filter(p=>p.id!==id);renderParts();recalc()}
+function renderParts(){
+  var rc=document.getElementById('rescard');
+  if(!partidas.length){rc.style.display='none';return}
+  rc.style.display='block';
+  document.getElementById('plist2').innerHTML=partidas.map(p=>`
+    <div class="part-item">
+      <div class="part-info">
+        <div class="part-desc">${p.desc}</div>
+        <div class="part-sub">${p.m2?p.m2+' m² × '+fmt(p.eur)+' €/m²':'Precio fijo'}</div>
+      </div>
+      <div class="part-price">${fmt(p.tot)} €</div>
+      <button class="part-del" onclick="delPart(${p.id})">✕</button>
+    </div>`).join('');
+}
+function recalc(){
+  var sub=partidas.reduce((a,p)=>a+p.tot,0);
+  var igic=document.getElementById('igic').checked;
+  var iva=document.getElementById('iva').checked;
+  var rate=igic?.07:iva?.21:0;
+  var tax=sub*rate;
+  document.getElementById('t-sub').textContent=fmt(sub)+' €';
+  var ir=document.getElementById('t-imp-row');
+  if(rate){ir.style.display='flex';document.getElementById('t-imp-lbl').textContent=igic?'IGIC 7%':'IVA 21%';document.getElementById('t-imp').textContent=fmt(tax)+' €'}
+  else ir.style.display='none';
+  document.getElementById('t-tot').textContent=fmt(sub+tax)+' €';
+}
+function fmt(n){return parseFloat(n||0).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function fmtF(f){if(!f)return'—';var p=f.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
+
+// ═══════════════════════════════════════════════
+// GUARDAR / LISTA
+// ═══════════════════════════════════════════════
+function guardar(){
+  var nom=document.getElementById('cli-nombre').value.trim();
+  if(!nom){toast('Indica el nombre del cliente');return}
+  if(!partidas.length){toast('Añade al menos una partida');return}
+  var sub=partidas.reduce((a,p)=>a+p.tot,0);
+  var igic=document.getElementById('igic').checked;
+  var iva=document.getElementById('iva').checked;
+  var rate=igic?.07:iva?.21:0;
+  var tax=sub*rate;
+  var data={id:editId||Date.now(),ref:'PA-'+String(Date.now()).slice(-5),
+    fecha:document.getElementById('cli-fecha').value,
+    cliente:nom,obra:document.getElementById('cli-obra').value,
+    tel:document.getElementById('cli-tel').value,notas:document.getElementById('cli-notas').value,
+    igic,iva,rate,tax,partidas:JSON.parse(JSON.stringify(partidas)),
+    sub,total:sub+tax};
+  if(editId)presups=presups.map(p=>p.id===editId?data:p);
+  else presups.unshift(data);
+  localStorage.setItem('pal_v1',JSON.stringify(presups));
+  resetNuevo();goPage('list',0);toast('✓ Presupuesto guardado');
+}
+function resetNuevo(){
+  partidas=[];editId=null;
+  document.getElementById('ntit').textContent='Nuevo presupuesto';
+  ['cli-nombre','cli-obra','cli-tel','cli-notas'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cli-fecha').value=new Date().toISOString().split('T')[0];
+  document.getElementById('igic').checked=false;document.getElementById('iva').checked=false;
+  document.getElementById('rescard').style.display='none';
+  document.getElementById('plist2').innerHTML='';
+  recalc();
+}
+function renderList(){
+  var el=document.getElementById('plist');
+  document.getElementById('pcount').textContent=presups.length+' guardado'+(presups.length!==1?'s':'');
+  if(!presups.length){
+    el.innerHTML=`<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin presupuestos aún</div><div class="empty-hint">Toca "+ Nuevo" para crear el primero</div></div>`;return;
+  }
+  el.innerHTML=presups.map(p=>`
+    <div class="presup-item" onclick="verP(${p.id})">
+      <div class="ph"><span class="pref">${p.ref}</span><span class="pfecha">${fmtF(p.fecha)}</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div><div class="pcliente">${p.cliente}</div><div class="pobra">${p.obra||'—'}</div></div>
+        <div class="ptotal">${fmt(p.total)} €</div>
+      </div>
+      <div class="pacts" onclick="event.stopPropagation()">
+        <button class="btn btn-ghost btn-sm" onclick="editarPid(${p.id})">✏️ Editar</button>
+        <button class="btn btn-am btn-sm" onclick="genPDFid(${p.id})">📄 PDF</button>
+        <button class="btn btn-vd btn-sm" onclick="envWAid(${p.id})">📱 WA</button>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// MODAL VER
+// ═══════════════════════════════════════════════
+function verP(id){
+  var p=presups.find(x=>x.id===id);if(!p)return;verId=id;
+  document.getElementById('m-tit').textContent=p.ref+' — '+p.cliente;
+  document.getElementById('m-body').innerHTML=`
+    <div style="margin-bottom:10px"><div style="font-size:11px;color:#64748b">Obra</div><div style="font-weight:700">${p.obra||'—'}</div></div>
+    <div style="margin-bottom:14px"><div style="font-size:11px;color:#64748b">Fecha</div><div style="font-weight:700">${fmtF(p.fecha)}</div></div>
+    <div class="part-list">${p.partidas.map(x=>`<div class="part-item"><div class="part-info"><div class="part-desc">${x.desc}</div><div class="part-sub">${x.m2?x.m2+' m²':''}</div></div><div class="part-price">${fmt(x.tot)} €</div></div>`).join('')}</div>
+    <div class="total-box" style="margin-top:10px">
+      <div class="total-row"><span class="tl">Subtotal</span><span class="tv">${fmt(p.sub)} €</span></div>
+      ${p.rate?`<div class="total-row"><span class="tl">${p.igic?'IGIC 7%':'IVA 21%'}</span><span class="tv">${fmt(p.tax)} €</span></div>`:''}
+      <div class="total-row"><span class="tl">TOTAL</span><span class="tv big">${fmt(p.total)} €</span></div>
+    </div>
+    ${p.notas?`<div style="margin-top:10px;padding:10px;background:#f8fafc;border-radius:10px;font-size:12px;color:#64748b"><b>Notas:</b> ${p.notas}</div>`:''}`;
+  document.getElementById('modal-ver').classList.add('open');
+}
+function closeM(){document.getElementById('modal-ver').classList.remove('open')}
+function editarP(){closeM();editarPid(verId)}
+function editarPid(id){
+  var p=presups.find(x=>x.id===id);if(!p)return;
+  editId=id;document.getElementById('ntit').textContent='Editar presupuesto';
+  document.getElementById('cli-nombre').value=p.cliente;
+  document.getElementById('cli-obra').value=p.obra||'';
+  document.getElementById('cli-tel').value=p.tel||'';
+  document.getElementById('cli-notas').value=p.notas||'';
+  document.getElementById('cli-fecha').value=p.fecha;
+  document.getElementById('igic').checked=p.igic;
+  document.getElementById('iva').checked=p.iva;
+  partidas=JSON.parse(JSON.stringify(p.partidas));
+  renderParts();recalc();goPage('nuevo',1);
+}
+function eliminarP(){
+  if(!confirm('¿Eliminar este presupuesto?'))return;
+  presups=presups.filter(p=>p.id!==verId);
+  localStorage.setItem('pal_v1',JSON.stringify(presups));
+  closeM();renderList();toast('Presupuesto eliminado');
+}
+
+// ═══════════════════════════════════════════════
+// PDF
+// ═══════════════════════════════════════════════
+function buildData(id){
+  if(id)return presups.find(p=>p.id===id);
+  var nom=document.getElementById('cli-nombre').value.trim()||'Cliente';
+  var sub=partidas.reduce((a,p)=>a+p.tot,0);
+  var igic=document.getElementById('igic').checked;
+  var iva=document.getElementById('iva').checked;
+  var rate=igic?.07:iva?.21:0;
+  var tax=sub*rate;
+  return{ref:'BORRADOR',fecha:document.getElementById('cli-fecha').value,
+    cliente:nom,obra:document.getElementById('cli-obra').value,
+    tel:document.getElementById('cli-tel').value,notas:document.getElementById('cli-notas').value,
+    igic,iva,rate,tax,partidas,sub,total:sub+tax};
+}
+function genPDF(id){
+  var d=buildData(id);
+  if(!d||!d.partidas.length){toast('Sin datos para PDF');return}
+  var doc=new jspdf.jsPDF({unit:'mm',format:'a4'});
+  var W=210,M=18;
+  doc.setFillColor(0,32,96);doc.rect(0,0,W,32,'F');
+  doc.setFillColor(245,200,0);doc.rect(0,32,W,4,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(24);doc.setFont('helvetica','bold');
+  doc.text('PINTORAPP LITE',M,20);
+  doc.setFontSize(9);doc.setFont('helvetica','normal');
+  doc.text('Presupuesto de pintura profesional',M,27);
+  doc.setTextColor(0,0,0);
+  var y=44;
+  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(100,116,139);
+  doc.text('REFERENCIA',M,y);doc.text('FECHA',80,y);doc.text('TELÉFONO',145,y);
+  doc.setFont('helvetica','normal');doc.setTextColor(26,35,64);doc.setFontSize(10);y+=5;
+  doc.text(d.ref||'—',M,y);doc.text(fmtF(d.fecha),80,y);doc.text(d.tel||'—',145,y);
+  y+=10;
+  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(100,116,139);doc.text('CLIENTE',M,y);
+  y+=5;doc.setFont('helvetica','normal');doc.setTextColor(26,35,64);doc.setFontSize(14);doc.text(d.cliente,M,y);
+  if(d.obra){y+=5;doc.setFontSize(9);doc.setTextColor(100,116,139);doc.text(d.obra,M,y)}
+  y+=14;
+  doc.setFillColor(0,32,96);doc.rect(M,y,W-M*2,8,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+  doc.text('DESCRIPCIÓN',M+2,y+5.5);doc.text('CANTIDAD',122,y+5.5);doc.text('PRECIO',144,y+5.5);doc.text('TOTAL',170,y+5.5);
+  y+=8;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  d.partidas.forEach((p,i)=>{
+    if(i%2===0){doc.setFillColor(240,244,248);doc.rect(M,y,W-M*2,7,'F')}
+    doc.setTextColor(26,35,64);
+    doc.text(p.desc.substring(0,48),M+2,y+5);
+    doc.text(p.m2?p.m2+' m²':'—',122,y+5);
+    doc.text(p.eur?fmt(p.eur)+' €/m²':'—',144,y+5);
+    doc.text(fmt(p.tot)+' €',170,y+5);
+    y+=7;if(y>262){doc.addPage();y=20}
+  });
+  y+=8;
+  var bw=82,bx=W-M-bw;
+  [[fmt(d.sub)+' €','Subtotal',false],[d.rate?(d.igic?'IGIC 7%':'IVA 21%'):null,d.rate?fmt(d.tax)+' €':null,false]].forEach(r=>{
+    if(!r[0])return;
+    doc.setFillColor(240,244,248);doc.rect(bx,y,bw,7,'F');
+    doc.setTextColor(100,116,139);doc.text(r[1]||r[0],bx+2,y+5);
+    doc.setTextColor(26,35,64);doc.text(r[0],bx+bw-2,y+5,{align:'right'});
+    y+=7;
+  });
+  if(d.rate){
+    doc.setFillColor(240,244,248);doc.rect(bx,y-7,bw,7,'F');
+    doc.setTextColor(100,116,139);doc.text(d.igic?'IGIC 7%':'IVA 21%',bx+2,y-2);
+    doc.setTextColor(26,35,64);doc.text(fmt(d.tax)+' €',bx+bw-2,y-2,{align:'right'});
+  }
+  doc.setFillColor(0,32,96);doc.rect(bx,y,bw,10,'F');
+  doc.setTextColor(245,200,0);doc.setFont('helvetica','bold');doc.setFontSize(12);
+  doc.text('TOTAL',bx+2,y+7);doc.text(fmt(d.total)+' €',bx+bw-2,y+7,{align:'right'});
+  if(d.notas){y+=16;doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(100,116,139);doc.text('Notas: '+d.notas,M,y)}
+  doc.setFontSize(7);doc.setTextColor(180,180,180);
+  doc.text('Generado con PintorApp Lite',M,288);
+  doc.save('presupuesto-'+(d.ref||'borrador')+'.pdf');
+  toast('✓ PDF generado');
+}
+function genPDFid(id){genPDF(id||verId)}
+
+// ═══════════════════════════════════════════════
+// WHATSAPP
+// ═══════════════════════════════════════════════
+function buildWA(d){
+  if(!d)return'';
+  var l=['🎨 *PRESUPUESTO DE PINTURA*','',
+    '📋 Ref: '+(d.ref||'—'),'👤 '+d.cliente];
+  if(d.obra)l.push('📍 '+d.obra);
+  l.push('📅 '+fmtF(d.fecha),'','*PARTIDAS:*');
+  d.partidas.forEach(p=>l.push('• '+p.desc+(p.m2?' ('+p.m2+' m²)':'')+': '+fmt(p.tot)+' €'));
+  l.push('','Subtotal: '+fmt(d.sub)+' €');
+  if(d.rate)l.push((d.igic?'IGIC 7%':'IVA 21%')+': '+fmt(d.tax)+' €');
+  l.push('*TOTAL: '+fmt(d.total)+' €*');
+  if(d.notas)l.push('','📝 '+d.notas);
+  l.push('','_PintorApp Lite_');
+  return l.join('\n');
+}
+function envWA(id){
+  var d=buildData(id);
+  if(!d||!d.partidas.length){toast('Sin datos');return}
+  var tel=d.tel?d.tel.replace(/\D/g,''):'';
+  var url=(tel?'https://wa.me/'+tel:'https://wa.me')+'?text='+encodeURIComponent(buildWA(d));
+  window.open(url,'_blank');
+}
+function envWAid(id){envWA(id||verId)}
+
+// ═══════════════════════════════════════════════
+// CALCULADORA TRAMOS
+// ═══════════════════════════════════════════════
+function calcT(){
+  var a=parseFloat(document.getElementById('t-a').value)||0;
+  var h=parseFloat(document.getElementById('t-h').value)||0;
+  var hu=parseFloat(document.getElementById('t-huecos').value)||0;
+  document.getElementById('t-tot2').value=Math.max(0,a*h-hu).toFixed(2);
+}
+function addT(){
+  var nom=document.getElementById('t-nom').value.trim()||'Tramo '+(tramos.length+1);
+  var a=parseFloat(document.getElementById('t-a').value)||0;
+  var h=parseFloat(document.getElementById('t-h').value)||0;
+  var hu=parseFloat(document.getElementById('t-huecos').value)||0;
+  if(!a||!h){toast('Indica ancho y alto');return}
+  tramos.push({id:Date.now(),nom,a,h,hu,tot:Math.max(0,a*h-hu)});
+  ['t-nom','t-a','t-h','t-huecos','t-tot2'].forEach(id=>document.getElementById(id).value='');
+  renderT();toast('✓ Tramo añadido');
+}
+function delT(id){tramos=tramos.filter(t=>t.id!==id);renderT()}
+function renderT(){
+  var tc=document.getElementById('tcard');
+  if(!tramos.length){tc.style.display='none';return}
+  tc.style.display='block';
+  var sum=tramos.reduce((a,t)=>a+t.tot,0);
+  document.getElementById('tlist').innerHTML=tramos.map(t=>`
+    <div class="tramo-item">
+      <div class="tramo-info">
+        <div class="tramo-name">${t.nom}</div>
+        <div class="tramo-dim">${t.a}m × ${t.h}m${t.hu?' − '+t.hu+'m² huecos':''}</div>
+      </div>
+      <div class="tramo-m2">${t.tot.toFixed(2)} m²</div>
+      <button class="tramo-del" onclick="delT(${t.id})">✕</button>
+    </div>`).join('');
+  document.getElementById('tsum').textContent=sum.toFixed(2)+' m²';
+}
+function usarEnPresup(){
+  var sum=tramos.reduce((a,t)=>a+t.tot,0);
+  goPage('nuevo',1);
+  document.getElementById('part-m2').value=sum.toFixed(2);
+  toast(sum.toFixed(2)+' m² → presupuesto');
+}
+
+// ═══════════════════════════════════════════════
+// COLORES
+// ═══════════════════════════════════════════════
+var CD=[
+  // NCS
+  {c:'NCS S 0300-N',n:'Blanco puro',h:'#F9F9F9',t:'NCS'},{c:'NCS S 0500-N',n:'Blanco neutro',h:'#F5F5F5',t:'NCS'},
+  {c:'NCS S 1000-N',n:'Blanco hueso',h:'#EDEDED',t:'NCS'},{c:'NCS S 2000-N',n:'Gris muy claro',h:'#D2D2D2',t:'NCS'},
+  {c:'NCS S 3000-N',n:'Gris claro',h:'#B5B5B5',t:'NCS'},{c:'NCS S 4000-N',n:'Gris medio',h:'#999999',t:'NCS'},
+  {c:'NCS S 5000-N',n:'Gris oscuro',h:'#7F7F7F',t:'NCS'},{c:'NCS S 6000-N',n:'Gris fuerte',h:'#666666',t:'NCS'},
+  {c:'NCS S 7000-N',n:'Gris muy oscuro',h:'#4C4C4C',t:'NCS'},{c:'NCS S 8000-N',n:'Casi negro',h:'#333333',t:'NCS'},
+  {c:'NCS S 9000-N',n:'Negro',h:'#1A1A1A',t:'NCS'},
+  {c:'NCS S 0520-Y',n:'Amarillo pálido',h:'#FFF8D6',t:'NCS'},{c:'NCS S 0530-Y',n:'Amarillo claro',h:'#FFF0A0',t:'NCS'},
+  {c:'NCS S 1030-Y',n:'Amarillo cálido',h:'#F5E060',t:'NCS'},{c:'NCS S 1040-Y',n:'Amarillo vivo',h:'#F5D200',t:'NCS'},
+  {c:'NCS S 2040-Y',n:'Amarillo dorado',h:'#D4A800',t:'NCS'},{c:'NCS S 3040-Y',n:'Ocre claro',h:'#C09000',t:'NCS'},
+  {c:'NCS S 0520-Y30R',n:'Crema claro',h:'#FFF4D0',t:'NCS'},{c:'NCS S 0530-Y30R',n:'Crema cálido',h:'#FFE8A0',t:'NCS'},
+  {c:'NCS S 1020-Y30R',n:'Crema',h:'#F5D890',t:'NCS'},{c:'NCS S 2020-Y30R',n:'Marfil',h:'#D8B870',t:'NCS'},
+  {c:'NCS S 3020-Y30R',n:'Arena',h:'#B89050',t:'NCS'},{c:'NCS S 4020-Y30R',n:'Arena oscuro',h:'#907040',t:'NCS'},
+  {c:'NCS S 0520-Y50R',n:'Melocotón claro',h:'#FFECD0',t:'NCS'},{c:'NCS S 1030-Y50R',n:'Salmón claro',h:'#F5C080',t:'NCS'},
+  {c:'NCS S 2030-Y50R',n:'Salmón',h:'#D89060',t:'NCS'},{c:'NCS S 3030-Y50R',n:'Terracota cl.',h:'#B07040',t:'NCS'},
+  {c:'NCS S 4030-Y50R',n:'Terracota',h:'#905030',t:'NCS'},
+  {c:'NCS S 0530-Y70R',n:'Rosa cálido',h:'#FFD0C0',t:'NCS'},{c:'NCS S 1030-Y70R',n:'Coral claro',h:'#F5A080',t:'NCS'},
+  {c:'NCS S 2030-Y70R',n:'Coral',h:'#D87060',t:'NCS'},{c:'NCS S 3030-Y70R',n:'Siena',h:'#B05040',t:'NCS'},
+  {c:'NCS S 0530-R',n:'Rosa claro',h:'#FFB8B8',t:'NCS'},{c:'NCS S 1030-R',n:'Rosa medio',h:'#F58080',t:'NCS'},
+  {c:'NCS S 2030-R',n:'Rosa fuerte',h:'#D85060',t:'NCS'},{c:'NCS S 3040-R',n:'Rojo claro',h:'#C02040',t:'NCS'},
+  {c:'NCS S 4040-R',n:'Rojo medio',h:'#A01030',t:'NCS'},{c:'NCS S 5040-R',n:'Rojo oscuro',h:'#800020',t:'NCS'},
+  {c:'NCS S 0520-R20B',n:'Rosa violeta cl.',h:'#F0C0D8',t:'NCS'},{c:'NCS S 2020-R20B',n:'Malva claro',h:'#B87090',t:'NCS'},
+  {c:'NCS S 3020-R20B',n:'Malva',h:'#905070',t:'NCS'},{c:'NCS S 0520-R60B',n:'Lila claro',h:'#E0C0E8',t:'NCS'},
+  {c:'NCS S 2020-R60B',n:'Lila medio',h:'#A060B0',t:'NCS'},{c:'NCS S 3020-R60B',n:'Violeta',h:'#804090',t:'NCS'},
+  {c:'NCS S 0520-B',n:'Azul muy claro',h:'#C8E0F8',t:'NCS'},{c:'NCS S 1020-B',n:'Azul cielo cl.',h:'#A0C8F0',t:'NCS'},
+  {c:'NCS S 2020-B',n:'Azul cielo',h:'#70A8D8',t:'NCS'},{c:'NCS S 3020-B',n:'Azul medio',h:'#4080B8',t:'NCS'},
+  {c:'NCS S 4030-B',n:'Azul fuerte',h:'#2060A0',t:'NCS'},{c:'NCS S 5030-B',n:'Azul oscuro',h:'#104080',t:'NCS'},
+  {c:'NCS S 6030-B',n:'Azul muy oscuro',h:'#082060',t:'NCS'},
+  {c:'NCS S 0520-B20G',n:'Azul turquesa cl.',h:'#B8E0E8',t:'NCS'},{c:'NCS S 2020-B20G',n:'Turquesa',h:'#58A8B8',t:'NCS'},
+  {c:'NCS S 3020-B20G',n:'Turquesa oscuro',h:'#308898',t:'NCS'},
+  {c:'NCS S 0520-B50G',n:'Verde agua cl.',h:'#B0E0D8',t:'NCS'},{c:'NCS S 2020-B50G',n:'Verde menta',h:'#50A898',t:'NCS'},
+  {c:'NCS S 0520-G',n:'Verde claro',h:'#B8E8C0',t:'NCS'},{c:'NCS S 2020-G',n:'Verde',h:'#58A860',t:'NCS'},
+  {c:'NCS S 3020-G',n:'Verde medio',h:'#308840',t:'NCS'},{c:'NCS S 4030-G',n:'Verde oscuro',h:'#186820',t:'NCS'},
+  {c:'NCS S 0520-G30Y',n:'Verde lima cl.',h:'#D0E8A0',t:'NCS'},{c:'NCS S 2020-G30Y',n:'Verde oliva cl.',h:'#88A840',t:'NCS'},
+  {c:'NCS S 3020-G30Y',n:'Verde oliva',h:'#608028',t:'NCS'},{c:'NCS S 4020-G30Y',n:'Verde oliva osc.',h:'#406010',t:'NCS'},
+  {c:'NCS S 1030-G50Y',n:'Verde manzana',h:'#B8C850',t:'NCS'},{c:'NCS S 3030-G50Y',n:'Verde prado',h:'#688010',t:'NCS'},
+  // RAL
+  {c:'RAL 1000',n:'Beige verdoso',h:'#CCC58C',t:'RAL'},{c:'RAL 1001',n:'Beige',h:'#D0B17A',t:'RAL'},
+  {c:'RAL 1002',n:'Amarillo arena',h:'#D2A53E',t:'RAL'},{c:'RAL 1003',n:'Amarillo señales',h:'#F9A800',t:'RAL'},
+  {c:'RAL 1004',n:'Amarillo dorado',h:'#E49E00',t:'RAL'},{c:'RAL 1005',n:'Amarillo miel',h:'#CB8F00',t:'RAL'},
+  {c:'RAL 1013',n:'Blanco perla',h:'#E9E0D2',t:'RAL'},{c:'RAL 1014',n:'Marfil',h:'#DFD0A8',t:'RAL'},
+  {c:'RAL 1015',n:'Marfil claro',h:'#E6D690',t:'RAL'},{c:'RAL 1016',n:'Amarillo azufre',h:'#F0E040',t:'RAL'},
+  {c:'RAL 1018',n:'Amarillo zinc',h:'#F8C840',t:'RAL'},{c:'RAL 1019',n:'Beige grisáceo',h:'#A08060',t:'RAL'},
+  {c:'RAL 1021',n:'Amarillo colza',h:'#F0C000',t:'RAL'},{c:'RAL 1023',n:'Amarillo tráfico',h:'#F5C000',t:'RAL'},
+  {c:'RAL 2000',n:'Naranja amarillo',h:'#DD6A00',t:'RAL'},{c:'RAL 2001',n:'Naranja rojizo',h:'#BE4D22',t:'RAL'},
+  {c:'RAL 2003',n:'Naranja pastel',h:'#FF7514',t:'RAL'},{c:'RAL 2004',n:'Naranja puro',h:'#F44611',t:'RAL'},
+  {c:'RAL 2008',n:'Naranja rojizo cl.',h:'#F75E25',t:'RAL'},{c:'RAL 2009',n:'Naranja tráfico',h:'#F54021',t:'RAL'},
+  {c:'RAL 2011',n:'Naranja intenso',h:'#EC7C25',t:'RAL'},{c:'RAL 2012',n:'Naranja salmón',h:'#DB6A50',t:'RAL'},
+  {c:'RAL 3000',n:'Rojo llama',h:'#AB2524',t:'RAL'},{c:'RAL 3001',n:'Rojo señales',h:'#A02128',t:'RAL'},
+  {c:'RAL 3002',n:'Rojo carmín',h:'#A1232B',t:'RAL'},{c:'RAL 3003',n:'Rojo rubí',h:'#8D1D2C',t:'RAL'},
+  {c:'RAL 3005',n:'Rojo vino',h:'#5E2028',t:'RAL'},{c:'RAL 3009',n:'Rojo óxido',h:'#6C3B2A',t:'RAL'},
+  {c:'RAL 3012',n:'Rojo beige',h:'#C6846A',t:'RAL'},{c:'RAL 3013',n:'Rojo tomate',h:'#942723',t:'RAL'},
+  {c:'RAL 3015',n:'Rosa claro',h:'#E8A0A0',t:'RAL'},{c:'RAL 3017',n:'Rosa',h:'#D3545F',t:'RAL'},
+  {c:'RAL 3018',n:'Rojo fresa',h:'#D14152',t:'RAL'},{c:'RAL 3020',n:'Rojo tráfico',h:'#CC0605',t:'RAL'},
+  {c:'RAL 3022',n:'Rojo salmón',h:'#D56D56',t:'RAL'},{c:'RAL 3027',n:'Rojo frambuesa',h:'#B42041',t:'RAL'},
+  {c:'RAL 4003',n:'Violeta brezal',h:'#CB6D8E',t:'RAL'},{c:'RAL 4005',n:'Lila azulado',h:'#6C6094',t:'RAL'},
+  {c:'RAL 4006',n:'Violeta tráfico',h:'#903070',t:'RAL'},{c:'RAL 4008',n:'Violeta señales',h:'#844685',t:'RAL'},
+  {c:'RAL 4009',n:'Violeta pastel',h:'#A5809A',t:'RAL'},{c:'RAL 4010',n:'Telemagenta',h:'#C5307C',t:'RAL'},
+  {c:'RAL 5000',n:'Azul violeta',h:'#314F6F',t:'RAL'},{c:'RAL 5002',n:'Azul ultramar',h:'#20214F',t:'RAL'},
+  {c:'RAL 5005',n:'Azul señales',h:'#154889',t:'RAL'},{c:'RAL 5007',n:'Azul brillante',h:'#3B6898',t:'RAL'},
+  {c:'RAL 5009',n:'Azul azur',h:'#2B5080',t:'RAL'},{c:'RAL 5010',n:'Azul genciana',h:'#0E4C96',t:'RAL'},
+  {c:'RAL 5012',n:'Azul claro',h:'#3B83BD',t:'RAL'},{c:'RAL 5013',n:'Azul cobalto',h:'#232C60',t:'RAL'},
+  {c:'RAL 5015',n:'Azul cielo',h:'#2278AC',t:'RAL'},{c:'RAL 5017',n:'Azul tráfico',h:'#0E518D',t:'RAL'},
+  {c:'RAL 5018',n:'Azul turquesa',h:'#21888F',t:'RAL'},{c:'RAL 5021',n:'Azul agua',h:'#068490',t:'RAL'},
+  {c:'RAL 5024',n:'Azul pastel',h:'#5B7A8E',t:'RAL'},
+  {c:'RAL 6001',n:'Verde esmeralda',h:'#286940',t:'RAL'},{c:'RAL 6002',n:'Verde hojas',h:'#2D6030',t:'RAL'},
+  {c:'RAL 6005',n:'Verde musgo',h:'#1C4A2A',t:'RAL'},{c:'RAL 6010',n:'Verde hierba',h:'#3B6825',t:'RAL'},
+  {c:'RAL 6011',n:'Verde reseda',h:'#598556',t:'RAL'},{c:'RAL 6018',n:'Verde amarillo',h:'#4C9141',t:'RAL'},
+  {c:'RAL 6019',n:'Verde pastel',h:'#B0D7A2',t:'RAL'},{c:'RAL 6021',n:'Verde pálido',h:'#84A98C',t:'RAL'},
+  {c:'RAL 6024',n:'Verde tráfico',h:'#287233',t:'RAL'},{c:'RAL 6027',n:'Verde claro',h:'#79C7C0',t:'RAL'},
+  {c:'RAL 6029',n:'Verde menta',h:'#20603D',t:'RAL'},{c:'RAL 6037',n:'Verde puro',h:'#006F3C',t:'RAL'},
+  {c:'RAL 7000',n:'Gris ardilla',h:'#7E8B92',t:'RAL'},{c:'RAL 7001',n:'Gris plata',h:'#8C969D',t:'RAL'},
+  {c:'RAL 7004',n:'Gris señales',h:'#9DA3A6',t:'RAL'},{c:'RAL 7011',n:'Gris hierro',h:'#4F5357',t:'RAL'},
+  {c:'RAL 7015',n:'Gris pizarra',h:'#434750',t:'RAL'},{c:'RAL 7016',n:'Gris antracita',h:'#383E42',t:'RAL'},
+  {c:'RAL 7021',n:'Gris negro',h:'#2A2D2F',t:'RAL'},{c:'RAL 7024',n:'Gris grafito',h:'#474A51',t:'RAL'},
+  {c:'RAL 7030',n:'Gris piedra',h:'#939388',t:'RAL'},{c:'RAL 7032',n:'Gris guijarro',h:'#B9B9A0',t:'RAL'},
+  {c:'RAL 7035',n:'Gris claro',h:'#CBD0CC',t:'RAL'},{c:'RAL 7038',n:'Gris ágata',h:'#B4B8B0',t:'RAL'},
+  {c:'RAL 7040',n:'Gris ventana',h:'#9DA4A9',t:'RAL'},{c:'RAL 7042',n:'Gris tráfico A',h:'#8F9695',t:'RAL'},
+  {c:'RAL 7043',n:'Gris tráfico B',h:'#4E5451',t:'RAL'},{c:'RAL 7044',n:'Gris seda',h:'#BAB8A8',t:'RAL'},
+  {c:'RAL 7047',n:'Gris teleguía 4',h:'#CBCDC4',t:'RAL'},
+  {c:'RAL 8001',n:'Pardo ocre',h:'#9D622C',t:'RAL'},{c:'RAL 8003',n:'Pardo barro',h:'#7B4028',t:'RAL'},
+  {c:'RAL 8004',n:'Pardo cobre',h:'#8E3A26',t:'RAL'},{c:'RAL 8007',n:'Pardo ciervo',h:'#724830',t:'RAL'},
+  {c:'RAL 8011',n:'Pardo nuez',h:'#4F2B1A',t:'RAL'},{c:'RAL 8012',n:'Pardo rojizo',h:'#5A2524',t:'RAL'},
+  {c:'RAL 8017',n:'Pardo chocolate',h:'#442320',t:'RAL'},{c:'RAL 8019',n:'Pardo grisáceo',h:'#3D3232',t:'RAL'},
+  {c:'RAL 8023',n:'Pardo naranja',h:'#A05325',t:'RAL'},{c:'RAL 8024',n:'Pardo beige',h:'#7B5B3A',t:'RAL'},
+  {c:'RAL 8028',n:'Pardo tierra',h:'#4E3B26',t:'RAL'},
+  {c:'RAL 9001',n:'Blanco crema',h:'#F4F4F4',t:'RAL'},{c:'RAL 9002',n:'Blanco grisáceo',h:'#E7EBDA',t:'RAL'},
+  {c:'RAL 9003',n:'Blanco señales',h:'#F4F4F4',t:'RAL'},{c:'RAL 9004',n:'Negro señales',h:'#282828',t:'RAL'},
+  {c:'RAL 9005',n:'Negro intenso',h:'#0A0A0A',t:'RAL'},{c:'RAL 9006',n:'Blanco aluminio',h:'#A5A5A5',t:'RAL'},
+  {c:'RAL 9010',n:'Blanco puro',h:'#F7F7F7',t:'RAL'},{c:'RAL 9016',n:'Blanco tráfico',h:'#F6F6F6',t:'RAL'},
+  {c:'RAL 9018',n:'Blanco papiro',h:'#D7D7D7',t:'RAL'},
+  // RGB
+  {c:'RGB Blanco',n:'Blanco',h:'#FFFFFF',t:'RGB'},{c:'RGB Negro',n:'Negro',h:'#000000',t:'RGB'},
+  {c:'RGB Gris claro',n:'Gris claro',h:'#D3D3D3',t:'RGB'},{c:'RGB Gris',n:'Gris medio',h:'#808080',t:'RGB'},
+  {c:'RGB Gris oscuro',n:'Gris oscuro',h:'#404040',t:'RGB'},{c:'RGB Rojo',n:'Rojo puro',h:'#FF0000',t:'RGB'},
+  {c:'RGB Naranja',n:'Naranja',h:'#FF8000',t:'RGB'},{c:'RGB Amarillo',n:'Amarillo',h:'#FFFF00',t:'RGB'},
+  {c:'RGB Verde',n:'Verde puro',h:'#00FF00',t:'RGB'},{c:'RGB Verde oscuro',n:'Verde oscuro',h:'#006400',t:'RGB'},
+  {c:'RGB Azul',n:'Azul puro',h:'#0000FF',t:'RGB'},{c:'RGB Azul claro',n:'Azul claro',h:'#ADD8E6',t:'RGB'},
+  {c:'RGB Azul marino',n:'Azul marino',h:'#000080',t:'RGB'},{c:'RGB Cyan',n:'Cyan',h:'#00FFFF',t:'RGB'},
+  {c:'RGB Turquesa',n:'Turquesa',h:'#40E0D0',t:'RGB'},{c:'RGB Violeta',n:'Violeta',h:'#8000FF',t:'RGB'},
+  {c:'RGB Púrpura',n:'Púrpura',h:'#800080',t:'RGB'},{c:'RGB Rosa',n:'Rosa',h:'#FF69B4',t:'RGB'},
+  {c:'RGB Marrón',n:'Marrón',h:'#8B4513',t:'RGB'},{c:'RGB Beige',n:'Beige',h:'#F5F5DC',t:'RGB'},
+  {c:'RGB Crema',n:'Crema',h:'#FFFDD0',t:'RGB'},{c:'RGB Terracota',n:'Terracota',h:'#C07050',t:'RGB'},
+  {c:'RGB Marfil',n:'Marfil',h:'#FFFFF0',t:'RGB'},{c:'RGB Salmón',n:'Salmón',h:'#FA8072',t:'RGB'},
+  {c:'RGB Coral',n:'Coral',h:'#FF6347',t:'RGB'},{c:'RGB Lima',n:'Lima',h:'#00FF80',t:'RGB'},
+  {c:'RGB Ocre',n:'Ocre',h:'#CC7700',t:'RGB'},{c:'RGB Dorado',n:'Dorado',h:'#FFD700',t:'RGB'},
+  {c:'RGB Plateado',n:'Plateado',h:'#C0C0C0',t:'RGB'},{c:'RGB Blanco roto',n:'Blanco roto',h:'#F5F5F0',t:'RGB'},
+  {c:'RGB Blanco hueso',n:'Blanco hueso',h:'#F8F0E3',t:'RGB'},{c:'RGB Granate',n:'Granate',h:'#800000',t:'RGB'}
+];
+
+function fltC(tipo,btn){
+  cFiltro=tipo;
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderC(tipo);
+}
+function buscarC(){
+  var q=document.getElementById('csearch').value.trim().toLowerCase();
+  var data=CD.filter(c=>(cFiltro==='ALL'||c.t===cFiltro)&&(c.c.toLowerCase().includes(q)||c.n.toLowerCase().includes(q)));
+  drawGrid(data);
+}
+function renderC(tipo){drawGrid(tipo==='ALL'?CD:CD.filter(c=>c.t===tipo))}
+function drawGrid(data){
+  document.getElementById('cgrid').innerHTML=data.slice(0,120).map(c=>`
+    <div class="ccard" onclick="selC('${c.c.replace(/'/g,'\\\'')}')" id="cc-${c.c.replace(/[\s']/g,'_')}">
+      <div class="cswatch" style="background:${c.h}"></div>
+      <div class="cinfo"><div class="ccode">${c.c}</div><div class="cname">${c.n}</div></div>
+    </div>`).join('');
+}
+function selC(cod){
+  var c=CD.find(x=>x.c===cod);if(!c)return;
+  cSel=c;
+  document.getElementById('cprev-sw').style.background=c.h;
+  document.getElementById('cprev-cod').textContent=c.c;
+  document.getElementById('cprev-nom').textContent=c.n+' · '+c.h;
+  document.getElementById('cprev-box').style.display='block';
+  document.querySelectorAll('.ccard').forEach(el=>el.classList.remove('sel'));
+  var el=document.getElementById('cc-'+cod.replace(/[\s']/g,'_'));
+  if(el)el.classList.add('sel');
+}
+function copiarC(){
+  if(!cSel)return;
+  var txt=cSel.c+' '+cSel.h;
+  if(navigator.clipboard)navigator.clipboard.writeText(txt);
+  toast('✓ Copiado: '+txt);
+}
+
+// INIT
+renderC('NCS');
+</script>
+</body>
+</html>
