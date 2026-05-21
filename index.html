@@ -7,11 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--az:#003d8f;--az2:#002060;--am:#f5c800;--bl:#ffffff;--gr:#f0f4f8;--tx:#1a2340;--vd:#25D366}
+/* ══════════════════════════════════════════════
+   VARIABLES Y RESET
+══════════════════════════════════════════════ */
+:root{--az:#003d8f;--az2:#002060;--am:#f5c800;--bl:#ffffff;--gr:#f0f4f8;--tx:#1a2340;--vd:#25D366;--pro:#7c3aed}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Nunito',sans-serif;background:var(--gr);color:var(--tx);min-height:100vh;overflow-x:hidden}
 
-/* ── HERO ── */
+/* ══════════════════════════════════════════════
+   HERO / LANDING
+══════════════════════════════════════════════ */
 .hero{background:linear-gradient(160deg,var(--az2) 0%,var(--az) 60%,#1a5ea6 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px 80px;position:relative;overflow:hidden;text-align:center}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(245,200,0,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(255,255,255,.04) 0%,transparent 50%)}
 .hero-badge{background:rgba(245,200,0,.15);border:1.5px solid rgba(245,200,0,.4);color:var(--am);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:30px;margin-bottom:24px;display:inline-block;animation:fadeDown .6s ease both}
@@ -25,30 +30,45 @@ body{font-family:'Nunito',sans-serif;background:var(--gr);color:var(--tx);min-he
 .hero-feat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 10px;display:flex;align-items:center;gap:8px}
 .hero-feat-icon{font-size:20px;flex-shrink:0}
 .hero-feat-text{font-size:12px;color:rgba(255,255,255,.85);font-weight:700;text-align:left}
+.hero-price-badge{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:14px;padding:10px 20px;margin-top:20px;display:inline-block;animation:fadeUp .6s ease .55s both}
+.hero-price-badge span{font-size:22px;font-weight:900;color:var(--am)}
+.hero-price-badge small{font-size:11px;color:rgba(255,255,255,.6);display:block;margin-top:2px}
 
-/* ── APP (bottom nav) ── */
+/* ══════════════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════════════ */
 .app-shell{display:none;flex-direction:column;min-height:100vh;padding-bottom:72px}
 .app-bar{background:var(--az2);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .app-bar-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:white;letter-spacing:1px}
 .app-bar-logo span{color:var(--am)}
-.app-bar-right{font-size:11px;color:rgba(255,255,255,.5);font-weight:600}
+.app-bar-right{font-size:11px;color:rgba(255,255,255,.5);font-weight:600;cursor:pointer}
+.app-bar-pro{background:var(--pro);color:white;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;cursor:pointer}
 
+/* ══════════════════════════════════════════════
+   BOTTOM NAV
+══════════════════════════════════════════════ */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--az2);display:flex;z-index:100;border-top:1px solid rgba(255,255,255,.08)}
 .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 12px;background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;color:rgba(255,255,255,.5);font-size:10px;font-weight:700;gap:3px;transition:color .2s}
 .bnav-btn.active{color:var(--am)}
 .bnav-btn .ico{font-size:22px}
 
-/* ── PAGES ── */
+/* ══════════════════════════════════════════════
+   PAGES
+══════════════════════════════════════════════ */
 .page{display:none;padding:16px;max-width:520px;margin:0 auto}
 .page.active{display:block}
 .page-title{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--az2);letter-spacing:1px;margin-bottom:4px;margin-top:2px}
 .page-sub{font-size:12px;color:#64748b;margin-bottom:16px}
 
-/* ── CARDS ── */
+/* ══════════════════════════════════════════════
+   CARDS
+══════════════════════════════════════════════ */
 .card{background:white;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,32,96,.06)}
 .card-hdr{font-size:11px;font-weight:800;color:var(--az);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 
-/* ── INPUTS ── */
+/* ══════════════════════════════════════════════
+   INPUTS
+══════════════════════════════════════════════ */
 .ig{margin-bottom:10px}
 .il{font-size:12px;font-weight:700;color:#64748b;margin-bottom:4px;display:block}
 .if{width:100%;border:1.5px solid #e2e8f0;border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Nunito',sans-serif;outline:none;transition:border .2s;color:var(--tx)}
@@ -57,7 +77,9 @@ textarea.if{resize:none}
 .ir2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .ir3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
 
-/* ── BUTTONS ── */
+/* ══════════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════════ */
 .btn{border:none;border-radius:12px;padding:13px 18px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:transform .15s;display:inline-flex;align-items:center;gap:6px}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--az);color:white;width:100%;justify-content:center}
@@ -65,16 +87,21 @@ textarea.if{resize:none}
 .btn-vd{background:var(--vd);color:white}
 .btn-red{background:#ef4444;color:white}
 .btn-ghost{background:#e2e8f0;color:#475569}
+.btn-pro{background:var(--pro);color:white;width:100%;justify-content:center}
 .btn-sm{padding:8px 13px;font-size:12px;border-radius:9px}
 .btn-row{display:flex;gap:8px;margin-top:10px}
 .btn-row .btn{flex:1;justify-content:center}
 
-/* ── TIPO WORK CHIPS ── */
+/* ══════════════════════════════════════════════
+   CHIPS
+══════════════════════════════════════════════ */
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .chip{background:white;border:1.5px solid #e2e8f0;border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;color:var(--tx);transition:all .15s}
 .chip.active{border-color:var(--az);background:#e8f0fe;color:var(--az)}
 
-/* ── PARTIDAS ── */
+/* ══════════════════════════════════════════════
+   PARTIDAS
+══════════════════════════════════════════════ */
 .part-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 .part-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px}
 .part-info{flex:1}
@@ -83,7 +110,9 @@ textarea.if{resize:none}
 .part-price{font-size:15px;font-weight:900;color:var(--az);min-width:76px;text-align:right}
 .part-del{background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;padding:2px;line-height:1}
 
-/* ── TOTAL BOX ── */
+/* ══════════════════════════════════════════════
+   TOTAL BOX
+══════════════════════════════════════════════ */
 .total-box{background:var(--az2);border-radius:14px;padding:14px 16px}
 .total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .total-row:last-child{margin-bottom:0;border-top:1px solid rgba(255,255,255,.15);padding-top:8px;margin-top:4px}
@@ -91,7 +120,9 @@ textarea.if{resize:none}
 .tv{font-size:14px;font-weight:800;color:white}
 .tv.big{font-size:22px;color:var(--am)}
 
-/* ── TRAMOS ── */
+/* ══════════════════════════════════════════════
+   TRAMOS
+══════════════════════════════════════════════ */
 .tramo-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .tramo-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:8px}
 .tramo-info{flex:1}
@@ -103,13 +134,18 @@ textarea.if{resize:none}
 .calc-total-l{font-size:13px;font-weight:800;color:var(--az2)}
 .calc-total-v{font-size:22px;font-weight:900;color:var(--az2)}
 
-/* ── COLORES ── */
-.color-tabs{display:flex;gap:6px;margin-bottom:12px}
-.ctab{flex:1;padding:9px 4px;border:1.5px solid #e2e8f0;background:white;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;color:#64748b;transition:all .15s}
+/* ══════════════════════════════════════════════
+   COLORES
+══════════════════════════════════════════════ */
+.color-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.ctab{flex:1;min-width:60px;padding:9px 4px;border:1.5px solid #e2e8f0;background:white;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;color:#64748b;transition:all .15s}
 .ctab.active{border-color:var(--az);color:var(--az);background:#e8f0fe}
+.ctab.pro-tab{border-color:#e9d5ff;color:var(--pro);background:#faf5ff}
 .cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.ccard{border-radius:12px;overflow:hidden;cursor:pointer;border:2.5px solid transparent;transition:border .15s}
+.ccard{border-radius:12px;overflow:hidden;cursor:pointer;border:2.5px solid transparent;transition:border .15s;position:relative}
 .ccard.sel{border-color:var(--az)}
+.ccard.locked{opacity:.75}
+.ccard-lock{position:absolute;top:4px;right:4px;font-size:12px;background:rgba(0,0,0,.4);border-radius:6px;padding:1px 4px}
 .cswatch{height:50px}
 .cinfo{background:white;padding:4px 6px}
 .ccode{font-size:10px;font-weight:800;color:var(--tx)}
@@ -119,7 +155,9 @@ textarea.if{resize:none}
 .cprev-cod{font-size:17px;font-weight:900;color:var(--tx)}
 .cprev-nom{font-size:12px;color:#64748b}
 
-/* ── PRESUP LIST ── */
+/* ══════════════════════════════════════════════
+   PRESUP LIST
+══════════════════════════════════════════════ */
 .presup-item{background:white;border-radius:14px;padding:14px;margin-bottom:8px;border:1px solid #e2e8f0;cursor:pointer;transition:box-shadow .15s}
 .presup-item:active{box-shadow:0 4px 16px rgba(0,32,96,.1)}
 .ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
@@ -130,13 +168,27 @@ textarea.if{resize:none}
 .ptotal{font-size:20px;font-weight:900;color:var(--az)}
 .pacts{display:flex;gap:6px;margin-top:10px}
 
-/* ── EMPTY ── */
+/* ══════════════════════════════════════════════
+   PRO BANNER (en lista presupuestos)
+══════════════════════════════════════════════ */
+.pro-banner{background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.pro-banner-ico{font-size:28px;flex-shrink:0}
+.pro-banner-txt{flex:1}
+.pro-banner-tit{font-size:14px;font-weight:900;color:white}
+.pro-banner-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+.pro-banner-btn{background:var(--am);color:#002060;font-size:11px;font-weight:900;padding:7px 12px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+
+/* ══════════════════════════════════════════════
+   EMPTY
+══════════════════════════════════════════════ */
 .empty{text-align:center;padding:40px 20px;color:#94a3b8}
 .empty-ico{font-size:48px;margin-bottom:10px}
 .empty-txt{font-size:15px;font-weight:700}
 .empty-hint{font-size:12px;margin-top:4px}
 
-/* ── TOGGLE ── */
+/* ══════════════════════════════════════════════
+   TOGGLE
+══════════════════════════════════════════════ */
 .toggle-wrap{display:flex;align-items:center;gap:10px}
 .toggle-lbl{font-size:13px;font-weight:700;color:var(--tx)}
 .sw{position:relative;width:44px;height:24px;flex-shrink:0}
@@ -146,22 +198,49 @@ textarea.if{resize:none}
 input:checked+.swt{background:var(--az)}
 input:checked+.swt:before{transform:translateX(20px)}
 
-/* ── MIC ── */
+/* ══════════════════════════════════════════════
+   MIC
+══════════════════════════════════════════════ */
 .mic{background:rgba(0,61,143,.08);border:none;border-radius:9px;padding:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .mic.on{background:#fef2f2;animation:pulse .8s infinite}
 
-/* ── MODAL ── */
+/* ══════════════════════════════════════════════
+   MODAL / SHEET
+══════════════════════════════════════════════ */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:flex-end}
 .overlay.open{display:flex}
 .sheet{background:white;border-radius:22px 22px 0 0;padding:20px 16px 30px;width:100%;max-height:88vh;overflow-y:auto}
 .sheet-handle{width:40px;height:4px;background:#e2e8f0;border-radius:2px;margin:0 auto 16px}
 .sheet-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--tx);letter-spacing:.5px;margin-bottom:14px}
 
-/* ── TOAST ── */
+/* ══════════════════════════════════════════════
+   MODAL PRO
+══════════════════════════════════════════════ */
+.pro-modal-header{background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:16px;padding:20px;margin-bottom:16px;text-align:center}
+.pro-modal-ico{font-size:40px;margin-bottom:8px}
+.pro-modal-tit{font-family:'Bebas Neue',sans-serif;font-size:28px;color:white;letter-spacing:1px}
+.pro-modal-sub{font-size:13px;color:rgba(255,255,255,.8);margin-top:4px}
+.pro-feat-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.pro-feat-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#faf5ff;border-radius:12px;border:1px solid #e9d5ff}
+.pro-feat-item span:first-child{font-size:18px;flex-shrink:0}
+.pro-feat-item div{font-size:13px;font-weight:700;color:var(--tx)}
+.pro-feat-item small{font-size:11px;color:#64748b;display:block}
+.pro-price-box{background:#f8fafc;border-radius:14px;padding:14px;margin-bottom:14px;display:flex;gap:10px}
+.pro-price-opt{flex:1;border:2px solid #e2e8f0;border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s}
+.pro-price-opt.sel{border-color:var(--pro);background:#faf5ff}
+.pro-price-opt .ppo-price{font-size:20px;font-weight:900;color:var(--pro)}
+.pro-price-opt .ppo-period{font-size:10px;color:#64748b;font-weight:700}
+.pro-price-opt .ppo-save{font-size:10px;color:#16a34a;font-weight:800;margin-top:3px}
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
 .toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:11px 22px;border-radius:22px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
 
-/* ── ANIMS ── */
+/* ══════════════════════════════════════════════
+   ANIMACIONES
+══════════════════════════════════════════════ */
 @keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
@@ -171,15 +250,20 @@ input:checked+.swt:before{transform:translateX(20px)}
 
 <div class="toast" id="toast"></div>
 
-<!-- ╔══════════════════════════════╗ -->
-<!-- ║          HERO / LANDING      ║ -->
-<!-- ╚══════════════════════════════╝ -->
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║            HERO / LANDING               ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
 <section class="hero" id="hero">
   <div class="hero-badge">🎨 La app del pintor profesional</div>
   <h1 class="hero-titulo">Pintor<span>App</span><br><span style="font-size:.55em;letter-spacing:4px;color:rgba(255,255,255,.6)">LITE</span></h1>
   <p class="hero-sub">Presupuestos en 2 minutos<br>directo desde tu móvil 📱</p>
-  <button class="hero-cta" onclick="entrar()">Entrar a la app</button>
-  <p class="hero-nota">Sin registro · Funciona sin internet · Gratis</p>
+  <!-- PRECIO ÚNICO -->
+  <div class="hero-price-badge">
+    <span>5€</span> pago único · Para siempre
+    <small>Sin suscripción · Sin sorpresas</small>
+  </div>
+  <button class="hero-cta" onclick="entrar()" style="margin-top:20px">Entrar a la app</button>
+  <p class="hero-nota">Sin registro · Funciona sin internet</p>
   <div class="hero-feats">
     <div class="hero-feat"><span class="hero-feat-icon">🎤</span><span class="hero-feat-text">Dicta por voz</span></div>
     <div class="hero-feat"><span class="hero-feat-icon">📄</span><span class="hero-feat-text">PDF profesional</span></div>
@@ -190,18 +274,23 @@ input:checked+.swt:before{transform:translateX(20px)}
   </div>
 </section>
 
-<!-- ╔══════════════════════════════╗ -->
-<!-- ║           APP SHELL          ║ -->
-<!-- ╚══════════════════════════════╝ -->
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║              APP SHELL                  ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
 <div class="app-shell" id="appshell">
 
   <!-- TOP BAR -->
   <div class="app-bar">
     <div class="app-bar-logo">Pintor<span>App</span> <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif">Lite</span></div>
-    <div class="app-bar-right" id="bar-sub">Mis presupuestos</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="app-bar-right" id="bar-sub">Mis presupuestos</div>
+      <div class="app-bar-pro" onclick="openPro()">⭐ PRO</div>
+    </div>
   </div>
 
-  <!-- ── PAGE: PRESUPUESTOS ── -->
+  <!-- ══════════════════════════════════════════
+       PAGE: PRESUPUESTOS
+  ══════════════════════════════════════════ -->
   <div class="page active" id="page-list">
     <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 16px">
       <div>
@@ -210,10 +299,21 @@ input:checked+.swt:before{transform:translateX(20px)}
       </div>
       <button class="btn btn-am btn-sm" onclick="irNuevo()">+ Nuevo</button>
     </div>
+    <!-- BANNER PRO (caramelo) -->
+    <div class="pro-banner" onclick="openPro()">
+      <div class="pro-banner-ico">⭐</div>
+      <div class="pro-banner-txt">
+        <div class="pro-banner-tit">Pásate a PintorApp Pro</div>
+        <div class="pro-banner-sub">Historial clientes · Colores Valentine & Bruguer · Partidas ilimitadas</div>
+      </div>
+      <div class="pro-banner-btn">Ver Pro</div>
+    </div>
     <div id="plist"></div>
   </div>
 
-  <!-- ── PAGE: NUEVO / EDITAR ── -->
+  <!-- ══════════════════════════════════════════
+       PAGE: NUEVO / EDITAR
+  ══════════════════════════════════════════ -->
   <div class="page" id="page-nuevo">
     <div class="page-title" id="ntit">Nuevo presupuesto</div>
     <div class="page-sub">Rellena los datos y añade partidas</div>
@@ -240,10 +340,11 @@ input:checked+.swt:before{transform:translateX(20px)}
         <div class="ig"><label class="il">Fecha</label><input class="if" id="cli-fecha" type="date"></div>
       </div>
       <div class="ig"><label class="il">Notas</label><textarea class="if" id="cli-notas" rows="2" placeholder="Observaciones, colores acordados..."></textarea></div>
-      <!-- IMPUESTO -->
+      <!-- IMPUESTO + COMUNIDAD -->
       <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">
-        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="igic" onchange="chkImp('igic')"><span class="swt"></span></label><span class="toggle-lbl">IGIC 7% (Canarias)</span></div>
+        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="igic" onchange="chkImp('igic')"><span class="swt"></span></label><span class="toggle-lbl">IGIC 7%</span></div>
         <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="iva" onchange="chkImp('iva')"><span class="swt"></span></label><span class="toggle-lbl">IVA 21%</span></div>
+        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="comunidad" onchange="recalc()"><span class="swt"></span></label><span class="toggle-lbl">+10% Comunidad</span></div>
       </div>
     </div>
 
@@ -274,6 +375,19 @@ input:checked+.swt:before{transform:translateX(20px)}
         <div class="ig"><label class="il">Total €</label><input class="if" id="part-tot" type="number" placeholder="0" step="0.01" style="background:#f8fafc"></div>
       </div>
       <button class="btn btn-primary" onclick="addPart()">+ Añadir partida</button>
+
+      <!-- PARTIDA LIBRE (1 gratis en Lite) -->
+      <div style="margin-top:10px;padding:10px;background:#faf5ff;border-radius:12px;border:1px solid #e9d5ff">
+        <div style="font-size:11px;font-weight:800;color:var(--pro);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">✏️ Partida libre</div>
+        <div class="ig" style="margin-bottom:6px">
+          <input class="if" id="libre-desc" placeholder="Descripción personalizada..." style="border-color:#e9d5ff">
+        </div>
+        <div class="ir2">
+          <div class="ig"><input class="if" id="libre-tot" type="number" placeholder="Importe €" step="0.01" style="border-color:#e9d5ff"></div>
+          <button class="btn btn-sm" style="background:var(--pro);color:white;margin-top:0;align-self:flex-end;height:44px" onclick="addLibre()">+ Añadir</button>
+        </div>
+        <div style="font-size:10px;color:#94a3b8;margin-top:4px" id="libre-hint">1 partida libre incluida en Lite · <span style="color:var(--pro);cursor:pointer;font-weight:800" onclick="openPro()">Pro = ilimitadas</span></div>
+      </div>
     </div>
 
     <!-- RESUMEN -->
@@ -282,6 +396,7 @@ input:checked+.swt:before{transform:translateX(20px)}
       <div class="part-list" id="plist2"></div>
       <div class="total-box">
         <div class="total-row"><span class="tl">Subtotal</span><span class="tv" id="t-sub">0,00 €</span></div>
+        <div class="total-row" id="t-com-row" style="display:none"><span class="tl">Gastos comunidad 10%</span><span class="tv" id="t-com">0,00 €</span></div>
         <div class="total-row" id="t-imp-row" style="display:none"><span class="tl" id="t-imp-lbl">IGIC 7%</span><span class="tv" id="t-imp">0,00 €</span></div>
         <div class="total-row"><span class="tl">TOTAL</span><span class="tv big" id="t-tot">0,00 €</span></div>
       </div>
@@ -293,7 +408,9 @@ input:checked+.swt:before{transform:translateX(20px)}
     </div>
   </div>
 
-  <!-- ── PAGE: COLORES ── -->
+  <!-- ══════════════════════════════════════════
+       PAGE: COLORES
+  ══════════════════════════════════════════ -->
   <div class="page" id="page-colores">
     <div class="page-title">Carta de colores</div>
     <div class="page-sub">NCS · RAL · RGB — toca para copiar el código</div>
@@ -315,12 +432,16 @@ input:checked+.swt:before{transform:translateX(20px)}
       <button class="ctab" onclick="fltC('RAL',this)">RAL</button>
       <button class="ctab" onclick="fltC('RGB',this)">RGB</button>
       <button class="ctab" onclick="fltC('ALL',this)">Todos</button>
+      <button class="ctab pro-tab" onclick="fltC('VAL',this)">🔒 Valentine</button>
+      <button class="ctab pro-tab" onclick="fltC('BRU',this)">🔒 Bruguer</button>
     </div>
     <div class="ig" style="margin-bottom:12px"><input class="if" id="csearch" placeholder="Buscar código o nombre..." oninput="buscarC()"></div>
     <div class="cgrid" id="cgrid"></div>
   </div>
 
-  <!-- ── PAGE: CALCULADORA ── -->
+  <!-- ══════════════════════════════════════════
+       PAGE: CALCULADORA
+  ══════════════════════════════════════════ -->
   <div class="page" id="page-calc">
     <div class="page-title">Calculadora</div>
     <div class="page-sub">Superficie por tramos — fachadas y habitaciones</div>
@@ -359,7 +480,9 @@ input:checked+.swt:before{transform:translateX(20px)}
   </nav>
 </div>
 
-<!-- MODAL VER PRESUPUESTO -->
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║         MODAL VER PRESUPUESTO           ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
 <div class="overlay" id="modal-ver">
   <div class="sheet">
     <div class="sheet-handle"></div>
@@ -377,180 +500,302 @@ input:checked+.swt:before{transform:translateX(20px)}
   </div>
 </div>
 
-<script>
-// ═══════════════════════════════════════════════
-// DATOS Y ESTADO
-// ═══════════════════════════════════════════════
-var partidas=[], tramos=[], editId=null, verId=null;
-var presups=JSON.parse(localStorage.getItem('pal_v1')||'[]');
-var cFiltro='NCS', cSel=null;
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║            MODAL PRO                    ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div class="overlay" id="modal-pro">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closePro()">✕</button>
+    <div class="pro-modal-header">
+      <div class="pro-modal-ico">⭐</div>
+      <div class="pro-modal-tit">PintorApp PRO</div>
+      <div class="pro-modal-sub">Todo lo que necesita un pintor profesional</div>
+    </div>
+    <div class="pro-feat-list">
+      <div class="pro-feat-item"><span>🎨</span><div>Carta Valentine & Bruguer<small>+500 colores de marca con referencia exacta</small></div></div>
+      <div class="pro-feat-item"><span>✏️</span><div>Partidas libres ilimitadas<small>Añade cualquier concepto personalizado</small></div></div>
+      <div class="pro-feat-item"><span>👥</span><div>Historial de clientes<small>Accede a todos tus clientes y obras anteriores</small></div></div>
+      <div class="pro-feat-item"><span>📄</span><div>PDF con tu logo y datos<small>Presupuestos 100% personalizados</small></div></div>
+      <div class="pro-feat-item"><span>📊</span><div>Estadísticas y facturación<small>Controla tus ingresos mes a mes</small></div></div>
+      <div class="pro-feat-item"><span>☁️</span><div>Copia de seguridad en la nube<small>Nunca pierdas tus presupuestos</small></div></div>
+    </div>
+    <!-- OPCIONES DE PRECIO -->
+    <div class="pro-price-box">
+      <div class="pro-price-opt sel" id="popt-m" onclick="selPlan('m')">
+        <div class="ppo-price">4,99€</div>
+        <div class="ppo-period">/ mes</div>
+      </div>
+      <div class="pro-price-opt" id="popt-y" onclick="selPlan('y')">
+        <div class="ppo-price">29€</div>
+        <div class="ppo-period">/ año</div>
+        <div class="ppo-save">Ahorra 31€</div>
+      </div>
+    </div>
+    <!-- TODO: Conectar con pasarela de pago (Stripe / Redsys) -->
+    <!-- La función activarPro() debe llamarse tras confirmar el pago -->
+    <button class="btn btn-pro" onclick="activarPro()">⭐ Activar Pro ahora</button>
+    <p style="text-align:center;font-size:11px;color:#94a3b8;margin-top:10px">Cancela cuando quieras · Pago seguro</p>
+    <p style="text-align:center;font-size:10px;color:#cbd5e1;margin-top:6px;cursor:pointer" onclick="desactivarPro()">[ Modo demo: resetear Pro ]</p>
+  </div>
+</div>
 
-function entrar(){
-  document.getElementById('hero').style.display='none';
-  var s=document.getElementById('appshell');
-  s.style.display='flex';
+<script>
+// ═══════════════════════════════════════════════════════════════
+// ESTADO GLOBAL
+// ═══════════════════════════════════════════════════════════════
+// TODO: isPro debe activarse tras verificar pago con backend/Stripe
+var isPro = localStorage.getItem('pal_pro') === '1';
+var partidas = [], tramos = [], editId = null, verId = null;
+var presups = JSON.parse(localStorage.getItem('pal_v1') || '[]');
+var cFiltro = 'NCS', cSel = null;
+var libreUsadas = parseInt(localStorage.getItem('pal_libre') || '0');
+var planSel = 'm';
+
+// ═══════════════════════════════════════════════════════════════
+// ENTRADA
+// ═══════════════════════════════════════════════════════════════
+function entrar() {
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('appshell').style.display = 'flex';
   renderList();
   renderC('NCS');
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // NAVEGACIÓN
-// ═══════════════════════════════════════════════
-var barSubs=['Mis presupuestos','Nuevo presupuesto','Carta de colores','Calculadora de superficies'];
-function goPage(id,idx){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('bn'+idx).classList.add('active');
-  document.getElementById('bar-sub').textContent=barSubs[idx];
-  if(id==='list')renderList();
-  if(id==='colores')renderC(cFiltro);
+// ═══════════════════════════════════════════════════════════════
+var barSubs = ['Mis presupuestos', 'Nuevo presupuesto', 'Carta de colores', 'Calculadora de superficies'];
+function goPage(id, idx) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('bn' + idx).classList.add('active');
+  document.getElementById('bar-sub').textContent = barSubs[idx];
+  if (id === 'list') renderList();
+  if (id === 'colores') renderC(cFiltro);
 }
-function irNuevo(){goPage('nuevo',1);}
+function irNuevo() { goPage('nuevo', 1); }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // TOAST
-// ═══════════════════════════════════════════════
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+// ═══════════════════════════════════════════════════════════════
+function toast(m) {
+  var t = document.getElementById('toast');
+  t.textContent = m;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// MODAL PRO
+// ═══════════════════════════════════════════════════════════════
+function openPro() { document.getElementById('modal-pro').classList.add('open'); }
+function closePro() { document.getElementById('modal-pro').classList.remove('open'); }
+function selPlan(p) {
+  planSel = p;
+  document.getElementById('popt-m').classList.toggle('sel', p === 'm');
+  document.getElementById('popt-y').classList.toggle('sel', p === 'y');
+}
+function activarPro() {
+  // DEMO: activa Pro localmente (conectar Stripe/Bizum para producción)
+  isPro = true;
+  localStorage.setItem('pal_pro', '1');
+  closePro();
+  renderList();
+  // Actualizar hint de partida libre
+  var hint = document.getElementById('libre-hint');
+  if (hint) hint.innerHTML = '⭐ Pro activo · Partidas libres ilimitadas';
+  toast('⭐ ¡Bienvenido a PintorApp Pro!');
+}
+
+// ═══════════════════════════════════════════════════════════════
 // MIC
-// ═══════════════════════════════════════════════
-var recog=null;
-function mic(id){
-  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){toast('Micrófono no disponible');return}
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  var btn=document.getElementById('mic-'+id.replace(/[^a-z]/g,''));
-  if(!btn){// fallback by map
-    var map={'cli-nombre':'cn','cli-obra':'co','part-desc':'pd'};
-    btn=document.getElementById('mic-'+map[id]);
-  }
-  if(recog){recog.stop();recog=null;if(btn)btn.classList.remove('on');return}
-  recog=new SR();
-  recog.lang='es-ES';recog.continuous=false;recog.interimResults=false;
-  if(btn)btn.classList.add('on');
-  recog.onresult=e=>{document.getElementById(id).value=e.results[0][0].transcript;if(id==='part-desc')calcP()};
-  recog.onend=()=>{recog=null;if(btn)btn.classList.remove('on')};
-  recog.onerror=()=>{recog=null;if(btn)btn.classList.remove('on');toast('Error micrófono')};
+// ═══════════════════════════════════════════════════════════════
+var recog = null;
+function mic(id) {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { toast('Micrófono no disponible'); return; }
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var map = { 'cli-nombre': 'cn', 'cli-obra': 'co', 'part-desc': 'pd' };
+  var btn = document.getElementById('mic-' + (map[id] || id.replace(/[^a-z]/g, '')));
+  if (recog) { recog.stop(); recog = null; if (btn) btn.classList.remove('on'); return; }
+  recog = new SR();
+  recog.lang = 'es-ES'; recog.continuous = false; recog.interimResults = false;
+  if (btn) btn.classList.add('on');
+  recog.onresult = e => { document.getElementById(id).value = e.results[0][0].transcript; if (id === 'part-desc') calcP(); };
+  recog.onend = () => { recog = null; if (btn) btn.classList.remove('on'); };
+  recog.onerror = () => { recog = null; if (btn) btn.classList.remove('on'); toast('Error micrófono'); };
   recog.start();
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // FECHA HOY
-// ═══════════════════════════════════════════════
-document.getElementById('cli-fecha').value=new Date().toISOString().split('T')[0];
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('cli-fecha').value = new Date().toISOString().split('T')[0];
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // TIPO CHIP
-// ═══════════════════════════════════════════════
-function setTipo(el,tipo){
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+// ═══════════════════════════════════════════════════════════════
+function setTipo(el, tipo) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('part-desc').value=tipo;
+  document.getElementById('part-desc').value = tipo;
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // IMPUESTO toggle
-// ═══════════════════════════════════════════════
-function chkImp(which){
-  if(which==='igic'&&document.getElementById('igic').checked)document.getElementById('iva').checked=false;
-  if(which==='iva'&&document.getElementById('iva').checked)document.getElementById('igic').checked=false;
+// ═══════════════════════════════════════════════════════════════
+function chkImp(which) {
+  if (which === 'igic' && document.getElementById('igic').checked) document.getElementById('iva').checked = false;
+  if (which === 'iva' && document.getElementById('iva').checked) document.getElementById('igic').checked = false;
   recalc();
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // PARTIDAS
-// ═══════════════════════════════════════════════
-function calcP(){
-  var m=parseFloat(document.getElementById('part-m2').value)||0;
-  var e=parseFloat(document.getElementById('part-eur').value)||0;
-  if(m&&e)document.getElementById('part-tot').value=(m*e).toFixed(2);
+// ═══════════════════════════════════════════════════════════════
+function calcP() {
+  var m = parseFloat(document.getElementById('part-m2').value) || 0;
+  var e = parseFloat(document.getElementById('part-eur').value) || 0;
+  if (m && e) document.getElementById('part-tot').value = (m * e).toFixed(2);
 }
-function addPart(){
-  var desc=document.getElementById('part-desc').value.trim();
-  var m2=parseFloat(document.getElementById('part-m2').value)||0;
-  var eur=parseFloat(document.getElementById('part-eur').value)||0;
-  var tot=parseFloat(document.getElementById('part-tot').value)||(m2*eur);
-  if(!desc){toast('Escribe una descripción');return}
-  if(!tot){toast('Indica precio o importe');return}
-  partidas.push({id:Date.now(),desc,m2,eur,tot});
-  ['part-desc','part-m2','part-eur','part-tot'].forEach(id=>document.getElementById(id).value='');
-  renderParts();recalc();toast('✓ Partida añadida');
+
+function addPart() {
+  var desc = document.getElementById('part-desc').value.trim();
+  var m2 = parseFloat(document.getElementById('part-m2').value) || 0;
+  var eur = parseFloat(document.getElementById('part-eur').value) || 0;
+  var tot = parseFloat(document.getElementById('part-tot').value) || (m2 * eur);
+  if (!desc) { toast('Escribe una descripción'); return; }
+  if (!tot) { toast('Indica precio o importe'); return; }
+  partidas.push({ id: Date.now(), desc, m2, eur, tot, tipo: 'normal' });
+  ['part-desc', 'part-m2', 'part-eur', 'part-tot'].forEach(id => document.getElementById(id).value = '');
+  renderParts(); recalc(); toast('✓ Partida añadida');
 }
-function delPart(id){partidas=partidas.filter(p=>p.id!==id);renderParts();recalc()}
-function renderParts(){
-  var rc=document.getElementById('rescard');
-  if(!partidas.length){rc.style.display='none';return}
-  rc.style.display='block';
-  document.getElementById('plist2').innerHTML=partidas.map(p=>`
+
+// PARTIDA LIBRE (1 gratis en Lite, ilimitadas en Pro)
+function addLibre() {
+  var desc = document.getElementById('libre-desc').value.trim();
+  var tot = parseFloat(document.getElementById('libre-tot').value) || 0;
+  if (!desc) { toast('Escribe la descripción'); return; }
+  if (!tot) { toast('Indica el importe'); return; }
+  if (!isPro && libreUsadas >= 1) {
+    openPro();
+    toast('⭐ Pro: partidas libres ilimitadas');
+    return;
+  }
+  partidas.push({ id: Date.now(), desc, m2: 0, eur: 0, tot, tipo: 'libre' });
+  document.getElementById('libre-desc').value = '';
+  document.getElementById('libre-tot').value = '';
+  if (!isPro) {
+    libreUsadas++;
+    localStorage.setItem('pal_libre', libreUsadas);
+    document.getElementById('libre-hint').innerHTML = '✓ Partida libre usada · <span style="color:var(--pro);cursor:pointer;font-weight:800" onclick="openPro()">Pro = ilimitadas ⭐</span>';
+  }
+  renderParts(); recalc(); toast('✓ Partida libre añadida');
+}
+
+function delPart(id) { partidas = partidas.filter(p => p.id !== id); renderParts(); recalc(); }
+
+function renderParts() {
+  var rc = document.getElementById('rescard');
+  if (!partidas.length) { rc.style.display = 'none'; return; }
+  rc.style.display = 'block';
+  document.getElementById('plist2').innerHTML = partidas.map(p => `
     <div class="part-item">
       <div class="part-info">
-        <div class="part-desc">${p.desc}</div>
-        <div class="part-sub">${p.m2?p.m2+' m² × '+fmt(p.eur)+' €/m²':'Precio fijo'}</div>
+        <div class="part-desc">${p.desc}${p.tipo === 'libre' ? ' <span style="font-size:10px;color:var(--pro);font-weight:800">LIBRE</span>' : ''}</div>
+        <div class="part-sub">${p.m2 ? p.m2 + ' m² × ' + fmt(p.eur) + ' €/m²' : 'Precio fijo'}</div>
       </div>
       <div class="part-price">${fmt(p.tot)} €</div>
       <button class="part-del" onclick="delPart(${p.id})">✕</button>
     </div>`).join('');
 }
-function recalc(){
-  var sub=partidas.reduce((a,p)=>a+p.tot,0);
-  var igic=document.getElementById('igic').checked;
-  var iva=document.getElementById('iva').checked;
-  var rate=igic?.07:iva?.21:0;
-  var tax=sub*rate;
-  document.getElementById('t-sub').textContent=fmt(sub)+' €';
-  var ir=document.getElementById('t-imp-row');
-  if(rate){ir.style.display='flex';document.getElementById('t-imp-lbl').textContent=igic?'IGIC 7%':'IVA 21%';document.getElementById('t-imp').textContent=fmt(tax)+' €'}
-  else ir.style.display='none';
-  document.getElementById('t-tot').textContent=fmt(sub+tax)+' €';
-}
-function fmt(n){return parseFloat(n||0).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function fmtF(f){if(!f)return'—';var p=f.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
 
-// ═══════════════════════════════════════════════
-// GUARDAR / LISTA
-// ═══════════════════════════════════════════════
-function guardar(){
-  var nom=document.getElementById('cli-nombre').value.trim();
-  if(!nom){toast('Indica el nombre del cliente');return}
-  if(!partidas.length){toast('Añade al menos una partida');return}
-  var sub=partidas.reduce((a,p)=>a+p.tot,0);
-  var igic=document.getElementById('igic').checked;
-  var iva=document.getElementById('iva').checked;
-  var rate=igic?.07:iva?.21:0;
-  var tax=sub*rate;
-  var data={id:editId||Date.now(),ref:'PA-'+String(Date.now()).slice(-5),
-    fecha:document.getElementById('cli-fecha').value,
-    cliente:nom,obra:document.getElementById('cli-obra').value,
-    tel:document.getElementById('cli-tel').value,notas:document.getElementById('cli-notas').value,
-    igic,iva,rate,tax,partidas:JSON.parse(JSON.stringify(partidas)),
-    sub,total:sub+tax};
-  if(editId)presups=presups.map(p=>p.id===editId?data:p);
-  else presups.unshift(data);
-  localStorage.setItem('pal_v1',JSON.stringify(presups));
-  resetNuevo();goPage('list',0);toast('✓ Presupuesto guardado');
+function recalc() {
+  var sub = partidas.reduce((a, p) => a + p.tot, 0);
+  var comunidad = document.getElementById('comunidad').checked;
+  var igic = document.getElementById('igic').checked;
+  var iva = document.getElementById('iva').checked;
+  var comAmt = comunidad ? sub * 0.10 : 0;
+  var baseImp = sub + comAmt;
+  var rate = igic ? 0.07 : iva ? 0.21 : 0;
+  var tax = baseImp * rate;
+  document.getElementById('t-sub').textContent = fmt(sub) + ' €';
+  // Comunidad
+  var cr = document.getElementById('t-com-row');
+  if (comunidad) { cr.style.display = 'flex'; document.getElementById('t-com').textContent = fmt(comAmt) + ' €'; }
+  else cr.style.display = 'none';
+  // Impuesto
+  var ir = document.getElementById('t-imp-row');
+  if (rate) { ir.style.display = 'flex'; document.getElementById('t-imp-lbl').textContent = igic ? 'IGIC 7%' : 'IVA 21%'; document.getElementById('t-imp').textContent = fmt(tax) + ' €'; }
+  else ir.style.display = 'none';
+  document.getElementById('t-tot').textContent = fmt(sub + comAmt + tax) + ' €';
 }
-function resetNuevo(){
-  partidas=[];editId=null;
-  document.getElementById('ntit').textContent='Nuevo presupuesto';
-  ['cli-nombre','cli-obra','cli-tel','cli-notas'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('cli-fecha').value=new Date().toISOString().split('T')[0];
-  document.getElementById('igic').checked=false;document.getElementById('iva').checked=false;
-  document.getElementById('rescard').style.display='none';
-  document.getElementById('plist2').innerHTML='';
+
+function fmt(n) { return parseFloat(n || 0).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function fmtF(f) { if (!f) return '—'; var p = f.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+
+// ═══════════════════════════════════════════════════════════════
+// GUARDAR / LISTA
+// ═══════════════════════════════════════════════════════════════
+function guardar() {
+  var nom = document.getElementById('cli-nombre').value.trim();
+  if (!nom) { toast('Indica el nombre del cliente'); return; }
+  if (!partidas.length) { toast('Añade al menos una partida'); return; }
+  var sub = partidas.reduce((a, p) => a + p.tot, 0);
+  var comunidad = document.getElementById('comunidad').checked;
+  var igic = document.getElementById('igic').checked;
+  var iva = document.getElementById('iva').checked;
+  var comAmt = comunidad ? sub * 0.10 : 0;
+  var baseImp = sub + comAmt;
+  var rate = igic ? 0.07 : iva ? 0.21 : 0;
+  var tax = baseImp * rate;
+  var data = {
+    id: editId || Date.now(), ref: 'PA-' + String(Date.now()).slice(-5),
+    fecha: document.getElementById('cli-fecha').value,
+    cliente: nom, obra: document.getElementById('cli-obra').value,
+    tel: document.getElementById('cli-tel').value, notas: document.getElementById('cli-notas').value,
+    igic, iva, comunidad, comAmt, rate, tax,
+    partidas: JSON.parse(JSON.stringify(partidas)),
+    sub, total: sub + comAmt + tax
+  };
+  if (editId) presups = presups.map(p => p.id === editId ? data : p);
+  else presups.unshift(data);
+  localStorage.setItem('pal_v1', JSON.stringify(presups));
+  resetNuevo(); goPage('list', 0); toast('✓ Presupuesto guardado');
+}
+
+function resetNuevo() {
+  partidas = []; editId = null;
+  document.getElementById('ntit').textContent = 'Nuevo presupuesto';
+  ['cli-nombre', 'cli-obra', 'cli-tel', 'cli-notas'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cli-fecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('igic').checked = false;
+  document.getElementById('iva').checked = false;
+  document.getElementById('comunidad').checked = false;
+  document.getElementById('rescard').style.display = 'none';
+  document.getElementById('plist2').innerHTML = '';
   recalc();
 }
-function renderList(){
-  var el=document.getElementById('plist');
-  document.getElementById('pcount').textContent=presups.length+' guardado'+(presups.length!==1?'s':'');
-  if(!presups.length){
-    el.innerHTML=`<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin presupuestos aún</div><div class="empty-hint">Toca "+ Nuevo" para crear el primero</div></div>`;return;
+
+function renderList() {
+  var el = document.getElementById('plist');
+  document.getElementById('pcount').textContent = presups.length + ' guardado' + (presups.length !== 1 ? 's' : '');
+  // Ocultar banner Pro si ya es Pro
+  var banner = document.querySelector('.pro-banner');
+  if (banner) banner.style.display = isPro ? 'none' : 'flex';
+  // Cambiar logo a PRO
+  var appLogo = document.querySelector('.app-bar-logo');
+  if (appLogo && isPro) appLogo.innerHTML = 'Pintor<span>App</span> <span style="font-size:11px;font-weight:600;color:var(--am);font-family:'Nunito',sans-serif">PRO ⭐</span>';
+  if (!presups.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Sin presupuestos aún</div><div class="empty-hint">Toca "+ Nuevo" para crear el primero</div></div>`;
+    return;
   }
-  el.innerHTML=presups.map(p=>`
+  el.innerHTML = presups.map(p => `
     <div class="presup-item" onclick="verP(${p.id})">
       <div class="ph"><span class="pref">${p.ref}</span><span class="pfecha">${fmtF(p.fecha)}</span></div>
       <div style="display:flex;justify-content:space-between;align-items:flex-end">
-        <div><div class="pcliente">${p.cliente}</div><div class="pobra">${p.obra||'—'}</div></div>
+        <div><div class="pcliente">${p.cliente}</div><div class="pobra">${p.obra || '—'}</div></div>
         <div class="ptotal">${fmt(p.total)} €</div>
       </div>
       <div class="pacts" onclick="event.stopPropagation()">
@@ -561,196 +806,213 @@ function renderList(){
     </div>`).join('');
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // MODAL VER
-// ═══════════════════════════════════════════════
-function verP(id){
-  var p=presups.find(x=>x.id===id);if(!p)return;verId=id;
-  document.getElementById('m-tit').textContent=p.ref+' — '+p.cliente;
-  document.getElementById('m-body').innerHTML=`
-    <div style="margin-bottom:10px"><div style="font-size:11px;color:#64748b">Obra</div><div style="font-weight:700">${p.obra||'—'}</div></div>
+// ═══════════════════════════════════════════════════════════════
+function verP(id) {
+  var p = presups.find(x => x.id === id); if (!p) return; verId = id;
+  document.getElementById('m-tit').textContent = p.ref + ' — ' + p.cliente;
+  document.getElementById('m-body').innerHTML = `
+    <div style="margin-bottom:10px"><div style="font-size:11px;color:#64748b">Obra</div><div style="font-weight:700">${p.obra || '—'}</div></div>
     <div style="margin-bottom:14px"><div style="font-size:11px;color:#64748b">Fecha</div><div style="font-weight:700">${fmtF(p.fecha)}</div></div>
-    <div class="part-list">${p.partidas.map(x=>`<div class="part-item"><div class="part-info"><div class="part-desc">${x.desc}</div><div class="part-sub">${x.m2?x.m2+' m²':''}</div></div><div class="part-price">${fmt(x.tot)} €</div></div>`).join('')}</div>
+    <div class="part-list">${p.partidas.map(x => `<div class="part-item"><div class="part-info"><div class="part-desc">${x.desc}</div><div class="part-sub">${x.m2 ? x.m2 + ' m²' : ''}</div></div><div class="part-price">${fmt(x.tot)} €</div></div>`).join('')}</div>
     <div class="total-box" style="margin-top:10px">
       <div class="total-row"><span class="tl">Subtotal</span><span class="tv">${fmt(p.sub)} €</span></div>
-      ${p.rate?`<div class="total-row"><span class="tl">${p.igic?'IGIC 7%':'IVA 21%'}</span><span class="tv">${fmt(p.tax)} €</span></div>`:''}
+      ${p.comunidad ? `<div class="total-row"><span class="tl">Comunidad 10%</span><span class="tv">${fmt(p.comAmt)} €</span></div>` : ''}
+      ${p.rate ? `<div class="total-row"><span class="tl">${p.igic ? 'IGIC 7%' : 'IVA 21%'}</span><span class="tv">${fmt(p.tax)} €</span></div>` : ''}
       <div class="total-row"><span class="tl">TOTAL</span><span class="tv big">${fmt(p.total)} €</span></div>
     </div>
-    ${p.notas?`<div style="margin-top:10px;padding:10px;background:#f8fafc;border-radius:10px;font-size:12px;color:#64748b"><b>Notas:</b> ${p.notas}</div>`:''}`;
+    ${p.notas ? `<div style="margin-top:10px;padding:10px;background:#f8fafc;border-radius:10px;font-size:12px;color:#64748b"><b>Notas:</b> ${p.notas}</div>` : ''}`;
   document.getElementById('modal-ver').classList.add('open');
 }
-function closeM(){document.getElementById('modal-ver').classList.remove('open')}
-function editarP(){closeM();editarPid(verId)}
-function editarPid(id){
-  var p=presups.find(x=>x.id===id);if(!p)return;
-  editId=id;document.getElementById('ntit').textContent='Editar presupuesto';
-  document.getElementById('cli-nombre').value=p.cliente;
-  document.getElementById('cli-obra').value=p.obra||'';
-  document.getElementById('cli-tel').value=p.tel||'';
-  document.getElementById('cli-notas').value=p.notas||'';
-  document.getElementById('cli-fecha').value=p.fecha;
-  document.getElementById('igic').checked=p.igic;
-  document.getElementById('iva').checked=p.iva;
-  partidas=JSON.parse(JSON.stringify(p.partidas));
-  renderParts();recalc();goPage('nuevo',1);
+function closeM() { document.getElementById('modal-ver').classList.remove('open'); }
+function editarP() { closeM(); editarPid(verId); }
+function editarPid(id) {
+  var p = presups.find(x => x.id === id); if (!p) return;
+  editId = id; document.getElementById('ntit').textContent = 'Editar presupuesto';
+  document.getElementById('cli-nombre').value = p.cliente;
+  document.getElementById('cli-obra').value = p.obra || '';
+  document.getElementById('cli-tel').value = p.tel || '';
+  document.getElementById('cli-notas').value = p.notas || '';
+  document.getElementById('cli-fecha').value = p.fecha;
+  document.getElementById('igic').checked = p.igic;
+  document.getElementById('iva').checked = p.iva;
+  document.getElementById('comunidad').checked = p.comunidad || false;
+  partidas = JSON.parse(JSON.stringify(p.partidas));
+  renderParts(); recalc(); goPage('nuevo', 1);
 }
-function eliminarP(){
-  if(!confirm('¿Eliminar este presupuesto?'))return;
-  presups=presups.filter(p=>p.id!==verId);
-  localStorage.setItem('pal_v1',JSON.stringify(presups));
-  closeM();renderList();toast('Presupuesto eliminado');
+function eliminarP() {
+  if (!confirm('¿Eliminar este presupuesto?')) return;
+  presups = presups.filter(p => p.id !== verId);
+  localStorage.setItem('pal_v1', JSON.stringify(presups));
+  closeM(); renderList(); toast('Presupuesto eliminado');
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // PDF
-// ═══════════════════════════════════════════════
-function buildData(id){
-  if(id)return presups.find(p=>p.id===id);
-  var nom=document.getElementById('cli-nombre').value.trim()||'Cliente';
-  var sub=partidas.reduce((a,p)=>a+p.tot,0);
-  var igic=document.getElementById('igic').checked;
-  var iva=document.getElementById('iva').checked;
-  var rate=igic?.07:iva?.21:0;
-  var tax=sub*rate;
-  return{ref:'BORRADOR',fecha:document.getElementById('cli-fecha').value,
-    cliente:nom,obra:document.getElementById('cli-obra').value,
-    tel:document.getElementById('cli-tel').value,notas:document.getElementById('cli-notas').value,
-    igic,iva,rate,tax,partidas,sub,total:sub+tax};
+// ═══════════════════════════════════════════════════════════════
+function buildData(id) {
+  if (id) return presups.find(p => p.id === id);
+  var nom = document.getElementById('cli-nombre').value.trim() || 'Cliente';
+  var sub = partidas.reduce((a, p) => a + p.tot, 0);
+  var comunidad = document.getElementById('comunidad').checked;
+  var igic = document.getElementById('igic').checked;
+  var iva = document.getElementById('iva').checked;
+  var comAmt = comunidad ? sub * 0.10 : 0;
+  var baseImp = sub + comAmt;
+  var rate = igic ? 0.07 : iva ? 0.21 : 0;
+  var tax = baseImp * rate;
+  return {
+    ref: 'BORRADOR', fecha: document.getElementById('cli-fecha').value,
+    cliente: nom, obra: document.getElementById('cli-obra').value,
+    tel: document.getElementById('cli-tel').value, notas: document.getElementById('cli-notas').value,
+    igic, iva, comunidad, comAmt, rate, tax, partidas, sub, total: sub + comAmt + tax
+  };
 }
-function genPDF(id){
-  var d=buildData(id);
-  if(!d||!d.partidas.length){toast('Sin datos para PDF');return}
-  var doc=new jspdf.jsPDF({unit:'mm',format:'a4'});
-  var W=210,M=18;
-  doc.setFillColor(0,32,96);doc.rect(0,0,W,32,'F');
-  doc.setFillColor(245,200,0);doc.rect(0,32,W,4,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(24);doc.setFont('helvetica','bold');
-  doc.text('PINTORAPP LITE',M,20);
-  doc.setFontSize(9);doc.setFont('helvetica','normal');
-  doc.text('Presupuesto de pintura profesional',M,27);
-  doc.setTextColor(0,0,0);
-  var y=44;
-  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(100,116,139);
-  doc.text('REFERENCIA',M,y);doc.text('FECHA',80,y);doc.text('TELÉFONO',145,y);
-  doc.setFont('helvetica','normal');doc.setTextColor(26,35,64);doc.setFontSize(10);y+=5;
-  doc.text(d.ref||'—',M,y);doc.text(fmtF(d.fecha),80,y);doc.text(d.tel||'—',145,y);
-  y+=10;
-  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(100,116,139);doc.text('CLIENTE',M,y);
-  y+=5;doc.setFont('helvetica','normal');doc.setTextColor(26,35,64);doc.setFontSize(14);doc.text(d.cliente,M,y);
-  if(d.obra){y+=5;doc.setFontSize(9);doc.setTextColor(100,116,139);doc.text(d.obra,M,y)}
-  y+=14;
-  doc.setFillColor(0,32,96);doc.rect(M,y,W-M*2,8,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
-  doc.text('DESCRIPCIÓN',M+2,y+5.5);doc.text('CANTIDAD',122,y+5.5);doc.text('PRECIO',144,y+5.5);doc.text('TOTAL',170,y+5.5);
-  y+=8;
-  doc.setFont('helvetica','normal');doc.setFontSize(9);
-  d.partidas.forEach((p,i)=>{
-    if(i%2===0){doc.setFillColor(240,244,248);doc.rect(M,y,W-M*2,7,'F')}
-    doc.setTextColor(26,35,64);
-    doc.text(p.desc.substring(0,48),M+2,y+5);
-    doc.text(p.m2?p.m2+' m²':'—',122,y+5);
-    doc.text(p.eur?fmt(p.eur)+' €/m²':'—',144,y+5);
-    doc.text(fmt(p.tot)+' €',170,y+5);
-    y+=7;if(y>262){doc.addPage();y=20}
+
+function genPDF(id) {
+  var d = buildData(id);
+  if (!d || !d.partidas.length) { toast('Sin datos para PDF'); return; }
+  var doc = new jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+  var W = 210, M = 18;
+  doc.setFillColor(0, 32, 96); doc.rect(0, 0, W, 32, 'F');
+  doc.setFillColor(245, 200, 0); doc.rect(0, 32, W, 4, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFontSize(24); doc.setFont('helvetica', 'bold');
+  doc.text('PINTORAPP LITE', M, 20);
+  doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+  doc.text('Presupuesto de pintura profesional', M, 27);
+  doc.setTextColor(0, 0, 0);
+  var y = 44;
+  doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(100, 116, 139);
+  doc.text('REFERENCIA', M, y); doc.text('FECHA', 80, y); doc.text('TELÉFONO', 145, y);
+  doc.setFont('helvetica', 'normal'); doc.setTextColor(26, 35, 64); doc.setFontSize(10); y += 5;
+  doc.text(d.ref || '—', M, y); doc.text(fmtF(d.fecha), 80, y); doc.text(d.tel || '—', 145, y);
+  y += 10;
+  doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(100, 116, 139); doc.text('CLIENTE', M, y);
+  y += 5; doc.setFont('helvetica', 'normal'); doc.setTextColor(26, 35, 64); doc.setFontSize(14); doc.text(d.cliente, M, y);
+  if (d.obra) { y += 5; doc.setFontSize(9); doc.setTextColor(100, 116, 139); doc.text(d.obra, M, y); }
+  y += 14;
+  doc.setFillColor(0, 32, 96); doc.rect(M, y, W - M * 2, 8, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+  doc.text('DESCRIPCIÓN', M + 2, y + 5.5); doc.text('CANTIDAD', 122, y + 5.5); doc.text('PRECIO', 144, y + 5.5); doc.text('TOTAL', 170, y + 5.5);
+  y += 8;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  d.partidas.forEach((p, i) => {
+    if (i % 2 === 0) { doc.setFillColor(240, 244, 248); doc.rect(M, y, W - M * 2, 7, 'F'); }
+    doc.setTextColor(26, 35, 64);
+    doc.text(p.desc.substring(0, 48), M + 2, y + 5);
+    doc.text(p.m2 ? p.m2 + ' m²' : '—', 122, y + 5);
+    doc.text(p.eur ? fmt(p.eur) + ' €/m²' : '—', 144, y + 5);
+    doc.text(fmt(p.tot) + ' €', 170, y + 5);
+    y += 7; if (y > 262) { doc.addPage(); y = 20; }
   });
-  y+=8;
-  var bw=82,bx=W-M-bw;
-  [[fmt(d.sub)+' €','Subtotal',false],[d.rate?(d.igic?'IGIC 7%':'IVA 21%'):null,d.rate?fmt(d.tax)+' €':null,false]].forEach(r=>{
-    if(!r[0])return;
-    doc.setFillColor(240,244,248);doc.rect(bx,y,bw,7,'F');
-    doc.setTextColor(100,116,139);doc.text(r[1]||r[0],bx+2,y+5);
-    doc.setTextColor(26,35,64);doc.text(r[0],bx+bw-2,y+5,{align:'right'});
-    y+=7;
-  });
-  if(d.rate){
-    doc.setFillColor(240,244,248);doc.rect(bx,y-7,bw,7,'F');
-    doc.setTextColor(100,116,139);doc.text(d.igic?'IGIC 7%':'IVA 21%',bx+2,y-2);
-    doc.setTextColor(26,35,64);doc.text(fmt(d.tax)+' €',bx+bw-2,y-2,{align:'right'});
+  y += 8;
+  var bw = 82, bx = W - M - bw;
+  // Subtotal
+  doc.setFillColor(240, 244, 248); doc.rect(bx, y, bw, 7, 'F');
+  doc.setTextColor(100, 116, 139); doc.text('Subtotal', bx + 2, y + 5);
+  doc.setTextColor(26, 35, 64); doc.text(fmt(d.sub) + ' €', bx + bw - 2, y + 5, { align: 'right' });
+  y += 7;
+  // Comunidad
+  if (d.comunidad) {
+    doc.setFillColor(240, 244, 248); doc.rect(bx, y, bw, 7, 'F');
+    doc.setTextColor(100, 116, 139); doc.text('Gastos comunidad 10%', bx + 2, y + 5);
+    doc.setTextColor(26, 35, 64); doc.text(fmt(d.comAmt) + ' €', bx + bw - 2, y + 5, { align: 'right' });
+    y += 7;
   }
-  doc.setFillColor(0,32,96);doc.rect(bx,y,bw,10,'F');
-  doc.setTextColor(245,200,0);doc.setFont('helvetica','bold');doc.setFontSize(12);
-  doc.text('TOTAL',bx+2,y+7);doc.text(fmt(d.total)+' €',bx+bw-2,y+7,{align:'right'});
-  if(d.notas){y+=16;doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(100,116,139);doc.text('Notas: '+d.notas,M,y)}
-  doc.setFontSize(7);doc.setTextColor(180,180,180);
-  doc.text('Generado con PintorApp Lite',M,288);
-  doc.save('presupuesto-'+(d.ref||'borrador')+'.pdf');
+  // Impuesto
+  if (d.rate) {
+    doc.setFillColor(240, 244, 248); doc.rect(bx, y, bw, 7, 'F');
+    doc.setTextColor(100, 116, 139); doc.text(d.igic ? 'IGIC 7%' : 'IVA 21%', bx + 2, y + 5);
+    doc.setTextColor(26, 35, 64); doc.text(fmt(d.tax) + ' €', bx + bw - 2, y + 5, { align: 'right' });
+    y += 7;
+  }
+  // Total
+  doc.setFillColor(0, 32, 96); doc.rect(bx, y, bw, 10, 'F');
+  doc.setTextColor(245, 200, 0); doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+  doc.text('TOTAL', bx + 2, y + 7); doc.text(fmt(d.total) + ' €', bx + bw - 2, y + 7, { align: 'right' });
+  if (d.notas) { y += 16; doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(100, 116, 139); doc.text('Notas: ' + d.notas, M, y); }
+  doc.setFontSize(7); doc.setTextColor(180, 180, 180);
+  doc.text('Generado con PintorApp Lite', M, 288);
+  doc.save('presupuesto-' + (d.ref || 'borrador') + '.pdf');
   toast('✓ PDF generado');
 }
-function genPDFid(id){genPDF(id||verId)}
+function genPDFid(id) { genPDF(id || verId); }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // WHATSAPP
-// ═══════════════════════════════════════════════
-function buildWA(d){
-  if(!d)return'';
-  var l=['🎨 *PRESUPUESTO DE PINTURA*','',
-    '📋 Ref: '+(d.ref||'—'),'👤 '+d.cliente];
-  if(d.obra)l.push('📍 '+d.obra);
-  l.push('📅 '+fmtF(d.fecha),'','*PARTIDAS:*');
-  d.partidas.forEach(p=>l.push('• '+p.desc+(p.m2?' ('+p.m2+' m²)':'')+': '+fmt(p.tot)+' €'));
-  l.push('','Subtotal: '+fmt(d.sub)+' €');
-  if(d.rate)l.push((d.igic?'IGIC 7%':'IVA 21%')+': '+fmt(d.tax)+' €');
-  l.push('*TOTAL: '+fmt(d.total)+' €*');
-  if(d.notas)l.push('','📝 '+d.notas);
-  l.push('','_PintorApp Lite_');
+// ═══════════════════════════════════════════════════════════════
+function buildWA(d) {
+  if (!d) return '';
+  var l = ['🎨 *PRESUPUESTO DE PINTURA*', '',
+    '📋 Ref: ' + (d.ref || '—'), '👤 ' + d.cliente];
+  if (d.obra) l.push('📍 ' + d.obra);
+  l.push('📅 ' + fmtF(d.fecha), '', '*PARTIDAS:*');
+  d.partidas.forEach(p => l.push('• ' + p.desc + (p.m2 ? ' (' + p.m2 + ' m²)' : '') + ': ' + fmt(p.tot) + ' €'));
+  l.push('', 'Subtotal: ' + fmt(d.sub) + ' €');
+  if (d.comunidad) l.push('Gastos comunidad 10%: ' + fmt(d.comAmt) + ' €');
+  if (d.rate) l.push((d.igic ? 'IGIC 7%' : 'IVA 21%') + ': ' + fmt(d.tax) + ' €');
+  l.push('*TOTAL: ' + fmt(d.total) + ' €*');
+  if (d.notas) l.push('', '📝 ' + d.notas);
+  l.push('', '_PintorApp Lite_');
   return l.join('\n');
 }
-function envWA(id){
-  var d=buildData(id);
-  if(!d||!d.partidas.length){toast('Sin datos');return}
-  var tel=d.tel?d.tel.replace(/\D/g,''):'';
-  var url=(tel?'https://wa.me/'+tel:'https://wa.me')+'?text='+encodeURIComponent(buildWA(d));
-  window.open(url,'_blank');
+function envWA(id) {
+  var d = buildData(id);
+  if (!d || !d.partidas.length) { toast('Sin datos'); return; }
+  var tel = d.tel ? d.tel.replace(/\D/g, '') : '';
+  var url = (tel ? 'https://wa.me/' + tel : 'https://wa.me') + '?text=' + encodeURIComponent(buildWA(d));
+  window.open(url, '_blank');
 }
-function envWAid(id){envWA(id||verId)}
+function envWAid(id) { envWA(id || verId); }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // CALCULADORA TRAMOS
-// ═══════════════════════════════════════════════
-function calcT(){
-  var a=parseFloat(document.getElementById('t-a').value)||0;
-  var h=parseFloat(document.getElementById('t-h').value)||0;
-  var hu=parseFloat(document.getElementById('t-huecos').value)||0;
-  document.getElementById('t-tot2').value=Math.max(0,a*h-hu).toFixed(2);
+// ═══════════════════════════════════════════════════════════════
+function calcT() {
+  var a = parseFloat(document.getElementById('t-a').value) || 0;
+  var h = parseFloat(document.getElementById('t-h').value) || 0;
+  var hu = parseFloat(document.getElementById('t-huecos').value) || 0;
+  document.getElementById('t-tot2').value = Math.max(0, a * h - hu).toFixed(2);
 }
-function addT(){
-  var nom=document.getElementById('t-nom').value.trim()||'Tramo '+(tramos.length+1);
-  var a=parseFloat(document.getElementById('t-a').value)||0;
-  var h=parseFloat(document.getElementById('t-h').value)||0;
-  var hu=parseFloat(document.getElementById('t-huecos').value)||0;
-  if(!a||!h){toast('Indica ancho y alto');return}
-  tramos.push({id:Date.now(),nom,a,h,hu,tot:Math.max(0,a*h-hu)});
-  ['t-nom','t-a','t-h','t-huecos','t-tot2'].forEach(id=>document.getElementById(id).value='');
-  renderT();toast('✓ Tramo añadido');
+function addT() {
+  var nom = document.getElementById('t-nom').value.trim() || 'Tramo ' + (tramos.length + 1);
+  var a = parseFloat(document.getElementById('t-a').value) || 0;
+  var h = parseFloat(document.getElementById('t-h').value) || 0;
+  var hu = parseFloat(document.getElementById('t-huecos').value) || 0;
+  if (!a || !h) { toast('Indica ancho y alto'); return; }
+  tramos.push({ id: Date.now(), nom, a, h, hu, tot: Math.max(0, a * h - hu) });
+  ['t-nom', 't-a', 't-h', 't-huecos', 't-tot2'].forEach(id => document.getElementById(id).value = '');
+  renderT(); toast('✓ Tramo añadido');
 }
-function delT(id){tramos=tramos.filter(t=>t.id!==id);renderT()}
-function renderT(){
-  var tc=document.getElementById('tcard');
-  if(!tramos.length){tc.style.display='none';return}
-  tc.style.display='block';
-  var sum=tramos.reduce((a,t)=>a+t.tot,0);
-  document.getElementById('tlist').innerHTML=tramos.map(t=>`
+function delT(id) { tramos = tramos.filter(t => t.id !== id); renderT(); }
+function renderT() {
+  var tc = document.getElementById('tcard');
+  if (!tramos.length) { tc.style.display = 'none'; return; }
+  tc.style.display = 'block';
+  var sum = tramos.reduce((a, t) => a + t.tot, 0);
+  document.getElementById('tlist').innerHTML = tramos.map(t => `
     <div class="tramo-item">
       <div class="tramo-info">
         <div class="tramo-name">${t.nom}</div>
-        <div class="tramo-dim">${t.a}m × ${t.h}m${t.hu?' − '+t.hu+'m² huecos':''}</div>
+        <div class="tramo-dim">${t.a}m × ${t.h}m${t.hu ? ' − ' + t.hu + 'm² huecos' : ''}</div>
       </div>
       <div class="tramo-m2">${t.tot.toFixed(2)} m²</div>
       <button class="tramo-del" onclick="delT(${t.id})">✕</button>
     </div>`).join('');
-  document.getElementById('tsum').textContent=sum.toFixed(2)+' m²';
+  document.getElementById('tsum').textContent = sum.toFixed(2) + ' m²';
 }
-function usarEnPresup(){
-  var sum=tramos.reduce((a,t)=>a+t.tot,0);
-  goPage('nuevo',1);
-  document.getElementById('part-m2').value=sum.toFixed(2);
-  toast(sum.toFixed(2)+' m² → presupuesto');
+function usarEnPresup() {
+  var sum = tramos.reduce((a, t) => a + t.tot, 0);
+  goPage('nuevo', 1);
+  document.getElementById('part-m2').value = sum.toFixed(2);
+  toast(sum.toFixed(2) + ' m² → presupuesto');
 }
 
-// ═══════════════════════════════════════════════
-// COLORES
-// ═══════════════════════════════════════════════
-var CD=[
+// ═══════════════════════════════════════════════════════════════
+// CARTA DE COLORES
+// ═══════════════════════════════════════════════════════════════
+var CD = [
   // NCS
   {c:'NCS S 0300-N',n:'Blanco puro',h:'#F9F9F9',t:'NCS'},{c:'NCS S 0500-N',n:'Blanco neutro',h:'#F5F5F5',t:'NCS'},
   {c:'NCS S 1000-N',n:'Blanco hueso',h:'#EDEDED',t:'NCS'},{c:'NCS S 2000-N',n:'Gris muy claro',h:'#D2D2D2',t:'NCS'},
@@ -858,47 +1120,109 @@ var CD=[
   {c:'RGB Coral',n:'Coral',h:'#FF6347',t:'RGB'},{c:'RGB Lima',n:'Lima',h:'#00FF80',t:'RGB'},
   {c:'RGB Ocre',n:'Ocre',h:'#CC7700',t:'RGB'},{c:'RGB Dorado',n:'Dorado',h:'#FFD700',t:'RGB'},
   {c:'RGB Plateado',n:'Plateado',h:'#C0C0C0',t:'RGB'},{c:'RGB Blanco roto',n:'Blanco roto',h:'#F5F5F0',t:'RGB'},
-  {c:'RGB Blanco hueso',n:'Blanco hueso',h:'#F8F0E3',t:'RGB'},{c:'RGB Granate',n:'Granate',h:'#800000',t:'RGB'}
+  {c:'RGB Blanco hueso',n:'Blanco hueso',h:'#F8F0E3',t:'RGB'},{c:'RGB Granate',n:'Granate',h:'#800000',t:'RGB'},
+  // VALENTINE (Pro) — muestra preview pero bloquea selección
+  {c:'VAL 100',n:'Blanco Nieve',h:'#F8F8F8',t:'VAL'},{c:'VAL 110',n:'Blanco Marfil',h:'#F5F0E8',t:'VAL'},
+  {c:'VAL 120',n:'Crema Suave',h:'#F0E8D0',t:'VAL'},{c:'VAL 130',n:'Vainilla',h:'#EDE0B0',t:'VAL'},
+  {c:'VAL 200',n:'Amarillo Sol',h:'#F5D800',t:'VAL'},{c:'VAL 210',n:'Amarillo Limón',h:'#F0E040',t:'VAL'},
+  {c:'VAL 300',n:'Naranja Cálido',h:'#F08030',t:'VAL'},{c:'VAL 310',n:'Melocotón',h:'#F0C090',t:'VAL'},
+  {c:'VAL 400',n:'Rojo Pasión',h:'#C02030',t:'VAL'},{c:'VAL 410',n:'Rosa Palo',h:'#F0B0B0',t:'VAL'},
+  {c:'VAL 500',n:'Lila Suave',h:'#C0A0D0',t:'VAL'},{c:'VAL 510',n:'Violeta',h:'#8040A0',t:'VAL'},
+  {c:'VAL 600',n:'Azul Cielo',h:'#80B8E0',t:'VAL'},{c:'VAL 610',n:'Azul Marino',h:'#203080',t:'VAL'},
+  {c:'VAL 700',n:'Verde Menta',h:'#90D0B0',t:'VAL'},{c:'VAL 710',n:'Verde Bosque',h:'#206040',t:'VAL'},
+  {c:'VAL 800',n:'Gris Perla',h:'#D0D0D0',t:'VAL'},{c:'VAL 810',n:'Gris Antracita',h:'#404040',t:'VAL'},
+  {c:'VAL 900',n:'Marrón Tierra',h:'#906040',t:'VAL'},{c:'VAL 910',n:'Beige Arena',h:'#D0B080',t:'VAL'},
+  // BRUGUER (Pro)
+  {c:'BRU 001',n:'Blanco Total',h:'#FAFAFA',t:'BRU'},{c:'BRU 002',n:'Blanco Roto',h:'#F5F0E5',t:'BRU'},
+  {c:'BRU 010',n:'Crema Bruguer',h:'#EDE0C0',t:'BRU'},{c:'BRU 020',n:'Ocre Dorado',h:'#D0A040',t:'BRU'},
+  {c:'BRU 030',n:'Naranja Teja',h:'#C06030',t:'BRU'},{c:'BRU 040',n:'Rojo Inglés',h:'#A02020',t:'BRU'},
+  {c:'BRU 050',n:'Rosa Empolvado',h:'#E0A0A0',t:'BRU'},{c:'BRU 060',n:'Malva Bruguer',h:'#A06080',t:'BRU'},
+  {c:'BRU 070',n:'Azul Mediterráneo',h:'#2060A0',t:'BRU'},{c:'BRU 080',n:'Azul Turquesa',h:'#40A0B0',t:'BRU'},
+  {c:'BRU 090',n:'Verde Oliva',h:'#608030',t:'BRU'},{c:'BRU 100',n:'Verde Salvia',h:'#80A070',t:'BRU'},
+  {c:'BRU 110',n:'Gris Cemento',h:'#909090',t:'BRU'},{c:'BRU 120',n:'Gris Marengo',h:'#505050',t:'BRU'},
+  {c:'BRU 130',n:'Marrón Nogal',h:'#704020',t:'BRU'},{c:'BRU 140',n:'Tierra Siena',h:'#A06030',t:'BRU'}
 ];
 
-function fltC(tipo,btn){
-  cFiltro=tipo;
-  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
+// Tabs Pro (Valentine y Bruguer)
+var PRO_TABS = ['VAL', 'BRU'];
+
+function fltC(tipo, btn) {
+  // Si es tab Pro y no tiene Pro, mostrar modal
+  if (PRO_TABS.includes(tipo) && !isPro) {
+    openPro();
+    return;
+  }
+  cFiltro = tipo;
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
   renderC(tipo);
 }
-function buscarC(){
-  var q=document.getElementById('csearch').value.trim().toLowerCase();
-  var data=CD.filter(c=>(cFiltro==='ALL'||c.t===cFiltro)&&(c.c.toLowerCase().includes(q)||c.n.toLowerCase().includes(q)));
+
+function buscarC() {
+  var q = document.getElementById('csearch').value.trim().toLowerCase();
+  var data = CD.filter(c => (cFiltro === 'ALL' ? true : c.t === cFiltro) && (c.c.toLowerCase().includes(q) || c.n.toLowerCase().includes(q)));
   drawGrid(data);
 }
-function renderC(tipo){drawGrid(tipo==='ALL'?CD:CD.filter(c=>c.t===tipo))}
-function drawGrid(data){
-  document.getElementById('cgrid').innerHTML=data.slice(0,120).map(c=>`
-    <div class="ccard" onclick="selC('${c.c.replace(/'/g,'\\\'')}')" id="cc-${c.c.replace(/[\s']/g,'_')}">
-      <div class="cswatch" style="background:${c.h}"></div>
-      <div class="cinfo"><div class="ccode">${c.c}</div><div class="cname">${c.n}</div></div>
-    </div>`).join('');
-}
-function selC(cod){
-  var c=CD.find(x=>x.c===cod);if(!c)return;
-  cSel=c;
-  document.getElementById('cprev-sw').style.background=c.h;
-  document.getElementById('cprev-cod').textContent=c.c;
-  document.getElementById('cprev-nom').textContent=c.n+' · '+c.h;
-  document.getElementById('cprev-box').style.display='block';
-  document.querySelectorAll('.ccard').forEach(el=>el.classList.remove('sel'));
-  var el=document.getElementById('cc-'+cod.replace(/[\s']/g,'_'));
-  if(el)el.classList.add('sel');
-}
-function copiarC(){
-  if(!cSel)return;
-  var txt=cSel.c+' '+cSel.h;
-  if(navigator.clipboard)navigator.clipboard.writeText(txt);
-  toast('✓ Copiado: '+txt);
+
+function renderC(tipo) {
+  var data = tipo === 'ALL' ? CD : CD.filter(c => c.t === tipo);
+  drawGrid(data);
 }
 
+function drawGrid(data) {
+  document.getElementById('cgrid').innerHTML = data.slice(0, 120).map(c => {
+    var isProColor = PRO_TABS.includes(c.t);
+    var locked = isProColor && !isPro;
+    return `
+      <div class="ccard${locked ? ' locked' : ''}" onclick="${locked ? 'openPro()' : "selC('" + c.c.replace(/'/g, "\'") + "')"}" id="cc-${c.c.replace(/[\s']/g, '_')}">
+        <div class="cswatch" style="background:${c.h}"></div>
+        ${locked ? '<div class="ccard-lock">🔒</div>' : ''}
+        <div class="cinfo"><div class="ccode">${c.c}</div><div class="cname">${c.n}</div></div>
+      </div>`;
+  }).join('');
+}
+
+function selC(cod) {
+  var c = CD.find(x => x.c === cod); if (!c) return;
+  if (PRO_TABS.includes(c.t) && !isPro) { openPro(); return; }
+  cSel = c;
+  document.getElementById('cprev-sw').style.background = c.h;
+  document.getElementById('cprev-cod').textContent = c.c;
+  document.getElementById('cprev-nom').textContent = c.n + ' · ' + c.h;
+  document.getElementById('cprev-box').style.display = 'block';
+  document.querySelectorAll('.ccard').forEach(el => el.classList.remove('sel'));
+  var el = document.getElementById('cc-' + cod.replace(/[\s']/g, '_'));
+  if (el) el.classList.add('sel');
+}
+
+function copiarC() {
+  if (!cSel) return;
+  var txt = cSel.c + ' ' + cSel.h;
+  if (navigator.clipboard) navigator.clipboard.writeText(txt);
+  toast('✓ Copiado: ' + txt);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DEMO HELPERS
+// ═══════════════════════════════════════════════════════════════
+function desactivarPro() {
+  isPro = false;
+  localStorage.removeItem('pal_pro');
+  libreUsadas = 0;
+  localStorage.removeItem('pal_libre');
+  closePro();
+  renderList();
+  toast('Modo Lite activado (demo reset)');
+}
+
+// ═══════════════════════════════════════════════════════════════
 // INIT
+// ═══════════════════════════════════════════════════════════════
+// Si viene de pago externo con ?pro=1 en URL, activar Pro
+if (new URLSearchParams(window.location.search).get('pro') === '1') {
+  isPro = true;
+  localStorage.setItem('pal_pro', '1');
+}
 renderC('NCS');
 </script>
 </body>
