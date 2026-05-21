@@ -248,298 +248,6 @@ input:checked+.swt:before{transform:translateX(20px)}
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║            HERO / LANDING               ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<section class="hero" id="hero">
-  <div class="hero-badge">🎨 La app del pintor profesional</div>
-  <h1 class="hero-titulo">Pintor<span>App</span><br><span style="font-size:.55em;letter-spacing:4px;color:rgba(255,255,255,.6)">LITE</span></h1>
-  <p class="hero-sub">Presupuestos en 2 minutos<br>directo desde tu móvil 📱</p>
-  <!-- PRECIO ÚNICO -->
-  <div class="hero-price-badge">
-    <span>5€</span> pago único · Para siempre
-    <small>Sin suscripción · Sin sorpresas</small>
-  </div>
-  <button class="hero-cta" onclick="entrar()" style="margin-top:20px">Entrar a la app</button>
-  <p class="hero-nota">Sin registro · Funciona sin internet</p>
-  <div class="hero-feats">
-    <div class="hero-feat"><span class="hero-feat-icon">🎤</span><span class="hero-feat-text">Dicta por voz</span></div>
-    <div class="hero-feat"><span class="hero-feat-icon">📄</span><span class="hero-feat-text">PDF profesional</span></div>
-    <div class="hero-feat"><span class="hero-feat-icon">📱</span><span class="hero-feat-text">Envío WhatsApp</span></div>
-    <div class="hero-feat"><span class="hero-feat-icon">🎨</span><span class="hero-feat-text">Carta NCS + RAL</span></div>
-    <div class="hero-feat"><span class="hero-feat-icon">📐</span><span class="hero-feat-text">Calc. fachadas</span></div>
-    <div class="hero-feat"><span class="hero-feat-icon">💾</span><span class="hero-feat-text">Guarda todo</span></div>
-  </div>
-</section>
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║              APP SHELL                  ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<div class="app-shell" id="appshell">
-
-  <!-- TOP BAR -->
-  <div class="app-bar">
-    <div class="app-bar-logo">Pintor<span>App</span> <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif">Lite</span></div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <div class="app-bar-right" id="bar-sub">Mis presupuestos</div>
-      <div class="app-bar-pro" onclick="openPro()">⭐ PRO</div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       PAGE: PRESUPUESTOS
-  ══════════════════════════════════════════ -->
-  <div class="page active" id="page-list">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 16px">
-      <div>
-        <div class="page-title">Presupuestos</div>
-        <div class="page-sub" id="pcount">0 guardados</div>
-      </div>
-      <button class="btn btn-am btn-sm" onclick="irNuevo()">+ Nuevo</button>
-    </div>
-    <!-- BANNER PRO (caramelo) -->
-    <div class="pro-banner" onclick="openPro()">
-      <div class="pro-banner-ico">⭐</div>
-      <div class="pro-banner-txt">
-        <div class="pro-banner-tit">Pásate a PintorApp Pro</div>
-        <div class="pro-banner-sub">Historial clientes · Colores Valentine & Bruguer · Partidas ilimitadas</div>
-      </div>
-      <div class="pro-banner-btn">Ver Pro</div>
-    </div>
-    <div id="plist"></div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       PAGE: NUEVO / EDITAR
-  ══════════════════════════════════════════ -->
-  <div class="page" id="page-nuevo">
-    <div class="page-title" id="ntit">Nuevo presupuesto</div>
-    <div class="page-sub">Rellena los datos y añade partidas</div>
-
-    <!-- CLIENTE -->
-    <div class="card">
-      <div class="card-hdr">📋 Cliente</div>
-      <div class="ig">
-        <label class="il">Nombre del cliente</label>
-        <div style="display:flex;gap:6px">
-          <input class="if" id="cli-nombre" placeholder="Ej: Juan García" style="flex:1">
-          <button class="mic" onclick="mic('cli-nombre')" id="mic-cn">🎤</button>
-        </div>
-      </div>
-      <div class="ig">
-        <label class="il">Obra / Dirección</label>
-        <div style="display:flex;gap:6px">
-          <input class="if" id="cli-obra" placeholder="Ej: C/ Mayor 5, 2º" style="flex:1">
-          <button class="mic" onclick="mic('cli-obra')" id="mic-co">🎤</button>
-        </div>
-      </div>
-      <div class="ir2">
-        <div class="ig"><label class="il">Teléfono</label><input class="if" id="cli-tel" placeholder="600..." type="tel"></div>
-        <div class="ig"><label class="il">Fecha</label><input class="if" id="cli-fecha" type="date"></div>
-      </div>
-      <div class="ig"><label class="il">Notas</label><textarea class="if" id="cli-notas" rows="2" placeholder="Observaciones, colores acordados..."></textarea></div>
-      <!-- IMPUESTO + COMUNIDAD -->
-      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">
-        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="igic" onchange="chkImp('igic')"><span class="swt"></span></label><span class="toggle-lbl">IGIC 7%</span></div>
-        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="iva" onchange="chkImp('iva')"><span class="swt"></span></label><span class="toggle-lbl">IVA 21%</span></div>
-        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="comunidad" onchange="recalc()"><span class="swt"></span></label><span class="toggle-lbl">+10% Comunidad</span></div>
-      </div>
-    </div>
-
-    <!-- AÑADIR PARTIDA -->
-    <div class="card">
-      <div class="card-hdr">🔨 Añadir partida</div>
-      <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Tipo de trabajo</div>
-      <div class="chips" id="chips">
-        <span class="chip active" onclick="setTipo(this,'Pintura interior')">Interior</span>
-        <span class="chip" onclick="setTipo(this,'Pintura exterior')">Exterior</span>
-        <span class="chip" onclick="setTipo(this,'Esmalte puertas')">Esmalte</span>
-        <span class="chip" onclick="setTipo(this,'Techo')">Techo</span>
-        <span class="chip" onclick="setTipo(this,'Preparación superficie')">Preparación</span>
-        <span class="chip" onclick="setTipo(this,'Gotelé')">Gotelé</span>
-        <span class="chip" onclick="setTipo(this,'Barniz')">Barniz</span>
-        <span class="chip" onclick="setTipo(this,'Otro')">Otro</span>
-      </div>
-      <div class="ig">
-        <label class="il">Descripción</label>
-        <div style="display:flex;gap:6px">
-          <input class="if" id="part-desc" placeholder="Ej: Pintura salón dos manos" style="flex:1">
-          <button class="mic" onclick="mic('part-desc')" id="mic-pd">🎤</button>
-        </div>
-      </div>
-      <div class="ir3">
-        <div class="ig"><label class="il">m² / Unid.</label><input class="if" id="part-m2" type="number" placeholder="0" step="0.01" oninput="calcP()"></div>
-        <div class="ig"><label class="il">€/m²</label><input class="if" id="part-eur" type="number" placeholder="0" step="0.01" oninput="calcP()"></div>
-        <div class="ig"><label class="il">Total €</label><input class="if" id="part-tot" type="number" placeholder="0" step="0.01" style="background:#f8fafc"></div>
-      </div>
-      <button class="btn btn-primary" onclick="addPart()">+ Añadir partida</button>
-
-      <!-- PARTIDA LIBRE (1 gratis en Lite) -->
-      <div style="margin-top:10px;padding:10px;background:#faf5ff;border-radius:12px;border:1px solid #e9d5ff">
-        <div style="font-size:11px;font-weight:800;color:var(--pro);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">✏️ Partida libre</div>
-        <div class="ig" style="margin-bottom:6px">
-          <input class="if" id="libre-desc" placeholder="Descripción personalizada..." style="border-color:#e9d5ff">
-        </div>
-        <div class="ir2">
-          <div class="ig"><input class="if" id="libre-tot" type="number" placeholder="Importe €" step="0.01" style="border-color:#e9d5ff"></div>
-          <button class="btn btn-sm" style="background:var(--pro);color:white;margin-top:0;align-self:flex-end;height:44px" onclick="addLibre()">+ Añadir</button>
-        </div>
-        <div style="font-size:10px;color:#94a3b8;margin-top:4px" id="libre-hint">1 partida libre incluida en Lite · <span style="color:var(--pro);cursor:pointer;font-weight:800" onclick="openPro()">Pro = ilimitadas</span></div>
-      </div>
-    </div>
-
-    <!-- RESUMEN -->
-    <div class="card" id="rescard" style="display:none">
-      <div class="card-hdr">📦 Partidas del presupuesto</div>
-      <div class="part-list" id="plist2"></div>
-      <div class="total-box">
-        <div class="total-row"><span class="tl">Subtotal</span><span class="tv" id="t-sub">0,00 €</span></div>
-        <div class="total-row" id="t-com-row" style="display:none"><span class="tl">Gastos comunidad 10%</span><span class="tv" id="t-com">0,00 €</span></div>
-        <div class="total-row" id="t-imp-row" style="display:none"><span class="tl" id="t-imp-lbl">IGIC 7%</span><span class="tv" id="t-imp">0,00 €</span></div>
-        <div class="total-row"><span class="tl">TOTAL</span><span class="tv big" id="t-tot">0,00 €</span></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-am" onclick="genPDF()">📄 PDF</button>
-        <button class="btn btn-vd" onclick="envWA()">📱 WhatsApp</button>
-      </div>
-      <button class="btn btn-primary" onclick="guardar()" style="margin-top:8px">💾 Guardar presupuesto</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       PAGE: COLORES
-  ══════════════════════════════════════════ -->
-  <div class="page" id="page-colores">
-    <div class="page-title">Carta de colores</div>
-    <div class="page-sub">NCS · RAL · RGB — toca para copiar el código</div>
-
-    <div id="cprev-box" style="display:none" class="card">
-      <div class="card-hdr">🎨 Color seleccionado</div>
-      <div class="cprev">
-        <div class="cprev-sw" id="cprev-sw"></div>
-        <div style="flex:1">
-          <div class="cprev-cod" id="cprev-cod">—</div>
-          <div class="cprev-nom" id="cprev-nom">—</div>
-        </div>
-        <button class="btn btn-ghost btn-sm" onclick="copiarC()">Copiar</button>
-      </div>
-    </div>
-
-    <div class="color-tabs">
-      <button class="ctab active" onclick="fltC('NCS',this)">NCS</button>
-      <button class="ctab" onclick="fltC('RAL',this)">RAL</button>
-      <button class="ctab" onclick="fltC('RGB',this)">RGB</button>
-      <button class="ctab" onclick="fltC('ALL',this)">Todos</button>
-      <button class="ctab pro-tab" onclick="fltC('VAL',this)">🔒 Valentine</button>
-      <button class="ctab pro-tab" onclick="fltC('BRU',this)">🔒 Bruguer</button>
-    </div>
-    <div class="ig" style="margin-bottom:12px"><input class="if" id="csearch" placeholder="Buscar código o nombre..." oninput="buscarC()"></div>
-    <div class="cgrid" id="cgrid"></div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       PAGE: CALCULADORA
-  ══════════════════════════════════════════ -->
-  <div class="page" id="page-calc">
-    <div class="page-title">Calculadora</div>
-    <div class="page-sub">Superficie por tramos — fachadas y habitaciones</div>
-
-    <div class="card">
-      <div class="card-hdr">📐 Nuevo tramo</div>
-      <div class="ig"><label class="il">Nombre del tramo</label><input class="if" id="t-nom" placeholder="Ej: Fachada Norte, Salón..."></div>
-      <div class="ir2">
-        <div class="ig"><label class="il">Ancho (m)</label><input class="if" id="t-a" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
-        <div class="ig"><label class="il">Alto (m)</label><input class="if" id="t-h" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
-      </div>
-      <div class="ir2">
-        <div class="ig"><label class="il">Huecos a descontar (m²)</label><input class="if" id="t-huecos" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
-        <div class="ig"><label class="il">Total tramo (m²)</label><input class="if" id="t-tot2" readonly style="background:#f8fafc;font-weight:800;color:var(--az)"></div>
-      </div>
-      <button class="btn btn-primary" onclick="addT()">+ Añadir tramo</button>
-    </div>
-
-    <div class="card" id="tcard" style="display:none">
-      <div class="card-hdr">📊 Resumen</div>
-      <div class="tramo-list" id="tlist"></div>
-      <div class="calc-total">
-        <span class="calc-total-l">TOTAL SUPERFICIE</span>
-        <span class="calc-total-v" id="tsum">0,00 m²</span>
-      </div>
-      <button class="btn btn-primary" style="margin-top:10px" onclick="usarEnPresup()">↗ Usar en presupuesto</button>
-    </div>
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
-    <button class="bnav-btn active" id="bn0" onclick="goPage('list',0)"><span class="ico">📋</span>Presupuestos</button>
-    <button class="bnav-btn" id="bn1" onclick="goPage('nuevo',1)"><span class="ico">➕</span>Nuevo</button>
-    <button class="bnav-btn" id="bn2" onclick="goPage('colores',2)"><span class="ico">🎨</span>Colores</button>
-    <button class="bnav-btn" id="bn3" onclick="goPage('calc',3)"><span class="ico">📐</span>Medidas</button>
-  </nav>
-</div>
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║         MODAL VER PRESUPUESTO           ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<div class="overlay" id="modal-ver">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closeM()">✕</button>
-    <div class="sheet-title" id="m-tit">Presupuesto</div>
-    <div id="m-body"></div>
-    <div class="btn-row" style="margin-top:14px">
-      <button class="btn btn-am" onclick="genPDFid()">📄 PDF</button>
-      <button class="btn btn-vd" onclick="envWAid()">📱 WhatsApp</button>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="editarP()">✏️ Editar</button>
-      <button class="btn btn-red btn-sm" style="flex:1" onclick="eliminarP()">🗑️ Eliminar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║            MODAL PRO                    ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<div class="overlay" id="modal-pro">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closePro()">✕</button>
-    <div class="pro-modal-header">
-      <div class="pro-modal-ico">⭐</div>
-      <div class="pro-modal-tit">PintorApp PRO</div>
-      <div class="pro-modal-sub">Todo lo que necesita un pintor profesional</div>
-    </div>
-    <div class="pro-feat-list">
-      <div class="pro-feat-item"><span>🎨</span><div>Carta Valentine & Bruguer<small>+500 colores de marca con referencia exacta</small></div></div>
-      <div class="pro-feat-item"><span>✏️</span><div>Partidas libres ilimitadas<small>Añade cualquier concepto personalizado</small></div></div>
-      <div class="pro-feat-item"><span>👥</span><div>Historial de clientes<small>Accede a todos tus clientes y obras anteriores</small></div></div>
-      <div class="pro-feat-item"><span>📄</span><div>PDF con tu logo y datos<small>Presupuestos 100% personalizados</small></div></div>
-      <div class="pro-feat-item"><span>📊</span><div>Estadísticas y facturación<small>Controla tus ingresos mes a mes</small></div></div>
-      <div class="pro-feat-item"><span>☁️</span><div>Copia de seguridad en la nube<small>Nunca pierdas tus presupuestos</small></div></div>
-    </div>
-    <!-- OPCIONES DE PRECIO -->
-    <div class="pro-price-box">
-      <div class="pro-price-opt sel" id="popt-m" onclick="selPlan('m')">
-        <div class="ppo-price">4,99€</div>
-        <div class="ppo-period">/ mes</div>
-      </div>
-      <div class="pro-price-opt" id="popt-y" onclick="selPlan('y')">
-        <div class="ppo-price">29€</div>
-        <div class="ppo-period">/ año</div>
-        <div class="ppo-save">Ahorra 31€</div>
-      </div>
-    </div>
-    <!-- TODO: Conectar con pasarela de pago (Stripe / Redsys) -->
-    <!-- La función activarPro() debe llamarse tras confirmar el pago -->
-    <button class="btn btn-pro" onclick="activarPro()">⭐ Activar Pro ahora</button>
-    <p style="text-align:center;font-size:11px;color:#94a3b8;margin-top:10px">Cancela cuando quieras · Pago seguro</p>
-    <p style="text-align:center;font-size:10px;color:#cbd5e1;margin-top:6px;cursor:pointer" onclick="desactivarPro()">[ Modo demo: resetear Pro ]</p>
-  </div>
-</div>
-
 <script>
 // ═══════════════════════════════════════════════════════════════
 // ESTADO GLOBAL
@@ -631,8 +339,6 @@ function mic(id) {
 // ═══════════════════════════════════════════════════════════════
 // FECHA HOY
 // ═══════════════════════════════════════════════════════════════
-document.getElementById('cli-fecha').value = new Date().toISOString().split('T')[0];
-
 // ═══════════════════════════════════════════════════════════════
 // TIPO CHIP
 // ═══════════════════════════════════════════════════════════════
@@ -1216,14 +922,314 @@ function desactivarPro() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// INIT
+// INIT — esperar DOM listo
 // ═══════════════════════════════════════════════════════════════
-// Si viene de pago externo con ?pro=1 en URL, activar Pro
-if (new URLSearchParams(window.location.search).get('pro') === '1') {
-  isPro = true;
-  localStorage.setItem('pal_pro', '1');
-}
-renderC('NCS');
+document.addEventListener('DOMContentLoaded', function() {
+  // Si viene de pago externo con ?pro=1 en URL, activar Pro
+  if (new URLSearchParams(window.location.search).get('pro') === '1') {
+    isPro = true;
+    localStorage.setItem('pal_pro', '1');
+  }
+  // Poner fecha de hoy
+  var fechaEl = document.getElementById('cli-fecha');
+  if (fechaEl) fechaEl.value = new Date().toISOString().split('T')[0];
+  // Render inicial
+  renderC('NCS');
+});
 </script>
+
+<div class="toast" id="toast"></div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║            HERO / LANDING               ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<section class="hero" id="hero">
+  <div class="hero-badge">🎨 La app del pintor profesional</div>
+  <h1 class="hero-titulo">Pintor<span>App</span><br><span style="font-size:.55em;letter-spacing:4px;color:rgba(255,255,255,.6)">LITE</span></h1>
+  <p class="hero-sub">Presupuestos en 2 minutos<br>directo desde tu móvil 📱</p>
+  <!-- PRECIO ÚNICO -->
+  <div class="hero-price-badge">
+    <span>5€</span> pago único · Para siempre
+    <small>Sin suscripción · Sin sorpresas</small>
+  </div>
+  <button class="hero-cta" onclick="entrar()" style="margin-top:20px">Entrar a la app</button>
+  <p class="hero-nota">Sin registro · Funciona sin internet</p>
+  <div class="hero-feats">
+    <div class="hero-feat"><span class="hero-feat-icon">🎤</span><span class="hero-feat-text">Dicta por voz</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">📄</span><span class="hero-feat-text">PDF profesional</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">📱</span><span class="hero-feat-text">Envío WhatsApp</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">🎨</span><span class="hero-feat-text">Carta NCS + RAL</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">📐</span><span class="hero-feat-text">Calc. fachadas</span></div>
+    <div class="hero-feat"><span class="hero-feat-icon">💾</span><span class="hero-feat-text">Guarda todo</span></div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║              APP SHELL                  ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div class="app-shell" id="appshell">
+
+  <!-- TOP BAR -->
+  <div class="app-bar">
+    <div class="app-bar-logo">Pintor<span>App</span> <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif">Lite</span></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="app-bar-right" id="bar-sub">Mis presupuestos</div>
+      <div class="app-bar-pro" onclick="openPro()">⭐ PRO</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: PRESUPUESTOS
+  ══════════════════════════════════════════ -->
+  <div class="page active" id="page-list">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 16px">
+      <div>
+        <div class="page-title">Presupuestos</div>
+        <div class="page-sub" id="pcount">0 guardados</div>
+      </div>
+      <button class="btn btn-am btn-sm" onclick="irNuevo()">+ Nuevo</button>
+    </div>
+    <!-- BANNER PRO (caramelo) -->
+    <div class="pro-banner" onclick="openPro()">
+      <div class="pro-banner-ico">⭐</div>
+      <div class="pro-banner-txt">
+        <div class="pro-banner-tit">Pásate a PintorApp Pro</div>
+        <div class="pro-banner-sub">Historial clientes · Colores Valentine & Bruguer · Partidas ilimitadas</div>
+      </div>
+      <div class="pro-banner-btn">Ver Pro</div>
+    </div>
+    <div id="plist"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: NUEVO / EDITAR
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-nuevo">
+    <div class="page-title" id="ntit">Nuevo presupuesto</div>
+    <div class="page-sub">Rellena los datos y añade partidas</div>
+
+    <!-- CLIENTE -->
+    <div class="card">
+      <div class="card-hdr">📋 Cliente</div>
+      <div class="ig">
+        <label class="il">Nombre del cliente</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="cli-nombre" placeholder="Ej: Juan García" style="flex:1">
+          <button class="mic" onclick="mic('cli-nombre')" id="mic-cn">🎤</button>
+        </div>
+      </div>
+      <div class="ig">
+        <label class="il">Obra / Dirección</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="cli-obra" placeholder="Ej: C/ Mayor 5, 2º" style="flex:1">
+          <button class="mic" onclick="mic('cli-obra')" id="mic-co">🎤</button>
+        </div>
+      </div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Teléfono</label><input class="if" id="cli-tel" placeholder="600..." type="tel"></div>
+        <div class="ig"><label class="il">Fecha</label><input class="if" id="cli-fecha" type="date"></div>
+      </div>
+      <div class="ig"><label class="il">Notas</label><textarea class="if" id="cli-notas" rows="2" placeholder="Observaciones, colores acordados..."></textarea></div>
+      <!-- IMPUESTO + COMUNIDAD -->
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">
+        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="igic" onchange="chkImp('igic')"><span class="swt"></span></label><span class="toggle-lbl">IGIC 7%</span></div>
+        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="iva" onchange="chkImp('iva')"><span class="swt"></span></label><span class="toggle-lbl">IVA 21%</span></div>
+        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="comunidad" onchange="recalc()"><span class="swt"></span></label><span class="toggle-lbl">+10% Comunidad</span></div>
+      </div>
+    </div>
+
+    <!-- AÑADIR PARTIDA -->
+    <div class="card">
+      <div class="card-hdr">🔨 Añadir partida</div>
+      <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Tipo de trabajo</div>
+      <div class="chips" id="chips">
+        <span class="chip active" onclick="setTipo(this,'Pintura interior')">Interior</span>
+        <span class="chip" onclick="setTipo(this,'Pintura exterior')">Exterior</span>
+        <span class="chip" onclick="setTipo(this,'Esmalte puertas')">Esmalte</span>
+        <span class="chip" onclick="setTipo(this,'Techo')">Techo</span>
+        <span class="chip" onclick="setTipo(this,'Preparación superficie')">Preparación</span>
+        <span class="chip" onclick="setTipo(this,'Gotelé')">Gotelé</span>
+        <span class="chip" onclick="setTipo(this,'Barniz')">Barniz</span>
+        <span class="chip" onclick="setTipo(this,'Otro')">Otro</span>
+      </div>
+      <div class="ig">
+        <label class="il">Descripción</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="part-desc" placeholder="Ej: Pintura salón dos manos" style="flex:1">
+          <button class="mic" onclick="mic('part-desc')" id="mic-pd">🎤</button>
+        </div>
+      </div>
+      <div class="ir3">
+        <div class="ig"><label class="il">m² / Unid.</label><input class="if" id="part-m2" type="number" placeholder="0" step="0.01" oninput="calcP()"></div>
+        <div class="ig"><label class="il">€/m²</label><input class="if" id="part-eur" type="number" placeholder="0" step="0.01" oninput="calcP()"></div>
+        <div class="ig"><label class="il">Total €</label><input class="if" id="part-tot" type="number" placeholder="0" step="0.01" style="background:#f8fafc"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addPart()">+ Añadir partida</button>
+
+      <!-- PARTIDA LIBRE (1 gratis en Lite) -->
+      <div style="margin-top:10px;padding:10px;background:#faf5ff;border-radius:12px;border:1px solid #e9d5ff">
+        <div style="font-size:11px;font-weight:800;color:var(--pro);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">✏️ Partida libre</div>
+        <div class="ig" style="margin-bottom:6px">
+          <input class="if" id="libre-desc" placeholder="Descripción personalizada..." style="border-color:#e9d5ff">
+        </div>
+        <div class="ir2">
+          <div class="ig"><input class="if" id="libre-tot" type="number" placeholder="Importe €" step="0.01" style="border-color:#e9d5ff"></div>
+          <button class="btn btn-sm" style="background:var(--pro);color:white;margin-top:0;align-self:flex-end;height:44px" onclick="addLibre()">+ Añadir</button>
+        </div>
+        <div style="font-size:10px;color:#94a3b8;margin-top:4px" id="libre-hint">1 partida libre incluida en Lite · <span style="color:var(--pro);cursor:pointer;font-weight:800" onclick="openPro()">Pro = ilimitadas</span></div>
+      </div>
+    </div>
+
+    <!-- RESUMEN -->
+    <div class="card" id="rescard" style="display:none">
+      <div class="card-hdr">📦 Partidas del presupuesto</div>
+      <div class="part-list" id="plist2"></div>
+      <div class="total-box">
+        <div class="total-row"><span class="tl">Subtotal</span><span class="tv" id="t-sub">0,00 €</span></div>
+        <div class="total-row" id="t-com-row" style="display:none"><span class="tl">Gastos comunidad 10%</span><span class="tv" id="t-com">0,00 €</span></div>
+        <div class="total-row" id="t-imp-row" style="display:none"><span class="tl" id="t-imp-lbl">IGIC 7%</span><span class="tv" id="t-imp">0,00 €</span></div>
+        <div class="total-row"><span class="tl">TOTAL</span><span class="tv big" id="t-tot">0,00 €</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-am" onclick="genPDF()">📄 PDF</button>
+        <button class="btn btn-vd" onclick="envWA()">📱 WhatsApp</button>
+      </div>
+      <button class="btn btn-primary" onclick="guardar()" style="margin-top:8px">💾 Guardar presupuesto</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: COLORES
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-colores">
+    <div class="page-title">Carta de colores</div>
+    <div class="page-sub">NCS · RAL · RGB — toca para copiar el código</div>
+
+    <div id="cprev-box" style="display:none" class="card">
+      <div class="card-hdr">🎨 Color seleccionado</div>
+      <div class="cprev">
+        <div class="cprev-sw" id="cprev-sw"></div>
+        <div style="flex:1">
+          <div class="cprev-cod" id="cprev-cod">—</div>
+          <div class="cprev-nom" id="cprev-nom">—</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="copiarC()">Copiar</button>
+      </div>
+    </div>
+
+    <div class="color-tabs">
+      <button class="ctab active" onclick="fltC('NCS',this)">NCS</button>
+      <button class="ctab" onclick="fltC('RAL',this)">RAL</button>
+      <button class="ctab" onclick="fltC('RGB',this)">RGB</button>
+      <button class="ctab" onclick="fltC('ALL',this)">Todos</button>
+      <button class="ctab pro-tab" onclick="fltC('VAL',this)">🔒 Valentine</button>
+      <button class="ctab pro-tab" onclick="fltC('BRU',this)">🔒 Bruguer</button>
+    </div>
+    <div class="ig" style="margin-bottom:12px"><input class="if" id="csearch" placeholder="Buscar código o nombre..." oninput="buscarC()"></div>
+    <div class="cgrid" id="cgrid"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: CALCULADORA
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-calc">
+    <div class="page-title">Calculadora</div>
+    <div class="page-sub">Superficie por tramos — fachadas y habitaciones</div>
+
+    <div class="card">
+      <div class="card-hdr">📐 Nuevo tramo</div>
+      <div class="ig"><label class="il">Nombre del tramo</label><input class="if" id="t-nom" placeholder="Ej: Fachada Norte, Salón..."></div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Ancho (m)</label><input class="if" id="t-a" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+        <div class="ig"><label class="il">Alto (m)</label><input class="if" id="t-h" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+      </div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Huecos a descontar (m²)</label><input class="if" id="t-huecos" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+        <div class="ig"><label class="il">Total tramo (m²)</label><input class="if" id="t-tot2" readonly style="background:#f8fafc;font-weight:800;color:var(--az)"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addT()">+ Añadir tramo</button>
+    </div>
+
+    <div class="card" id="tcard" style="display:none">
+      <div class="card-hdr">📊 Resumen</div>
+      <div class="tramo-list" id="tlist"></div>
+      <div class="calc-total">
+        <span class="calc-total-l">TOTAL SUPERFICIE</span>
+        <span class="calc-total-v" id="tsum">0,00 m²</span>
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px" onclick="usarEnPresup()">↗ Usar en presupuesto</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="bnav-btn active" id="bn0" onclick="goPage('list',0)"><span class="ico">📋</span>Presupuestos</button>
+    <button class="bnav-btn" id="bn1" onclick="goPage('nuevo',1)"><span class="ico">➕</span>Nuevo</button>
+    <button class="bnav-btn" id="bn2" onclick="goPage('colores',2)"><span class="ico">🎨</span>Colores</button>
+    <button class="bnav-btn" id="bn3" onclick="goPage('calc',3)"><span class="ico">📐</span>Medidas</button>
+  </nav>
+</div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║         MODAL VER PRESUPUESTO           ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div class="overlay" id="modal-ver">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closeM()">✕</button>
+    <div class="sheet-title" id="m-tit">Presupuesto</div>
+    <div id="m-body"></div>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn btn-am" onclick="genPDFid()">📄 PDF</button>
+      <button class="btn btn-vd" onclick="envWAid()">📱 WhatsApp</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="editarP()">✏️ Editar</button>
+      <button class="btn btn-red btn-sm" style="flex:1" onclick="eliminarP()">🗑️ Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║            MODAL PRO                    ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div class="overlay" id="modal-pro">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closePro()">✕</button>
+    <div class="pro-modal-header">
+      <div class="pro-modal-ico">⭐</div>
+      <div class="pro-modal-tit">PintorApp PRO</div>
+      <div class="pro-modal-sub">Todo lo que necesita un pintor profesional</div>
+    </div>
+    <div class="pro-feat-list">
+      <div class="pro-feat-item"><span>🎨</span><div>Carta Valentine & Bruguer<small>+500 colores de marca con referencia exacta</small></div></div>
+      <div class="pro-feat-item"><span>✏️</span><div>Partidas libres ilimitadas<small>Añade cualquier concepto personalizado</small></div></div>
+      <div class="pro-feat-item"><span>👥</span><div>Historial de clientes<small>Accede a todos tus clientes y obras anteriores</small></div></div>
+      <div class="pro-feat-item"><span>📄</span><div>PDF con tu logo y datos<small>Presupuestos 100% personalizados</small></div></div>
+      <div class="pro-feat-item"><span>📊</span><div>Estadísticas y facturación<small>Controla tus ingresos mes a mes</small></div></div>
+      <div class="pro-feat-item"><span>☁️</span><div>Copia de seguridad en la nube<small>Nunca pierdas tus presupuestos</small></div></div>
+    </div>
+    <!-- OPCIONES DE PRECIO -->
+    <div class="pro-price-box">
+      <div class="pro-price-opt sel" id="popt-m" onclick="selPlan('m')">
+        <div class="ppo-price">4,99€</div>
+        <div class="ppo-period">/ mes</div>
+      </div>
+      <div class="pro-price-opt" id="popt-y" onclick="selPlan('y')">
+        <div class="ppo-price">29€</div>
+        <div class="ppo-period">/ año</div>
+        <div class="ppo-save">Ahorra 31€</div>
+      </div>
+    </div>
+    <!-- TODO: Conectar con pasarela de pago (Stripe / Redsys) -->
+    <!-- La función activarPro() debe llamarse tras confirmar el pago -->
+    <button class="btn btn-pro" onclick="activarPro()">⭐ Activar Pro ahora</button>
+    <p style="text-align:center;font-size:11px;color:#94a3b8;margin-top:10px">Cancela cuando quieras · Pago seguro</p>
+    <p style="text-align:center;font-size:10px;color:#cbd5e1;margin-top:6px;cursor:pointer" onclick="desactivarPro()">[ Modo demo: resetear Pro ]</p>
+  </div>
+</div>
+
+
 </body>
 </html>
