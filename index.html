@@ -6,6 +6,32 @@
 <title>PintorApp Lite</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<meta name="theme-color" content="#002060">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PintorApp">
+<link rel="apple-touch-icon" href="https://cdn.abacus.ai/images/64a2f04e-877f-4c78-98f4-2fc415c46ce0.png">
+<script>
+var _manifest={
+  "name":"PintorApp Lite",
+  "short_name":"PintorApp",
+  "description":"Presupuestos de pintura profesional",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#002060",
+  "theme_color":"#002060",
+  "orientation":"portrait",
+  "icons":[
+    {"src":"https://cdn.abacus.ai/images/64a2f04e-877f-4c78-98f4-2fc415c46ce0.png","sizes":"192x192","type":"image/png"},
+    {"src":"https://cdn.abacus.ai/images/64a2f04e-877f-4c78-98f4-2fc415c46ce0.png","sizes":"512x512","type":"image/png"}
+  ]
+};
+var _blob=new Blob([JSON.stringify(_manifest)],{type:'application/json'});
+var _ml=document.createElement('link');
+_ml.rel='manifest';_ml.href=URL.createObjectURL(_blob);
+document.currentScript.parentNode.appendChild(_ml);
+</script>
 <style>
 /* ══════════════════════════════════════════════
    VARIABLES Y RESET
@@ -1116,19 +1142,15 @@ function checkKeyLive() {
   if (!tipo) {
     inp.className = 'key-input err';
     st.className = 'key-status err';
-    st.textContent = '✗ Clave no válida';
-  } else if (tipo === 'lite' && keyTabActual === 'pro') {
-    inp.className = 'key-input err';
-    st.className = 'key-status err';
-    st.textContent = '✗ Esta clave es Lite, no Pro';
-  } else if (tipo === 'pro' && keyTabActual === 'lite') {
+    st.textContent = '✗ Clave no válida — revisa bien';
+  } else if (tipo === 'pro') {
     inp.className = 'key-input ok';
     st.className = 'key-status ok';
-    st.textContent = '⭐ ¡Clave Pro detectada! Pulsa Activar';
+    st.textContent = '⭐ Clave Pro válida — pulsa Activar';
   } else {
     inp.className = 'key-input ok';
     st.className = 'key-status ok';
-    st.textContent = '✓ Clave válida — pulsa Activar';
+    st.textContent = '✓ Clave Lite válida — pulsa Activar';
   }
 }
 
@@ -1260,6 +1282,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- ║              APP SHELL                  ║ -->
 <!-- ╚══════════════════════════════════════════╝ -->
 <div class="app-shell" id="appshell">
+
+  <!-- BANNER INSTALAR APP -->
+  <div id="install-banner" style="display:none;background:linear-gradient(135deg,#002060,#003d8f);padding:10px 16px;align-items:center;gap:10px;position:sticky;top:0;z-index:101">
+    <span style="font-size:22px">📲</span>
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:800;color:white">Instalar PintorApp</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.6)">Añadir a pantalla de inicio</div>
+    </div>
+    <button onclick="instalarApp()" style="background:var(--am);color:#002060;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif">Instalar</button>
+    <button onclick="document.getElementById('install-banner').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:20px;cursor:pointer;padding:0 4px">✕</button>
+  </div>
 
   <!-- TOP BAR -->
   <div class="app-bar">
