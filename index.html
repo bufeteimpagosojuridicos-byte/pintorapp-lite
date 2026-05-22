@@ -17,20 +17,120 @@ body{font-family:'Nunito',sans-serif;background:var(--gr);color:var(--tx);min-he
 /* ══════════════════════════════════════════════
    HERO / LANDING
 ══════════════════════════════════════════════ */
-.hero{background:linear-gradient(160deg,var(--az2) 0%,var(--az) 60%,#1a5ea6 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px 80px;position:relative;overflow:hidden;text-align:center}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(245,200,0,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(255,255,255,.04) 0%,transparent 50%)}
-.hero-badge{background:linear-gradient(135deg,#4c1d95,#7c3aed);border:1.5px solid rgba(245,200,0,.5);color:var(--am);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:30px;margin-bottom:24px;display:inline-block;animation:fadeDown .6s ease both}
-.hero-titulo{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,14vw,72px);color:white;line-height:.95;letter-spacing:2px;margin-bottom:8px;animation:fadeUp .6s ease .2s both}
+.hero{
+  background-color:#1a4a8a;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 20% 30%, #2060b8 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, #0d3070 0%, transparent 50%),
+    linear-gradient(160deg, #0e2d6e 0%, #1a4a8a 40%, #1055a0 70%, #0a2560 100%);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:50px 28px 80px;position:relative;overflow:hidden;text-align:center
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 15% 60%, rgba(30,80,160,.4) 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 40%, rgba(10,40,100,.5) 0%, transparent 40%);
+}
+.hero-badge{
+  background:linear-gradient(135deg,rgba(200,220,255,.25),rgba(150,180,240,.12));
+  border:1.5px solid rgba(200,220,255,.45);
+  color:white;font-size:12px;font-weight:800;letter-spacing:2px;
+  text-transform:uppercase;padding:8px 20px;border-radius:30px;
+  margin-bottom:28px;display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 2px 12px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.2);
+  backdrop-filter:blur(8px);
+  animation:fadeDown .6s ease both
+}
+.hero-titulo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(58px,16vw,84px);
+  line-height:.9;letter-spacing:3px;margin-bottom:6px;
+  color:transparent;
+  background:linear-gradient(180deg,#e8eef8 0%,#c5d4ee 30%,#f0f5ff 50%,#8aaad8 70%,#c8d8f0 100%);
+  -webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,.5)) drop-shadow(0 1px 0 rgba(255,255,255,.3));
+  animation:fadeUp .6s ease .1s both
+}
+.hero-lite{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(32px,9vw,48px);
+  letter-spacing:10px;
+  color:transparent;
+  background:linear-gradient(180deg,#d4c8a8 0%,#b8a878 30%,#e8ddb8 50%,#907850 70%,#c8b888 100%);
+  -webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));
+  margin-bottom:16px;
+  animation:fadeUp .6s ease .2s both
+}
+.hero-sub{
+  font-size:16px;color:rgba(255,255,255,.9);font-weight:700;
+  margin-bottom:32px;line-height:1.5;
+  animation:fadeUp .6s ease .25s both;
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap
+}
+.hero-precio{
+  background:linear-gradient(135deg,rgba(220,210,180,.22),rgba(180,165,120,.15));
+  border:1.5px solid rgba(210,195,150,.5);
+  border-radius:18px;padding:14px 32px;margin-bottom:18px;
+  box-shadow:0 4px 20px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.15),inset 0 -1px 0 rgba(0,0,0,.2);
+  backdrop-filter:blur(6px);
+  animation:fadeUp .6s ease .3s both;
+  width:100%;max-width:340px
+}
+.hero-precio-main{font-size:19px;font-weight:900;color:white;letter-spacing:.3px}
+.hero-precio-main span{color:#f5d070}
+.hero-precio-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:3px;font-weight:700}
+.hero-cta{
+  background:linear-gradient(180deg,#f0c840 0%,#d4a020 35%,#b88010 65%,#e0b030 100%);
+  color:#3a2000;font-size:19px;font-weight:900;
+  padding:17px 50px;border-radius:50px;
+  border:none;cursor:pointer;font-family:'Nunito',sans-serif;
+  box-shadow:0 6px 20px rgba(0,0,0,.4),0 2px 0 rgba(255,255,255,.2) inset,0 -3px 0 rgba(0,0,0,.3) inset;
+  letter-spacing:.3px;width:100%;max-width:340px;
+  transition:transform .15s,box-shadow .15s;
+  animation:fadeUp .6s ease .35s both
+}
+.hero-cta:active{transform:translateY(2px);box-shadow:0 2px 10px rgba(0,0,0,.4)}
+.hero-nota{margin-top:10px;font-size:12px;color:rgba(255,255,255,.45);animation:fadeUp .6s ease .4s both}
+.hero-clave{
+  background:linear-gradient(135deg,rgba(180,195,220,.2),rgba(140,165,200,.12));
+  border:1.5px solid rgba(180,200,230,.4);
+  color:rgba(255,255,255,.9);font-size:14px;font-weight:800;
+  padding:12px 28px;border-radius:30px;
+  cursor:pointer;font-family:'Nunito',sans-serif;
+  display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 3px 12px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.15);
+  animation:fadeUp .6s ease .45s both;margin-top:8px
+}
+.hero-feats{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin-top:32px;width:100%;max-width:360px;
+  animation:fadeUp .6s ease .5s both
+}
+.hero-feat{
+  background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.06));
+  border:1px solid rgba(255,255,255,.2);border-radius:16px;
+  padding:14px 12px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.12);
+  backdrop-filter:blur(4px)
+}
+.hero-feat-icon{font-size:26px;flex-shrink:0}
+.hero-feat-text{font-size:13px;color:white;font-weight:800;text-align:left}
+
+
 .hero-titulo span{color:var(--am)}
-.hero-sub{font-size:16px;color:rgba(255,255,255,.8);font-weight:600;margin-bottom:36px;line-height:1.5;animation:fadeUp .6s ease .3s both}
-.hero-cta{display:inline-block;background:var(--am);color:#002060;font-size:17px;font-weight:900;padding:18px 40px;border-radius:50px;text-decoration:none;letter-spacing:.5px;box-shadow:0 8px 24px rgba(245,200,0,.4);border:none;cursor:pointer;font-family:'Nunito',sans-serif;animation:fadeUp .6s ease .4s both;transition:transform .2s}
+
+
 .hero-cta:active{transform:scale(.97)}
-.hero-nota{margin-top:14px;font-size:12px;color:rgba(255,255,255,.45);animation:fadeUp .6s ease .5s both}
+
 .hero-feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px;width:100%;max-width:340px;animation:fadeUp .6s ease .6s both}
-.hero-feat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 10px;display:flex;align-items:center;gap:8px}
-.hero-feat-icon{font-size:20px;flex-shrink:0}
-.hero-feat-text{font-size:12px;color:rgba(255,255,255,.85);font-weight:700;text-align:left}
-.hero-price-badge{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:14px;padding:10px 20px;margin-top:20px;display:inline-block;animation:fadeUp .6s ease .55s both}
+
+
+
+
 .hero-price-badge span{font-size:22px;font-weight:900;color:var(--am)}
 .hero-price-badge small{font-size:11px;color:rgba(255,255,255,.6);display:block;margin-top:2px}
 
@@ -247,6 +347,13 @@ input:checked+.swt:before{transform:translateX(20px)}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.key-input{width:100%;border:2.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;font-size:18px;font-family:'Bebas Neue',sans-serif;letter-spacing:4px;text-align:center;text-transform:uppercase;outline:none;transition:border .2s;color:var(--az2)}
+.key-input:focus{border-color:var(--az)}
+.key-input.ok{border-color:#22c55e;background:#f0fdf4;color:#166534}
+.key-input.err{border-color:#ef4444;background:#fef2f2;color:#991b1b}
+.key-status{text-align:center;font-size:13px;font-weight:800;margin-top:8px;min-height:20px}
+.key-status.ok{color:#22c55e}
+.key-status.err{color:#ef4444}
 </style>
 </head>
 <body>
@@ -290,15 +397,12 @@ function irNuevo() { goPage('nuevo', 1); }
 
 function goProPage(id) {
   if (isPro) {
-    // Si tiene Pro, ir a la página real (futura implementación)
     toast('⭐ Función Pro — próximamente en esta versión');
     return;
   }
-  // En Lite: mostrar página bloqueada con preview
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('bar-sub').textContent = id === 'tarifa' ? 'Tarifa Orientativa · PRO' : 'Calculadora Pintura · PRO';
+  var overlay = document.getElementById('page-' + id + '-overlay');
+  if (overlay) { overlay.style.display = 'flex'; }
+  else { openPro(); }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -925,11 +1029,165 @@ function copiarC() {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// SISTEMA DE CLAVES DE ACTIVACIÓN
+// ═══════════════════════════════════════════════════════════════
+
+// ── CLAVES VÁLIDAS ──────────────────────────────────────────────
+// Formato: XXXX-XXXX-XX (12 chars con guiones = 14 chars display)
+// Lite: prefijo LITE- o PRBA-
+// Pro:  prefijo PROP- o PROX-
+// Máster: acceso total
+var CLAVES = {
+  // LITE — pago único 5€
+  'LITE-2025-01': 'lite',
+  'LITE-2025-02': 'lite',
+  'LITE-2025-03': 'lite',
+  'LITE-2025-04': 'lite',
+  'LITE-2025-05': 'lite',
+  'PRBA-2026-01': 'lite',
+  'PRBA-2026-02': 'lite',
+  'PRBA-2026-03': 'lite',
+  'TEST-LITE-01': 'lite',
+  // PRO — suscripción
+  'PROP-2025-01': 'pro',
+  'PROP-2025-02': 'pro',
+  'PROP-2025-03': 'pro',
+  'PROX-2026-01': 'pro',
+  'PROX-2026-02': 'pro',
+  // MÁSTER — demo / tuyo
+  'MAES-TROP-RO': 'pro',
+  'MAST-ER26-JM': 'pro',
+  // LITE demo testing
+  'DEMO-LITE-00': 'lite'
+};
+
+var keyTabActual = 'lite';
+
+function openClave() {
+  document.getElementById('modal-clave').classList.add('open');
+  document.getElementById('key-input').value = '';
+  document.getElementById('key-input').className = 'key-input';
+  document.getElementById('key-status').textContent = '';
+  document.getElementById('key-status').className = 'key-status';
+  setKeyTab('lite');
+}
+function closeClave() { document.getElementById('modal-clave').classList.remove('open'); }
+
+function setKeyTab(tab) {
+  keyTabActual = tab;
+  var btnL = document.getElementById('ktab-lite');
+  var btnP = document.getElementById('ktab-pro');
+  var info = document.getElementById('key-info');
+  if (tab === 'lite') {
+    btnL.style.background = 'var(--az)'; btnL.style.borderColor = 'var(--az)'; btnL.style.color = 'white';
+    btnP.style.background = 'white'; btnP.style.borderColor = '#e2e8f0'; btnP.style.color = '#64748b';
+    info.innerHTML = 'Introduce tu clave de activación <b>Lite</b>.<br>Formato: XXXX-XXXX-XX (12 caracteres)';
+  } else {
+    btnP.style.background = 'var(--pro)'; btnP.style.borderColor = 'var(--pro)'; btnP.style.color = 'white';
+    btnL.style.background = 'white'; btnL.style.borderColor = '#e2e8f0'; btnL.style.color = '#64748b';
+    info.innerHTML = 'Introduce tu clave <b>Pro ⭐</b>.<br>Formato: XXXX-XXXX-XX · Activa todas las funciones';
+  }
+  document.getElementById('key-input').value = '';
+  document.getElementById('key-input').className = 'key-input';
+  document.getElementById('key-status').textContent = '';
+}
+
+function formatKey(el) {
+  // Auto-formato: añade guiones automáticamente XXXX-XXXX-XX
+  var v = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  var out = '';
+  for (var i = 0; i < v.length && i < 12; i++) {
+    if (i === 4 || i === 8) out += '-';
+    out += v[i];
+  }
+  el.value = out;
+}
+
+function checkKeyLive() {
+  var v = document.getElementById('key-input').value.trim().toUpperCase();
+  var st = document.getElementById('key-status');
+  var inp = document.getElementById('key-input');
+  if (v.length < 12) {
+    inp.className = 'key-input';
+    st.textContent = '';
+    return;
+  }
+  var tipo = CLAVES[v];
+  if (!tipo) {
+    inp.className = 'key-input err';
+    st.className = 'key-status err';
+    st.textContent = '✗ Clave no válida';
+  } else if (tipo === 'lite' && keyTabActual === 'pro') {
+    inp.className = 'key-input err';
+    st.className = 'key-status err';
+    st.textContent = '✗ Esta clave es Lite, no Pro';
+  } else if (tipo === 'pro' && keyTabActual === 'lite') {
+    inp.className = 'key-input ok';
+    st.className = 'key-status ok';
+    st.textContent = '⭐ ¡Clave Pro detectada! Pulsa Activar';
+  } else {
+    inp.className = 'key-input ok';
+    st.className = 'key-status ok';
+    st.textContent = '✓ Clave válida — pulsa Activar';
+  }
+}
+
+function activarClave() {
+  var v = document.getElementById('key-input').value.trim().toUpperCase();
+  var tipo = CLAVES[v];
+  if (!tipo) {
+    document.getElementById('key-input').className = 'key-input err';
+    document.getElementById('key-status').className = 'key-status err';
+    document.getElementById('key-status').textContent = '✗ Clave incorrecta. Revisa bien los caracteres.';
+    return;
+  }
+  // Marcar clave como usada (no reutilizable en este dispositivo)
+  var usadas = JSON.parse(localStorage.getItem('pal_keys_used') || '[]');
+  if (usadas.includes(v)) {
+    document.getElementById('key-status').className = 'key-status err';
+    document.getElementById('key-status').textContent = '✗ Esta clave ya fue activada en este dispositivo';
+    return;
+  }
+  usadas.push(v);
+  localStorage.setItem('pal_keys_used', JSON.stringify(usadas));
+
+  if (tipo === 'pro') {
+    isPro = true;
+    localStorage.setItem('pal_pro', '1');
+    localStorage.setItem('pal_plan', 'pro');
+    closeClave(); closePro();
+    renderList();
+    var hint = document.getElementById('libre-hint');
+    if (hint) hint.innerHTML = '⭐ Pro activo · Partidas libres ilimitadas';
+    toast('⭐ ¡PintorApp Pro activado!');
+  } else {
+    // Lite — ya está disponible por defecto, solo confirmar activación
+    localStorage.setItem('pal_lite', '1');
+    localStorage.setItem('pal_plan', 'lite');
+    closeClave();
+    toast('✓ PintorApp Lite activado · ¡A presupuestar!');
+  }
+}
+
+// ── GENERAR CLAVE (función máster — solo tú) ─────────────────
+// Llama desde consola: generarClave('lite') o generarClave('pro')
+function generarClave(tipo) {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
+  function rnd(n) { var s=''; for(var i=0;i<n;i++) s+=chars[Math.floor(Math.random()*chars.length)]; return s; }
+  var prefix = tipo === 'pro' ? 'PROP' : 'LITE';
+  var year = new Date().getFullYear().toString().slice(-2);
+  var clave = prefix + '-' + year + rnd(2) + '-' + rnd(2);
+  console.log('Nueva clave ' + tipo.toUpperCase() + ': ' + clave);
+  return clave;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // DEMO HELPERS
 // ═══════════════════════════════════════════════════════════════
 function desactivarPro() {
   isPro = false;
   localStorage.removeItem('pal_pro');
+  localStorage.removeItem('pal_plan');
   libreUsadas = 0;
   localStorage.removeItem('pal_libre');
   closePro();
@@ -960,16 +1218,33 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- ║            HERO / LANDING               ║ -->
 <!-- ╚══════════════════════════════════════════╝ -->
 <section class="hero" id="hero">
+
+  <!-- Badge cristal top -->
   <div class="hero-badge">🎨 La app del pintor profesional</div>
-  <h1 class="hero-titulo">Pintor<span>App</span><br><span style="font-size:.55em;letter-spacing:4px;color:rgba(255,255,255,.6)">LITE</span></h1>
-  <p class="hero-sub">Presupuestos en 2 minutos<br>directo desde tu móvil 📱</p>
-  <!-- PRECIO ÚNICO -->
-  <div class="hero-price-badge">
-    <span>5€</span> pago único · Para siempre
-    <small>Sin suscripción · Sin sorpresas</small>
+
+  <!-- PINTORAPP con relieve metálico -->
+  <h1 class="hero-titulo">PintorApp</h1>
+
+  <!-- LITE dorado -->
+  <div class="hero-lite">LITE</div>
+
+  <!-- Subtítulo -->
+  <p class="hero-sub">📱 Presupuestos en 2 minutos<br>directo desde tu móvil</p>
+
+  <!-- Precio cristal -->
+  <div class="hero-precio">
+    <div class="hero-precio-main">5€ <span>pago único · Para siempre</span></div>
+    <div class="hero-precio-sub">Sin suscripción · Sin sorpresas</div>
   </div>
-  <button class="hero-cta" onclick="entrar()" style="margin-top:20px">Entrar a la app</button>
+
+  <!-- CTA dorado 3D -->
+  <button class="hero-cta" onclick="entrar()">Entrar a la app</button>
   <p class="hero-nota">Sin registro · Funciona sin internet</p>
+
+  <!-- Botón clave cristal -->
+  <button class="hero-clave" onclick="entrar();setTimeout(()=>openClave(),300)">🔑 Ya tengo una clave</button>
+
+  <!-- Features 2x3 con relieve -->
   <div class="hero-feats">
     <div class="hero-feat"><span class="hero-feat-icon">🎤</span><span class="hero-feat-text">Dicta por voz</span></div>
     <div class="hero-feat"><span class="hero-feat-icon">📄</span><span class="hero-feat-text">PDF profesional</span></div>
@@ -978,6 +1253,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="hero-feat"><span class="hero-feat-icon">📐</span><span class="hero-feat-text">Calc. fachadas</span></div>
     <div class="hero-feat"><span class="hero-feat-icon">💾</span><span class="hero-feat-text">Guarda todo</span></div>
   </div>
+
 </section>
 
 <!-- ╔══════════════════════════════════════════╗ -->
@@ -990,6 +1266,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="app-bar-logo">Pintor<span>App</span> <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif">Lite</span></div>
     <div style="display:flex;align-items:center;gap:8px">
       <div class="app-bar-right" id="bar-sub">Mis presupuestos</div>
+      <div style="background:rgba(255,255,255,.12);color:white;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;cursor:pointer" onclick="openClave()">🔑</div>
       <div class="app-bar-pro" onclick="openPro()">⭐ PRO</div>
     </div>
   </div>
@@ -1283,6 +1560,57 @@ document.addEventListener('DOMContentLoaded', function() {
   </nav>
 </div>
 
+<!-- TARIFA PRO - OVERLAY BLOQUEADO -->
+<div style="display:none;position:fixed;inset:0;background:rgba(10,20,50,.88);z-index:150;align-items:center;justify-content:center;padding:20px" id="page-tarifa-overlay">
+  <div style="background:white;border-radius:20px;padding:24px;max-width:360px;width:100%;text-align:center">
+    <div style="font-size:44px;margin-bottom:10px">🔒</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#002060;letter-spacing:1px;margin-bottom:6px">Tarifa Orientativa</div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:16px;line-height:1.5">43 conceptos · Obra Nueva y Rehabilitación<br>Precios de mercado con 20% dto aplicado</div>
+    <div style="filter:blur(2.5px);pointer-events:none;text-align:left;margin-bottom:14px">
+      <div style="background:#f8fafc;border-radius:10px;padding:10px;margin-bottom:6px">
+        <div style="font-size:10px;font-weight:800;color:#003d8f;margin-bottom:4px">ANDAMIAJE</div>
+        <div style="font-size:12px;color:#1a2340">Andamio tubular, montaje y desmontaje</div>
+        <div style="font-size:11px;color:#64748b">m² · ON: 9,22 €/m²</div>
+      </div>
+      <div style="background:#f8fafc;border-radius:10px;padding:10px;margin-bottom:6px">
+        <div style="font-size:10px;font-weight:800;color:#003d8f;margin-bottom:4px">PREPARACIÓN</div>
+        <div style="font-size:12px;color:#1a2340">Lavado con agua a presión en fachadas</div>
+        <div style="font-size:11px;color:#64748b">m² · ON: 1,85 €/m²</div>
+      </div>
+      <div style="background:#f8fafc;border-radius:10px;padding:10px">
+        <div style="font-size:10px;font-weight:800;color:#003d8f;margin-bottom:4px">PINTURA INTERIOR</div>
+        <div style="font-size:12px;color:#1a2340">Pintura plástica blanca 2 manos</div>
+        <div style="font-size:11px;color:#64748b">m² · ON: 6,50 €/m²</div>
+      </div>
+    </div>
+    <button class="btn btn-pro" style="margin-bottom:8px" onclick="document.getElementById('page-tarifa-overlay').style.display='none';openPro()">⭐ Desbloquear con Pro</button>
+    <button onclick="document.getElementById('page-tarifa-overlay').style.display='none'" style="background:none;border:none;font-size:12px;color:#94a3b8;cursor:pointer;font-family:'Nunito',sans-serif;display:block;margin:0 auto">Volver</button>
+  </div>
+</div>
+
+<!-- LITROS PRO - OVERLAY BLOQUEADO -->
+<div style="display:none;position:fixed;inset:0;background:rgba(10,20,50,.88);z-index:150;align-items:center;justify-content:center;padding:20px" id="page-litros-overlay">
+  <div style="background:white;border-radius:20px;padding:24px;max-width:360px;width:100%;text-align:center">
+    <div style="font-size:44px;margin-bottom:10px">🔒</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#002060;letter-spacing:1px;margin-bottom:6px">Calculadora de litros</div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:16px;line-height:1.5">Litros exactos · Botes 15L y 4L<br>Según m², manos y rendimiento</div>
+    <div style="filter:blur(2.5px);pointer-events:none;margin-bottom:14px">
+      <div style="background:#002060;border-radius:10px;padding:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center;margin-bottom:6px">
+        <div><div style="font-size:9px;color:rgba(255,255,255,.6)">PAREDES</div><div style="font-size:15px;font-weight:900;color:white">123,8 m²</div></div>
+        <div><div style="font-size:9px;color:rgba(255,255,255,.6)">TECHOS</div><div style="font-size:15px;font-weight:900;color:white">47,8 m²</div></div>
+        <div><div style="font-size:9px;color:rgba(255,255,255,.6)">TOTAL</div><div style="font-size:15px;font-weight:900;color:#f5c800">171,6 m²</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+        <div style="background:#f8fafc;border-radius:8px;padding:8px"><div style="font-size:9px;color:#64748b">LITROS</div><div style="font-size:18px;font-weight:900;color:#002060">57 L</div></div>
+        <div style="background:#f8fafc;border-radius:8px;padding:8px"><div style="font-size:9px;color:#64748b">BOTES 15L</div><div style="font-size:18px;font-weight:900;color:#002060">3 uds</div></div>
+        <div style="background:#f8fafc;border-radius:8px;padding:8px"><div style="font-size:9px;color:#64748b">BOTES 4L</div><div style="font-size:18px;font-weight:900;color:#002060">3 uds</div></div>
+      </div>
+    </div>
+    <button class="btn btn-pro" style="margin-bottom:8px" onclick="document.getElementById('page-litros-overlay').style.display='none';openPro()">⭐ Desbloquear con Pro</button>
+    <button onclick="document.getElementById('page-litros-overlay').style.display='none'" style="background:none;border:none;font-size:12px;color:#94a3b8;cursor:pointer;font-family:'Nunito',sans-serif;display:block;margin:0 auto">Volver</button>
+  </div>
+</div>
+
 <!-- ╔══════════════════════════════════════════╗ -->
 <!-- ║         MODAL VER PRESUPUESTO           ║ -->
 <!-- ╚══════════════════════════════════════════╝ -->
@@ -1304,6 +1632,53 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║          MODAL CLAVE ACTIVACIÓN         ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div class="overlay" id="modal-clave">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closeClave()">✕</button>
+    <div class="sheet-title">🔑 Introducir clave</div>
+
+    <!-- TABS: Lite / Pro -->
+    <div style="display:flex;gap:8px;margin-bottom:20px">
+      <button id="ktab-lite" onclick="setKeyTab('lite')" style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--az);background:var(--az);color:white;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">Clave Lite</button>
+      <button id="ktab-pro" onclick="setKeyTab('pro')" style="flex:1;padding:10px;border-radius:10px;border:2px solid #e2e8f0;background:white;color:#64748b;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">Clave Pro ⭐</button>
+    </div>
+
+    <!-- INFO -->
+    <div id="key-info" style="background:#f0f4f8;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#64748b;font-weight:600;line-height:1.5">
+      Introduce tu clave de activación <b>Lite</b>.<br>Formato: XXXX-XXXX-XX (12 caracteres)
+    </div>
+
+    <!-- INPUT CLAVE -->
+    <input class="key-input" id="key-input" maxlength="14" placeholder="XXXX-XXXX-XX"
+      oninput="formatKey(this)" onkeyup="checkKeyLive()">
+    <div class="key-status" id="key-status"></div>
+
+    <!-- BOTÓN ACTIVAR -->
+    <button class="btn btn-primary" style="margin-top:16px" onclick="activarClave()">🔑 Activar</button>
+
+    <!-- SEPARADOR -->
+    <div style="display:flex;align-items:center;gap:10px;margin:16px 0">
+      <div style="flex:1;height:1px;background:#e2e8f0"></div>
+      <span style="font-size:11px;color:#94a3b8;font-weight:700">¿No tienes clave?</span>
+      <div style="flex:1;height:1px;background:#e2e8f0"></div>
+    </div>
+
+    <!-- CTA comprar -->
+    <div style="background:#f8fafc;border-radius:12px;padding:14px;text-align:center">
+      <div style="font-size:13px;font-weight:800;color:var(--tx);margin-bottom:4px">Consigue tu clave por WhatsApp</div>
+      <div style="font-size:11px;color:#64748b;margin-bottom:10px">Lite: 5€ pago único · Pro: 4,99€/mes</div>
+      <button class="btn btn-vd btn-sm" style="width:100%;justify-content:center"
+        onclick="window.open('https://wa.me/34643223301?text=Hola%2C%20quiero%20activar%20PintorApp%20Lite','_blank')">
+        📱 Pedir clave por WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
 <!-- ║            MODAL PRO                    ║ -->
 <!-- ╚══════════════════════════════════════════╝ -->
 <div class="overlay" id="modal-pro">
@@ -1317,13 +1692,13 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     <!-- COMPARATIVA LITE vs PRO -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;text-align:center">
-      <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:10px 8px">
+      <div style="background:#f0f4f8;border:1.5px solid #cbd5e1;border-radius:12px;padding:10px 8px">
         <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Lite · 5€</div>
-        <div style="font-size:12px;color:white;font-weight:600;line-height:1.6">✓ Presupuestos básicos<br>✓ PDF sencillo<br>✓ WhatsApp<br>✓ Calc. superficies<br>✓ NCS + RAL<br>✓ 1 partida libre</div>
+        <div style="font-size:12px;color:#002060;font-weight:800;line-height:1.8">✓ Presupuestos básicos<br>✓ PDF sencillo<br>✓ WhatsApp<br>✓ Calc. superficies<br>✓ NCS + RAL<br>✓ 1 partida libre</div>
       </div>
-      <div style="background:linear-gradient(135deg,#4c1d95,#7c3aed);border:1.5px solid rgba(245,200,0,.5);border-radius:12px;padding:10px 8px">
-        <div style="font-size:11px;font-weight:800;color:var(--am);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Pro · 4,99€/mes</div>
-        <div style="font-size:12px;color:white;line-height:1.6;font-weight:600">✓ Todo lo anterior +<br>⭐ Tarifa Orientativa<br>⭐ Calc. pintura (litros)<br>⭐ Valentine & Bruguer<br>⭐ Historial clientes<br>⭐ Partidas ilimitadas</div>
+      <div style="background:#ede9fe;border:2px solid #7c3aed;border-radius:12px;padding:10px 8px">
+        <div style="font-size:11px;font-weight:900;color:#7c3aed;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Pro · 4,99€/mes</div>
+        <div style="font-size:12px;color:#002060;font-weight:800;line-height:1.8">✓ Todo lo anterior +<br>⭐ Tarifa Orientativa<br>⭐ Calc. pintura (litros)<br>⭐ Valentine & Bruguer<br>⭐ Historial clientes<br>⭐ Partidas ilimitadas</div>
       </div>
     </div>
     <div class="pro-feat-list">
