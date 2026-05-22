@@ -1064,28 +1064,71 @@ function copiarC() {
 // Pro:  prefijo PROP- o PROX-
 // Máster: acceso total
 var CLAVES = {
-  // LITE — pago único 5€
-  'LITE-2025-01': 'lite',
-  'LITE-2025-02': 'lite',
-  'LITE-2025-03': 'lite',
-  'LITE-2025-04': 'lite',
-  'LITE-2025-05': 'lite',
-  'PRBA-2026-01': 'lite',
-  'PRBA-2026-02': 'lite',
-  'PRBA-2026-03': 'lite',
-  'TEST-LITE-01': 'lite',
-  // PRO — suscripción
-  'PROP-2025-01': 'pro',
-  'PROP-2025-02': 'pro',
-  'PROP-2025-03': 'pro',
-  'PROX-2026-01': 'pro',
-  'PROX-2026-02': 'pro',
-  // MÁSTER — demo / tuyo
-  'MAES-TROP-RO': 'pro',
-  'MAST-ER26-JM': 'pro',
-  // LITE demo testing
-  'DEMO-LITE-00': 'lite'
+  // LITE — pago único 5€ (sin caducidad)
+  'LITE-2025-01': 'lite', 'LITE-2025-02': 'lite', 'LITE-2025-03': 'lite',
+  'LITE-2025-04': 'lite', 'LITE-2025-05': 'lite',
+  'PRBA-2026-01': 'lite', 'PRBA-2026-02': 'lite', 'PRBA-2026-03': 'lite',
+  'TEST-LITE-01': 'lite', 'DEMO-LITE-00': 'lite',
+  // TRIAL — 15 días gratis
+  'TRY1-2026-01': 'trial', 'TRY1-2026-02': 'trial', 'TRY1-2026-03': 'trial',
+  'TRY1-2026-04': 'trial', 'TRY1-2026-05': 'trial',
+  'TRY1-2026-06': 'trial', 'TRY1-2026-07': 'trial', 'TRY1-2026-08': 'trial',
+  'TRY1-2026-09': 'trial', 'TRY1-2026-10': 'trial',
+  'TRY1-2026-11': 'trial', 'TRY1-2026-12': 'trial', 'TRY1-2026-13': 'trial',
+  'TRY1-2026-14': 'trial', 'TRY1-2026-15': 'trial',
+  'TRY1-2026-16': 'trial', 'TRY1-2026-17': 'trial', 'TRY1-2026-18': 'trial',
+  'TRY1-2026-19': 'trial', 'TRY1-2026-20': 'trial',
+  // PRO — suscripción (sin caducidad)
+  'PROP-2025-01': 'pro', 'PROP-2025-02': 'pro', 'PROP-2025-03': 'pro',
+  'PROX-2026-01': 'pro', 'PROX-2026-02': 'pro',
+  // MÁSTER — tuyo
+  'MAES-TROP-RO': 'pro', 'MAST-ER26-JM': 'pro'
 };
+var TRIAL_DIAS = 15;
+
+// ── SISTEMA DE CADUCIDAD TRIAL ─────────────────────────────
+function checkExpiry() {
+  var plan = localStorage.getItem('pal_plan');
+  if (plan !== 'trial') return true; // lite y pro nunca caducan
+  var activado = parseInt(localStorage.getItem('pal_trial_date') || '0');
+  if (!activado) return true;
+  var diasPasados = Math.floor((Date.now() - activado) / (1000 * 60 * 60 * 24));
+  var diasRestantes = TRIAL_DIAS - diasPasados;
+  if (diasRestantes <= 0) return false; // caducado
+  return diasRestantes; // devuelve días restantes
+}
+
+function getDiasRestantes() {
+  var r = checkExpiry();
+  if (r === true) return null;   // no es trial
+  if (r === false) return 0;     // caducado
+  return r;                       // número de días
+}
+
+function checkTrialOnLoad() {
+  var plan = localStorage.getItem('pal_plan');
+  if (plan !== 'trial') return;
+  var r = checkExpiry();
+  if (r === false) {
+    // Trial caducado — mostrar pantalla de caducidad
+    localStorage.removeItem('pal_pro');
+    isPro = false;
+    mostrarTrialCaducado();
+    return;
+  }
+  // Mostrar banner días restantes
+  var dias = r;
+  var banner = document.getElementById('trial-banner');
+  if (banner) {
+    banner.style.display = 'flex';
+    document.getElementById('trial-dias').textContent = dias + ' día' + (dias !== 1 ? 's' : '');
+  }
+}
+
+function mostrarTrialCaducado() {
+  var overlay = document.getElementById('trial-caducado');
+  if (overlay) overlay.style.display = 'flex';
+}
 
 var keyTabActual = 'lite';
 
@@ -1147,6 +1190,10 @@ function checkKeyLive() {
     inp.className = 'key-input ok';
     st.className = 'key-status ok';
     st.textContent = '⭐ Clave Pro válida — pulsa Activar';
+  } else if (tipo === 'trial') {
+    inp.className = 'key-input ok';
+    st.className = 'key-status ok';
+    st.textContent = '🎉 Trial 15 días — pulsa Activar';
   } else {
     inp.className = 'key-input ok';
     st.className = 'key-status ok';
@@ -1177,13 +1224,20 @@ function activarClave() {
     isPro = true;
     localStorage.setItem('pal_pro', '1');
     localStorage.setItem('pal_plan', 'pro');
-    closeClave(); closePro();
-    renderList();
+    closeClave(); closePro(); renderList();
     var hint = document.getElementById('libre-hint');
     if (hint) hint.innerHTML = '⭐ Pro activo · Partidas libres ilimitadas';
     toast('⭐ ¡PintorApp Pro activado!');
+  } else if (tipo === 'trial') {
+    isPro = true;
+    localStorage.setItem('pal_pro', '1');
+    localStorage.setItem('pal_plan', 'trial');
+    localStorage.setItem('pal_trial_date', Date.now().toString());
+    closeClave(); closePro(); renderList();
+    var hint2 = document.getElementById('libre-hint');
+    if (hint2) hint2.innerHTML = '🎉 Trial activo · 15 días gratis';
+    toast('🎉 Trial activado · 15 días gratis · ¡A presupuestar!');
   } else {
-    // Lite — ya está disponible por defecto, solo confirmar activación
     localStorage.setItem('pal_lite', '1');
     localStorage.setItem('pal_plan', 'lite');
     closeClave();
@@ -1292,6 +1346,16 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     <button onclick="instalarApp()" style="background:var(--am);color:#002060;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif">Instalar</button>
     <button onclick="document.getElementById('install-banner').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:20px;cursor:pointer;padding:0 4px">✕</button>
+  </div>
+
+  <!-- BANNER TRIAL DÍAS RESTANTES -->
+  <div id="trial-banner" style="display:none;background:linear-gradient(135deg,#b45309,#d97706);padding:9px 16px;align-items:center;gap:10px">
+    <span style="font-size:18px">⏳</span>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:800;color:white">Trial gratuito · Te quedan <span id="trial-dias" style="color:#fef3c7">15 días</span></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.7)">Activa Lite (5€) o Pro (4,99€/mes) para no perder tus datos</div>
+    </div>
+    <button onclick="openClave()" style="background:white;color:#b45309;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap">Activar</button>
   </div>
 
   <!-- TOP BAR -->
@@ -1641,6 +1705,30 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     <button class="btn btn-pro" style="margin-bottom:8px" onclick="document.getElementById('page-litros-overlay').style.display='none';openPro()">⭐ Desbloquear con Pro</button>
     <button onclick="document.getElementById('page-litros-overlay').style.display='none'" style="background:none;border:none;font-size:12px;color:#94a3b8;cursor:pointer;font-family:'Nunito',sans-serif;display:block;margin:0 auto">Volver</button>
+  </div>
+</div>
+
+<!-- TRIAL CADUCADO OVERLAY -->
+<div id="trial-caducado" style="display:none;position:fixed;inset:0;background:rgba(10,20,50,.95);z-index:300;align-items:center;justify-content:center;padding:24px;text-align:center">
+  <div style="background:white;border-radius:20px;padding:28px 24px;max-width:340px;width:100%">
+    <div style="font-size:52px;margin-bottom:12px">⏰</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#b45309;letter-spacing:1px;margin-bottom:8px">Trial caducado</div>
+    <div style="font-size:14px;color:#64748b;margin-bottom:20px;line-height:1.5">Tu periodo de prueba de <b>15 días</b> ha terminado.<br>Tus presupuestos están guardados.<br>Activa la app para seguir usándola.</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="background:#fef9c3;border:1.5px solid #fbbf24;border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:11px;font-weight:800;color:#92400e;text-transform:uppercase;letter-spacing:1px">Lite · Pago único</div>
+        <div style="font-size:26px;font-weight:900;color:#92400e">5€</div>
+        <div style="font-size:11px;color:#b45309">Sin suscripción · Para siempre</div>
+      </div>
+      <div style="background:#ede9fe;border:2px solid #7c3aed;border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:11px;font-weight:800;color:#5b21b6;text-transform:uppercase;letter-spacing:1px">Pro · Profesional</div>
+        <div style="font-size:26px;font-weight:900;color:#5b21b6">4,99€<span style="font-size:14px">/mes</span></div>
+        <div style="font-size:11px;color:#7c3aed">Tarifa orientativa · Calc. litros · Valentine</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="margin-top:16px" onclick="document.getElementById('trial-caducado').style.display='none';openClave()">🔑 Introducir clave de activación</button>
+    <button onclick="window.open('https://wa.me/34643223301?text=Hola%2C%20quiero%20activar%20PintorApp','_blank')" class="btn btn-vd" style="margin-top:8px">📱 Pedir clave por WhatsApp</button>
+    <div style="margin-top:12px;font-size:11px;color:#94a3b8">¿Ya tienes clave? Introdúcela arriba<br>Tus datos están a salvo 🔒</div>
   </div>
 </div>
 
