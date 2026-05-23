@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PainterApp Lite</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<meta name="theme-color" content="#002060">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PainterApp">
+<link rel="apple-touch-icon" href="https://cdn.abacus.ai/images/64a2f04e-877f-4c78-98f4-2fc415c46ce0.png">
+<script>
+var _manifest={
+  "name":"PainterApp Lite",
+  "short_name":"PainterApp",
+  "description":"Professional painting quotes",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#002060",
+  "theme_color":"#002060",
+  "orientation":"portrait",
+  "icons":[
+    {"src":"https://cdn.abacus.ai/images/64a2f04e-877f-4c78-98f4-2fc415c46ce0.png","sizes":"192x192","type":"image/png"},
+    {"src":"https://cdn.abacus.ai/images/64a2f04e-877f-4c78-98f4-2fc415c46ce0.png","sizes":"512x512","type":"image/png"}
+  ]
+};
+var _blob=new Blob([JSON.stringify(_manifest)],{type:'application/json'});
+var _ml=document.createElement('link');
+_ml.rel='manifest';_ml.href=URL.createObjectURL(_blob);
+document.currentScript.parentNode.appendChild(_ml);
+</script>
+<style>
+:root{--az:#003d8f;--az2:#002060;--am:#f5c800;--bl:#ffffff;--gr:#f0f4f8;--tx:#1a2340;--vd:#25D366;--pro:#7c3aed}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--gr);color:var(--tx);min-height:100vh;overflow-x:hidden}
+.hero{
+  background-color:#1a4a8a;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 20% 30%, #2060b8 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, #0d3070 0%, transparent 50%),
+    linear-gradient(160deg, #0e2d6e 0%, #1a4a8a 40%, #1055a0 70%, #0a2560 100%);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:50px 28px 80px;position:relative;overflow:hidden;text-align:center
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 15% 60%, rgba(30,80,160,.4) 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 40%, rgba(10,40,100,.5) 0%, transparent 40%);
+}
+.hero-badge{background:linear-gradient(135deg,rgba(200,220,255,.25),rgba(150,180,240,.12));border:1.5px solid rgba(200,220,255,.45);color:white;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:8px 20px;border-radius:30px;margin-bottom:28px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 2px 12px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(8px);animation:fadeDown .6s ease both}
+.hero-titulo{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,14vw,80px);line-height:.9;letter-spacing:3px;margin-bottom:6px;color:transparent;background:linear-gradient(180deg,#e8eef8 0%,#c5d4ee 30%,#f0f5ff 50%,#8aaad8 70%,#c8d8f0 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5)) drop-shadow(0 1px 0 rgba(255,255,255,.3));animation:fadeUp .6s ease .1s both}
+.hero-lite{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,8vw,46px);letter-spacing:10px;color:transparent;background:linear-gradient(180deg,#d4c8a8 0%,#b8a878 30%,#e8ddb8 50%,#907850 70%,#c8b888 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));margin-bottom:16px;animation:fadeUp .6s ease .2s both}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.9);font-weight:700;margin-bottom:32px;line-height:1.5;animation:fadeUp .6s ease .25s both;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.hero-precio{background:linear-gradient(135deg,rgba(220,210,180,.22),rgba(180,165,120,.15));border:1.5px solid rgba(210,195,150,.5);border-radius:18px;padding:14px 32px;margin-bottom:18px;box-shadow:0 4px 20px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.15),inset 0 -1px 0 rgba(0,0,0,.2);backdrop-filter:blur(6px);animation:fadeUp .6s ease .3s both;width:100%;max-width:340px}
+.hero-precio-main{font-size:19px;font-weight:900;color:white;letter-spacing:.3px}
+.hero-precio-main span{color:#f5d070}
+.hero-precio-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:3px;font-weight:700}
+.hero-cta{background:linear-gradient(180deg,#f0c840 0%,#d4a020 35%,#b88010 65%,#e0b030 100%);color:#3a2000;font-size:19px;font-weight:900;padding:17px 50px;border-radius:50px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.4),0 2px 0 rgba(255,255,255,.2) inset,0 -3px 0 rgba(0,0,0,.3) inset;letter-spacing:.3px;width:100%;max-width:340px;transition:transform .15s,box-shadow .15s;animation:fadeUp .6s ease .35s both}
+.hero-cta:active{transform:translateY(2px);box-shadow:0 2px 10px rgba(0,0,0,.4)}
+.hero-nota{margin-top:10px;font-size:12px;color:rgba(255,255,255,.45);animation:fadeUp .6s ease .4s both}
+.hero-clave{background:linear-gradient(135deg,rgba(180,195,220,.2),rgba(140,165,200,.12));border:1.5px solid rgba(180,200,230,.4);color:rgba(255,255,255,.9);font-size:14px;font-weight:800;padding:12px 28px;border-radius:30px;cursor:pointer;font-family:'Nunito',sans-serif;display:inline-flex;align-items:center;gap:8px;box-shadow:0 3px 12px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.15);animation:fadeUp .6s ease .45s both;margin-top:8px}
+.hero-feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px;width:100%;max-width:360px;animation:fadeUp .6s ease .5s both}
+.hero-feat{background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:14px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 3px 10px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(4px)}
+.hero-feat-text{font-size:13px;color:white;font-weight:800;text-align:left}
+.app-shell{display:none;flex-direction:column;min-height:100vh;padding-bottom:72px}
+.app-bar{background:var(--az2);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.app-bar-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:white;letter-spacing:1px}
+.app-bar-logo span{color:var(--am)}
+.app-bar-right{font-size:11px;color:rgba(255,255,255,.5);font-weight:600;cursor:pointer}
+.app-bar-pro{background:var(--pro);color:white;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;cursor:pointer}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--az2);display:flex;z-index:100;border-top:1px solid rgba(255,255,255,.08)}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 12px;background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;color:rgba(255,255,255,.5);font-size:10px;font-weight:700;gap:3px;transition:color .2s}
+.bnav-btn.active{color:var(--am)}
+.bnav-btn .ico{font-size:22px}
+.bnav-btn.bnav-pro{color:rgba(255,255,255,.35);position:relative}
+.bnav-btn.bnav-pro .ico{font-size:18px}
+.bnav-btn.bnav-pro::after{content:'PRO';position:absolute;top:6px;right:6px;font-size:7px;font-weight:800;background:var(--pro);color:white;padding:1px 4px;border-radius:4px}
+.page{display:none;padding:16px;max-width:520px;margin:0 auto}
+.page.active{display:block}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--az2);letter-spacing:1px;margin-bottom:4px;margin-top:2px}
+.page-sub{font-size:12px;color:#64748b;margin-bottom:16px}
+.card{background:white;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,32,96,.06)}
+.card-hdr{font-size:11px;font-weight:800;color:var(--az);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ig{margin-bottom:10px}
+.il{font-size:12px;font-weight:700;color:#64748b;margin-bottom:4px;display:block}
+.if{width:100%;border:1.5px solid #e2e8f0;border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Nunito',sans-serif;outline:none;transition:border .2s;color:var(--tx)}
+.if:focus{border-color:var(--az)}
+textarea.if{resize:none}
+.ir2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ir3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+.btn{border:none;border-radius:12px;padding:13px 18px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:transform .15s;display:inline-flex;align-items:center;gap:6px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--az);color:white;width:100%;justify-content:center}
+.btn-am{background:var(--am);color:var(--az2)}
+.btn-vd{background:var(--vd);color:white}
+.btn-red{background:#ef4444;color:white}
+.btn-ghost{background:#e2e8f0;color:#475569}
+.btn-pro{background:var(--pro);color:white;width:100%;justify-content:center}
+.btn-sm{padding:8px 13px;font-size:12px;border-radius:9px}
+.btn-row{display:flex;gap:8px;margin-top:10px}
+.btn-row .btn{flex:1;justify-content:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{background:white;border:1.5px solid #e2e8f0;border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;color:var(--tx);transition:all .15s}
+.chip.active{border-color:var(--az);background:#e8f0fe;color:var(--az)}
+.part-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.part-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px}
+.part-info{flex:1}
+.part-desc{font-size:13px;font-weight:700;color:var(--tx)}
+.part-sub{font-size:11px;color:#64748b}
+.part-price{font-size:15px;font-weight:900;color:var(--az);min-width:76px;text-align:right}
+.part-del{background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;padding:2px;line-height:1}
+.total-box{background:var(--az2);border-radius:14px;padding:14px 16px}
+.total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.total-row:last-child{margin-bottom:0;border-top:1px solid rgba(255,255,255,.15);padding-top:8px;margin-top:4px}
+.tl{font-size:12px;color:rgba(255,255,255,.7);font-weight:600}
+.tv{font-size:14px;font-weight:800;color:white}
+.tv.big{font-size:22px;color:var(--am)}
+.tramo-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.tramo-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:8px}
+.tramo-info{flex:1}
+.tramo-name{font-size:13px;font-weight:700}
+.tramo-dim{font-size:11px;color:#64748b}
+.tramo-m2{font-size:15px;font-weight:900;color:var(--az)}
+.tramo-del{background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px}
+.calc-total{background:var(--am);border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.calc-total-l{font-size:13px;font-weight:800;color:var(--az2)}
+.calc-total-v{font-size:22px;font-weight:900;color:var(--az2)}
+.color-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.ctab{flex:1;min-width:60px;padding:9px 4px;border:1.5px solid #e2e8f0;background:white;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;color:#64748b;transition:all .15s}
+.ctab.active{border-color:var(--az);color:var(--az);background:#e8f0fe}
+.ctab.pro-tab{border-color:#e9d5ff;color:var(--pro);background:#faf5ff}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ccard{border-radius:12px;overflow:hidden;cursor:pointer;border:2.5px solid transparent;transition:border .15s;position:relative}
+.ccard.sel{border-color:var(--az)}
+.ccard.locked{opacity:.75}
+.ccard-lock{position:absolute;top:4px;right:4px;font-size:12px;background:rgba(0,0,0,.4);border-radius:6px;padding:1px 4px}
+.cswatch{height:50px}
+.cinfo{background:white;padding:4px 6px}
+.ccode{font-size:10px;font-weight:800;color:var(--tx)}
+.cname{font-size:9px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cprev{background:white;border-radius:14px;padding:14px;border:1.5px solid #e2e8f0;display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.cprev-sw{width:52px;height:52px;border-radius:10px;flex-shrink:0;border:1px solid #e2e8f0}
+.cprev-cod{font-size:17px;font-weight:900;color:var(--tx)}
+.cprev-nom{font-size:12px;color:#64748b}
+.presup-item{background:white;border-radius:14px;padding:14px;margin-bottom:8px;border:1px solid #e2e8f0;cursor:pointer;transition:box-shadow .15s}
+.presup-item:active{box-shadow:0 4px 16px rgba(0,32,96,.1)}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.pref{font-size:11px;font-weight:800;color:var(--az);text-transform:uppercase}
+.pfecha{font-size:11px;color:#94a3b8}
+.pcliente{font-size:15px;font-weight:800;color:var(--tx)}
+.pobra{font-size:12px;color:#64748b}
+.ptotal{font-size:20px;font-weight:900;color:var(--az)}
+.pacts{display:flex;gap:6px;margin-top:10px}
+.pro-banner{background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.pro-banner-ico{font-size:28px;flex-shrink:0}
+.pro-banner-txt{flex:1}
+.pro-banner-tit{font-size:14px;font-weight:900;color:white}
+.pro-banner-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+.pro-banner-btn{background:var(--am);color:#002060;font-size:11px;font-weight:900;padding:7px 12px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+.empty{text-align:center;padding:40px 20px;color:#94a3b8}
+.empty-ico{font-size:48px;margin-bottom:10px}
+.empty-txt{font-size:15px;font-weight:700}
+.empty-hint{font-size:12px;margin-top:4px}
+.toggle-wrap{display:flex;align-items:center;gap:10px}
+.toggle-lbl{font-size:13px;font-weight:700;color:var(--tx)}
+.sw{position:relative;width:44px;height:24px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0}
+.swt{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:24px;transition:.3s}
+.swt:before{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;left:3px;top:3px;transition:.3s}
+input:checked+.swt{background:var(--az)}
+input:checked+.swt:before{transform:translateX(20px)}
+.mic{background:rgba(0,61,143,.08);border:none;border-radius:9px;padding:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mic.on{background:#fef2f2;animation:pulse .8s infinite}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:flex-end}
+.overlay.open{display:flex}
+.sheet{background:white;border-radius:22px 22px 0 0;padding:20px 16px 30px;width:100%;max-height:88vh;overflow-y:auto}
+.sheet-handle{width:40px;height:4px;background:#e2e8f0;border-radius:2px;margin:0 auto 16px}
+.sheet-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--tx);letter-spacing:.5px;margin-bottom:14px}
+.pro-modal-header{background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:16px;padding:20px;margin-bottom:16px;text-align:center}
+.pro-modal-ico{font-size:40px;margin-bottom:8px}
+.pro-modal-tit{font-family:'Bebas Neue',sans-serif;font-size:28px;color:white;letter-spacing:1px}
+.pro-modal-sub{font-size:13px;color:rgba(255,255,255,.8);margin-top:4px}
+.pro-feat-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.pro-feat-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#faf5ff;border-radius:12px;border:1px solid #e9d5ff}
+.pro-feat-item span:first-child{font-size:18px;flex-shrink:0}
+.pro-feat-item div{font-size:13px;font-weight:700;color:var(--tx)}
+.pro-feat-item small{font-size:11px;color:#64748b;display:block}
+.pro-price-opt{flex:1;border:2px solid #e2e8f0;border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s}
+.pro-price-opt.sel{border-color:var(--pro);background:#faf5ff}
+.pro-price-opt .ppo-price{font-size:20px;font-weight:900;color:var(--pro)}
+.pro-price-opt .ppo-period{font-size:10px;color:#64748b;font-weight:700}
+.pro-price-opt .ppo-save{font-size:10px;color:#16a34a;font-weight:800;margin-top:3px}
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:11px 22px;border-radius:22px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.key-input{width:100%;border:2.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;font-size:18px;font-family:'Bebas Neue',sans-serif;letter-spacing:4px;text-align:center;text-transform:uppercase;outline:none;transition:border .2s;color:var(--az2)}
+.key-input:focus{border-color:var(--az)}
+.key-input.ok{border-color:#22c55e;background:#f0fdf4;color:#166534}
+.key-input.err{border-color:#ef4444;background:#fef2f2;color:#991b1b}
+.key-status{text-align:center;font-size:13px;font-weight:800;margin-top:8px;min-height:20px}
+.key-status.ok{color:#22c55e}
+.key-status.err{color:#ef4444}
+</style>
+</head>
+<body>
+
+<script>
+var isPro = localStorage.getItem('pal_pro') === '1';
+var partidas = [], tramos = [], editId = null, verId = null;
+var presups = JSON.parse(localStorage.getItem('pal_v1_en') || '[]');
+var cFiltro = 'NCS', cSel = null;
+var libreUsadas = parseInt(localStorage.getItem('pal_libre_en') || '0');
+var planSel = 'm';
+
+function entrar() {
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('appshell').style.display = 'flex';
+  renderList();
+  renderC('NCS');
+}
+
+var barSubs = ['My Quotes', 'New Quote', 'Colour Chart', 'Surface Calculator', 'Price Guide · PRO', 'Paint Calculator · PRO'];
+function goPage(id, idx) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('bn' + idx).classList.add('active');
+  document.getElementById('bar-sub').textContent = barSubs[idx];
+  if (id === 'list') renderList();
+  if (id === 'colores') renderC(cFiltro);
+}
+function irNuevo() { goPage('nuevo', 1); }
+
+function goProPage(id) {
+  if (isPro) { toast('⭐ Pro feature — coming soon'); return; }
+  var overlay = document.getElementById('page-' + id + '-overlay');
+  if (overlay) { overlay.style.display = 'flex'; }
+  else { openPro(); }
+}
+
+function toast(m) {
+  var t = document.getElementById('toast');
+  t.textContent = m;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function openPro() { document.getElementById('modal-pro').classList.add('open'); }
+function closePro() { document.getElementById('modal-pro').classList.remove('open'); }
+function selPlan(p) {
+  planSel = p;
+  document.getElementById('popt-m').classList.toggle('sel', p === 'm');
+  document.getElementById('popt-y').classList.toggle('sel', p === 'y');
+}
+function activarPro() {
+  isPro = true; localStorage.setItem('pal_pro', '1');
+  closePro(); renderList(); toast('⭐ Welcome to PainterApp Pro!');
+}
+
+var recog = null;
+function mic(id) {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { toast('Microphone not available'); return; }
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var map = { 'cli-nombre': 'cn', 'cli-obra': 'co', 'part-desc': 'pd' };
+  var btn = document.getElementById('mic-' + (map[id] || id.replace(/[^a-z]/g, '')));
+  if (recog) { recog.stop(); recog = null; if (btn) btn.classList.remove('on'); return; }
+  recog = new SR();
+  recog.lang = 'en-GB'; recog.continuous = false; recog.interimResults = false;
+  if (btn) btn.classList.add('on');
+  recog.onresult = e => { document.getElementById(id).value = e.results[0][0].transcript; if (id === 'part-desc') calcP(); };
+  recog.onend = () => { recog = null; if (btn) btn.classList.remove('on'); };
+  recog.onerror = () => { recog = null; if (btn) btn.classList.remove('on'); toast('Microphone error'); };
+  recog.start();
+}
+
+function setTipo(el, tipo) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('part-desc').value = tipo;
+}
+
+function chkVat() { recalc(); }
+
+function calcP() {
+  var m = parseFloat(document.getElementById('part-m2').value) || 0;
+  var e = parseFloat(document.getElementById('part-eur').value) || 0;
+  if (m && e) document.getElementById('part-tot').value = (m * e).toFixed(2);
+}
+
+function addPart() {
+  var desc = document.getElementById('part-desc').value.trim();
+  var m2 = parseFloat(document.getElementById('part-m2').value) || 0;
+  var eur = parseFloat(document.getElementById('part-eur').value) || 0;
+  var tot = parseFloat(document.getElementById('part-tot').value) || (m2 * eur);
+  if (!desc) { toast('Enter a description'); return; }
+  if (!tot) { toast('Enter a price or amount'); return; }
+  partidas.push({ id: Date.now(), desc, m2, eur, tot, tipo: 'normal' });
+  ['part-desc', 'part-m2', 'part-eur', 'part-tot'].forEach(id => document.getElementById(id).value = '');
+  renderParts(); recalc(); toast('✓ Line item added');
+}
+
+function addLibre() {
+  var desc = document.getElementById('libre-desc').value.trim();
+  var tot = parseFloat(document.getElementById('libre-tot').value) || 0;
+  if (!desc) { toast('Enter the description'); return; }
+  if (!tot) { toast('Enter the amount'); return; }
+  if (!isPro && libreUsadas >= 1) { openPro(); toast('⭐ Pro: unlimited free items'); return; }
+  partidas.push({ id: Date.now(), desc, m2: 0, eur: 0, tot, tipo: 'libre' });
+  document.getElementById('libre-desc').value = '';
+  document.getElementById('libre-tot').value = '';
+  if (!isPro) {
+    libreUsadas++; localStorage.setItem('pal_libre_en', libreUsadas);
+    document.getElementById('libre-hint').innerHTML = '✓ Free item used · <span style="color:var(--pro);cursor:pointer;font-weight:800" onclick="openPro()">Pro = unlimited ⭐</span>';
+  }
+  renderParts(); recalc(); toast('✓ Free item added');
+}
+
+function delPart(id) { partidas = partidas.filter(p => p.id !== id); renderParts(); recalc(); }
+
+function renderParts() {
+  var rc = document.getElementById('rescard');
+  if (!partidas.length) { rc.style.display = 'none'; return; }
+  rc.style.display = 'block';
+  document.getElementById('plist2').innerHTML = partidas.map(p => `
+    <div class="part-item">
+      <div class="part-info">
+        <div class="part-desc">${p.desc}${p.tipo === 'libre' ? ' <span style="font-size:10px;color:var(--pro);font-weight:800">CUSTOM</span>' : ''}</div>
+        <div class="part-sub">${p.m2 ? p.m2 + ' m² × ' + fmt(p.eur) + ' /m²' : 'Fixed price'}</div>
+      </div>
+      <div class="part-price">${fmt(p.tot)}</div>
+      <button class="part-del" onclick="delPart(${p.id})">✕</button>
+    </div>`).join('');
+}
+
+function recalc() {
+  var sub = partidas.reduce((a, p) => a + p.tot, 0);
+  var vat = document.getElementById('vat') && document.getElementById('vat').checked;
+  var rate = vat ? 0.20 : 0;
+  var tax = sub * rate;
+  document.getElementById('t-sub').textContent = fmt(sub);
+  var ir = document.getElementById('t-imp-row');
+  if (rate) { ir.style.display = 'flex'; document.getElementById('t-imp').textContent = fmt(tax); }
+  else ir.style.display = 'none';
+  document.getElementById('t-tot').textContent = fmt(sub + tax);
+}
+
+function fmt(n) {
+  return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(parseFloat(n || 0));
+}
+function fmtF(f) { if (!f) return '—'; var p = f.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+
+function guardar() {
+  var nom = document.getElementById('cli-nombre').value.trim();
+  if (!nom) { toast('Enter the client name'); return; }
+  if (!partidas.length) { toast('Add at least one line item'); return; }
+  var sub = partidas.reduce((a, p) => a + p.tot, 0);
+  var vat = document.getElementById('vat') && document.getElementById('vat').checked;
+  var rate = vat ? 0.20 : 0;
+  var tax = sub * rate;
+  var data = {
+    id: editId || Date.now(), ref: 'QT-' + String(Date.now()).slice(-5),
+    fecha: document.getElementById('cli-fecha').value,
+    cliente: nom, obra: document.getElementById('cli-obra').value,
+    tel: document.getElementById('cli-tel').value, notas: document.getElementById('cli-notas').value,
+    vat, rate, tax,
+    partidas: JSON.parse(JSON.stringify(partidas)),
+    sub, total: sub + tax
+  };
+  if (editId) presups = presups.map(p => p.id === editId ? data : p);
+  else presups.unshift(data);
+  localStorage.setItem('pal_v1_en', JSON.stringify(presups));
+  resetNuevo(); goPage('list', 0); toast('✓ Quote saved');
+}
+
+function resetNuevo() {
+  partidas = []; editId = null;
+  document.getElementById('ntit').textContent = 'New Quote';
+  ['cli-nombre', 'cli-obra', 'cli-tel', 'cli-notas'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cli-fecha').value = new Date().toISOString().split('T')[0];
+  if(document.getElementById('vat')) document.getElementById('vat').checked = false;
+  document.getElementById('rescard').style.display = 'none';
+  document.getElementById('plist2').innerHTML = '';
+  recalc();
+}
+
+function renderList() {
+  var el = document.getElementById('plist');
+  document.getElementById('pcount').textContent = presups.length + ' quote' + (presups.length !== 1 ? 's' : '') + ' saved';
+  var banner = document.querySelector('.pro-banner');
+  if (banner) banner.style.display = isPro ? 'none' : 'flex';
+  if (!presups.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">No quotes yet</div><div class="empty-hint">Tap "+ New" to create your first one</div></div>`;
+    return;
+  }
+  el.innerHTML = presups.map(p => `
+    <div class="presup-item" onclick="verP(${p.id})">
+      <div class="ph"><span class="pref">${p.ref}</span><span class="pfecha">${fmtF(p.fecha)}</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div><div class="pcliente">${p.cliente}</div><div class="pobra">${p.obra || '—'}</div></div>
+        <div class="ptotal">${fmt(p.total)}</div>
+      </div>
+      <div class="pacts" onclick="event.stopPropagation()">
+        <button class="btn btn-ghost btn-sm" onclick="editarPid(${p.id})">✏️ Edit</button>
+        <button class="btn btn-am btn-sm" onclick="genPDFid(${p.id})">📄 PDF</button>
+        <button class="btn btn-vd btn-sm" onclick="envWAid(${p.id})">📱 WA</button>
+      </div>
+    </div>`).join('');
+}
+
+function verP(id) {
+  var p = presups.find(x => x.id === id); if (!p) return; verId = id;
+  document.getElementById('m-tit').textContent = p.ref + ' — ' + p.cliente;
+  document.getElementById('m-body').innerHTML = `
+    <div style="margin-bottom:10px"><div style="font-size:11px;color:#64748b">Job / Site</div><div style="font-weight:700">${p.obra || '—'}</div></div>
+    <div style="margin-bottom:14px"><div style="font-size:11px;color:#64748b">Date</div><div style="font-weight:700">${fmtF(p.fecha)}</div></div>
+    <div class="part-list">${p.partidas.map(x => `<div class="part-item"><div class="part-info"><div class="part-desc">${x.desc}</div><div class="part-sub">${x.m2 ? x.m2 + ' m²' : ''}</div></div><div class="part-price">${fmt(x.tot)}</div></div>`).join('')}</div>
+    <div class="total-box" style="margin-top:10px">
+      <div class="total-row"><span class="tl">Subtotal (ex. VAT)</span><span class="tv">${fmt(p.sub)}</span></div>
+      ${p.rate ? `<div class="total-row"><span class="tl">VAT 20%</span><span class="tv">${fmt(p.tax)}</span></div>` : ''}
+      <div class="total-row"><span class="tl">TOTAL</span><span class="tv big">${fmt(p.total)}</span></div>
+    </div>
+    ${p.notas ? `<div style="margin-top:10px;padding:10px;background:#f8fafc;border-radius:10px;font-size:12px;color:#64748b"><b>Notes:</b> ${p.notas}</div>` : ''}`;
+  document.getElementById('modal-ver').classList.add('open');
+}
+function closeM() { document.getElementById('modal-ver').classList.remove('open'); }
+function editarP() { closeM(); editarPid(verId); }
+function editarPid(id) {
+  var p = presups.find(x => x.id === id); if (!p) return;
+  editId = id; document.getElementById('ntit').textContent = 'Edit Quote';
+  document.getElementById('cli-nombre').value = p.cliente;
+  document.getElementById('cli-obra').value = p.obra || '';
+  document.getElementById('cli-tel').value = p.tel || '';
+  document.getElementById('cli-notas').value = p.notas || '';
+  document.getElementById('cli-fecha').value = p.fecha;
+  if(document.getElementById('vat')) document.getElementById('vat').checked = p.vat || false;
+  partidas = JSON.parse(JSON.stringify(p.partidas));
+  renderParts(); recalc(); goPage('nuevo', 1);
+}
+function eliminarP() {
+  if (!confirm('Delete this quote?')) return;
+  presups = presups.filter(p => p.id !== verId);
+  localStorage.setItem('pal_v1_en', JSON.stringify(presups));
+  closeM(); renderList(); toast('Quote deleted');
+}
+
+function buildData(id) {
+  if (id) return presups.find(p => p.id === id);
+  var nom = document.getElementById('cli-nombre').value.trim() || 'Client';
+  var sub = partidas.reduce((a, p) => a + p.tot, 0);
+  var vat = document.getElementById('vat') && document.getElementById('vat').checked;
+  var rate = vat ? 0.20 : 0;
+  var tax = sub * rate;
+  return {
+    ref: 'DRAFT', fecha: document.getElementById('cli-fecha').value,
+    cliente: nom, obra: document.getElementById('cli-obra').value,
+    tel: document.getElementById('cli-tel').value, notas: document.getElementById('cli-notas').value,
+    vat, rate, tax, partidas, sub, total: sub + tax
+  };
+}
+
+function fmtPDF(n) { return '£' + parseFloat(n || 0).toFixed(2); }
+
+function genPDF(id) {
+  var d = buildData(id);
+  if (!d || !d.partidas.length) { toast('No data for PDF'); return; }
+  var doc = new jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+  var W = 210, M = 18;
+  doc.setFillColor(0, 32, 96); doc.rect(0, 0, W, 32, 'F');
+  doc.setFillColor(245, 200, 0); doc.rect(0, 32, W, 4, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFontSize(24); doc.setFont('helvetica', 'bold');
+  doc.text('PAINTERAPP LITE', M, 20);
+  doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+  doc.text('Professional painting quote', M, 27);
+  doc.setTextColor(0, 0, 0);
+  var y = 44;
+  doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(100, 116, 139);
+  doc.text('REFERENCE', M, y); doc.text('DATE', 80, y); doc.text('PHONE', 145, y);
+  doc.setFont('helvetica', 'normal'); doc.setTextColor(26, 35, 64); doc.setFontSize(10); y += 5;
+  doc.text(d.ref || '—', M, y); doc.text(fmtF(d.fecha), 80, y); doc.text(d.tel || '—', 145, y);
+  y += 10;
+  doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(100, 116, 139); doc.text('CLIENT', M, y);
+  y += 5; doc.setFont('helvetica', 'normal'); doc.setTextColor(26, 35, 64); doc.setFontSize(14); doc.text(d.cliente, M, y);
+  if (d.obra) { y += 5; doc.setFontSize(9); doc.setTextColor(100, 116, 139); doc.text(d.obra, M, y); }
+  y += 14;
+  doc.setFillColor(0, 32, 96); doc.rect(M, y, W - M * 2, 8, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+  doc.text('DESCRIPTION', M + 2, y + 5.5); doc.text('QTY', 122, y + 5.5); doc.text('UNIT PRICE', 144, y + 5.5); doc.text('TOTAL', 170, y + 5.5);
+  y += 8;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  d.partidas.forEach((p, i) => {
+    if (i % 2 === 0) { doc.setFillColor(240, 244, 248); doc.rect(M, y, W - M * 2, 7, 'F'); }
+    doc.setTextColor(26, 35, 64);
+    doc.text(p.desc.substring(0, 48), M + 2, y + 5);
+    doc.text(p.m2 ? p.m2 + ' m²' : '—', 122, y + 5);
+    doc.text(p.eur ? fmtPDF(p.eur) + '/m²' : '—', 144, y + 5);
+    doc.text(fmtPDF(p.tot), 170, y + 5);
+    y += 7; if (y > 262) { doc.addPage(); y = 20; }
+  });
+  y += 8;
+  var bw = 82, bx = W - M - bw;
+  doc.setFillColor(240, 244, 248); doc.rect(bx, y, bw, 7, 'F');
+  doc.setTextColor(100, 116, 139); doc.text('Subtotal (ex. VAT)', bx + 2, y + 5);
+  doc.setTextColor(26, 35, 64); doc.text(fmtPDF(d.sub), bx + bw - 2, y + 5, { align: 'right' });
+  y += 7;
+  if (d.rate) {
+    doc.setFillColor(240, 244, 248); doc.rect(bx, y, bw, 7, 'F');
+    doc.setTextColor(100, 116, 139); doc.text('VAT 20%', bx + 2, y + 5);
+    doc.setTextColor(26, 35, 64); doc.text(fmtPDF(d.tax), bx + bw - 2, y + 5, { align: 'right' });
+    y += 7;
+  }
+  doc.setFillColor(0, 32, 96); doc.rect(bx, y, bw, 10, 'F');
+  doc.setTextColor(245, 200, 0); doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+  doc.text('TOTAL', bx + 2, y + 7); doc.text(fmtPDF(d.total), bx + bw - 2, y + 7, { align: 'right' });
+  if (d.notas) { y += 16; doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(100, 116, 139); doc.text('Notes: ' + d.notas, M, y); }
+  doc.setFontSize(7); doc.setTextColor(180, 180, 180);
+  doc.text('Generated with PainterApp Lite', M, 288);
+  doc.save('quote-' + (d.ref || 'draft') + '.pdf');
+  toast('✓ PDF generated');
+}
+function genPDFid(id) { genPDF(id || verId); }
+
+function buildWA(d) {
+  if (!d) return '';
+  var l = ['🎨 *PAINTING QUOTE*', '',
+    '📋 Ref: ' + (d.ref || '—'), '👤 ' + d.cliente];
+  if (d.obra) l.push('📍 ' + d.obra);
+  l.push('📅 ' + fmtF(d.fecha), '', '*LINE ITEMS:*');
+  d.partidas.forEach(p => l.push('• ' + p.desc + (p.m2 ? ' (' + p.m2 + ' m²)' : '') + ': ' + fmtPDF(p.tot)));
+  l.push('', 'Subtotal: ' + fmtPDF(d.sub));
+  if (d.rate) l.push('VAT 20%: ' + fmtPDF(d.tax));
+  l.push('*TOTAL: ' + fmtPDF(d.total) + '*');
+  if (d.notas) l.push('', '📝 ' + d.notas);
+  l.push('', '_PainterApp Lite_');
+  return l.join('\n');
+}
+function envWA(id) {
+  var d = buildData(id);
+  if (!d || !d.partidas.length) { toast('No data'); return; }
+  var tel = d.tel ? d.tel.replace(/\D/g, '') : '';
+  var url = (tel ? 'https://wa.me/' + tel : 'https://wa.me') + '?text=' + encodeURIComponent(buildWA(d));
+  window.open(url, '_blank');
+}
+function envWAid(id) { envWA(id || verId); }
+
+function calcT() {
+  var a = parseFloat(document.getElementById('t-a').value) || 0;
+  var h = parseFloat(document.getElementById('t-h').value) || 0;
+  var hu = parseFloat(document.getElementById('t-huecos').value) || 0;
+  document.getElementById('t-tot2').value = Math.max(0, a * h - hu).toFixed(2);
+}
+function addT() {
+  var nom = document.getElementById('t-nom').value.trim() || 'Section ' + (tramos.length + 1);
+  var a = parseFloat(document.getElementById('t-a').value) || 0;
+  var h = parseFloat(document.getElementById('t-h').value) || 0;
+  var hu = parseFloat(document.getElementById('t-huecos').value) || 0;
+  if (!a || !h) { toast('Enter width and height'); return; }
+  tramos.push({ id: Date.now(), nom, a, h, hu, tot: Math.max(0, a * h - hu) });
+  ['t-nom', 't-a', 't-h', 't-huecos', 't-tot2'].forEach(id => document.getElementById(id).value = '');
+  renderT(); toast('✓ Section added');
+}
+function delT(id) { tramos = tramos.filter(t => t.id !== id); renderT(); }
+function renderT() {
+  var tc = document.getElementById('tcard');
+  if (!tramos.length) { tc.style.display = 'none'; return; }
+  tc.style.display = 'block';
+  var sum = tramos.reduce((a, t) => a + t.tot, 0);
+  document.getElementById('tlist').innerHTML = tramos.map(t => `
+    <div class="tramo-item">
+      <div class="tramo-info">
+        <div class="tramo-name">${t.nom}</div>
+        <div class="tramo-dim">${t.a}m × ${t.h}m${t.hu ? ' − ' + t.hu + 'm² openings' : ''}</div>
+      </div>
+      <div class="tramo-m2">${t.tot.toFixed(2)} m²</div>
+      <button class="tramo-del" onclick="delT(${t.id})">✕</button>
+    </div>`).join('');
+  document.getElementById('tsum').textContent = sum.toFixed(2) + ' m²';
+}
+function usarEnPresup() {
+  var sum = tramos.reduce((a, t) => a + t.tot, 0);
+  goPage('nuevo', 1);
+  document.getElementById('part-m2').value = sum.toFixed(2);
+  toast(sum.toFixed(2) + ' m² → quote');
+}
+
+var PRO_TABS = ['VAL', 'BRU'];
+var CD = [
+  {c:'NCS S 0300-N',n:'Pure White',h:'#F9F9F9',t:'NCS'},{c:'NCS S 0500-N',n:'Neutral White',h:'#F5F5F5',t:'NCS'},
+  {c:'NCS S 1000-N',n:'Off White',h:'#EDEDED',t:'NCS'},{c:'NCS S 2000-N',n:'Very Light Grey',h:'#D2D2D2',t:'NCS'},
+  {c:'NCS S 3000-N',n:'Light Grey',h:'#B5B5B5',t:'NCS'},{c:'NCS S 4000-N',n:'Mid Grey',h:'#999999',t:'NCS'},
+  {c:'NCS S 5000-N',n:'Dark Grey',h:'#7F7F7F',t:'NCS'},{c:'NCS S 6000-N',n:'Deep Grey',h:'#666666',t:'NCS'},
+  {c:'NCS S 7000-N',n:'Very Dark Grey',h:'#4C4C4C',t:'NCS'},{c:'NCS S 8000-N',n:'Near Black',h:'#333333',t:'NCS'},
+  {c:'NCS S 9000-N',n:'Black',h:'#1A1A1A',t:'NCS'},
+  {c:'NCS S 0520-Y',n:'Pale Yellow',h:'#FFF8D6',t:'NCS'},{c:'NCS S 0530-Y',n:'Light Yellow',h:'#FFF0A0',t:'NCS'},
+  {c:'NCS S 1030-Y',n:'Warm Yellow',h:'#F5E060',t:'NCS'},{c:'NCS S 1040-Y',n:'Vivid Yellow',h:'#F5D200',t:'NCS'},
+  {c:'NCS S 2040-Y',n:'Golden Yellow',h:'#D4A800',t:'NCS'},{c:'NCS S 3040-Y',n:'Light Ochre',h:'#C09000',t:'NCS'},
+  {c:'NCS S 0520-Y30R',n:'Light Cream',h:'#FFF4D0',t:'NCS'},{c:'NCS S 1020-Y30R',n:'Cream',h:'#F5D890',t:'NCS'},
+  {c:'NCS S 2020-Y30R',n:'Ivory',h:'#D8B870',t:'NCS'},{c:'NCS S 3020-Y30R',n:'Sand',h:'#B89050',t:'NCS'},
+  {c:'NCS S 0520-Y50R',n:'Light Peach',h:'#FFECD0',t:'NCS'},{c:'NCS S 1030-Y50R',n:'Light Salmon',h:'#F5C080',t:'NCS'},
+  {c:'NCS S 2030-Y50R',n:'Salmon',h:'#D89060',t:'NCS'},{c:'NCS S 4030-Y50R',n:'Terracotta',h:'#905030',t:'NCS'},
+  {c:'NCS S 0530-Y70R',n:'Warm Pink',h:'#FFD0C0',t:'NCS'},{c:'NCS S 1030-Y70R',n:'Light Coral',h:'#F5A080',t:'NCS'},
+  {c:'NCS S 2030-Y70R',n:'Coral',h:'#D87060',t:'NCS'},
+  {c:'NCS S 0530-R',n:'Light Pink',h:'#FFB8B8',t:'NCS'},{c:'NCS S 1030-R',n:'Mid Pink',h:'#F58080',t:'NCS'},
+  {c:'NCS S 3040-R',n:'Light Red',h:'#C02040',t:'NCS'},{c:'NCS S 4040-R',n:'Mid Red',h:'#A01030',t:'NCS'},
+  {c:'NCS S 5040-R',n:'Dark Red',h:'#800020',t:'NCS'},
+  {c:'NCS S 0520-B',n:'Very Light Blue',h:'#C8E0F8',t:'NCS'},{c:'NCS S 1020-B',n:'Light Sky Blue',h:'#A0C8F0',t:'NCS'},
+  {c:'NCS S 2020-B',n:'Sky Blue',h:'#70A8D8',t:'NCS'},{c:'NCS S 3020-B',n:'Mid Blue',h:'#4080B8',t:'NCS'},
+  {c:'NCS S 4030-B',n:'Strong Blue',h:'#2060A0',t:'NCS'},{c:'NCS S 5030-B',n:'Dark Blue',h:'#104080',t:'NCS'},
+  {c:'NCS S 0520-B50G',n:'Light Aqua',h:'#B0E0D8',t:'NCS'},{c:'NCS S 2020-B50G',n:'Mint',h:'#50A898',t:'NCS'},
+  {c:'NCS S 0520-G',n:'Light Green',h:'#B8E8C0',t:'NCS'},{c:'NCS S 2020-G',n:'Green',h:'#58A860',t:'NCS'},
+  {c:'NCS S 3020-G',n:'Mid Green',h:'#308840',t:'NCS'},{c:'NCS S 4030-G',n:'Dark Green',h:'#186820',t:'NCS'},
+  {c:'NCS S 0520-G30Y',n:'Light Lime',h:'#D0E8A0',t:'NCS'},{c:'NCS S 3020-G30Y',n:'Olive',h:'#608028',t:'NCS'},
+  {c:'RAL 1001',n:'Beige',h:'#D0B17A',t:'RAL'},{c:'RAL 1002',n:'Sand Yellow',h:'#D2A53E',t:'RAL'},
+  {c:'RAL 1003',n:'Signal Yellow',h:'#F9A800',t:'RAL'},{c:'RAL 1013',n:'Pearl White',h:'#E9E0D2',t:'RAL'},
+  {c:'RAL 1014',n:'Ivory',h:'#DFD0A8',t:'RAL'},{c:'RAL 1015',n:'Light Ivory',h:'#E6D690',t:'RAL'},
+  {c:'RAL 1016',n:'Sulphur Yellow',h:'#F0E040',t:'RAL'},
+  {c:'RAL 2003',n:'Pastel Orange',h:'#FF7514',t:'RAL'},{c:'RAL 2004',n:'Pure Orange',h:'#F44611',t:'RAL'},
+  {c:'RAL 3000',n:'Flame Red',h:'#AB2524',t:'RAL'},{c:'RAL 3001',n:'Signal Red',h:'#A02128',t:'RAL'},
+  {c:'RAL 3002',n:'Carmine Red',h:'#A1232B',t:'RAL'},{c:'RAL 3003',n:'Ruby Red',h:'#8D1D2C',t:'RAL'},
+  {c:'RAL 3005',n:'Wine Red',h:'#5E2028',t:'RAL'},{c:'RAL 3015',n:'Light Pink',h:'#E8A0A0',t:'RAL'},
+  {c:'RAL 3017',n:'Rose',h:'#D3545F',t:'RAL'},{c:'RAL 3020',n:'Traffic Red',h:'#CC0605',t:'RAL'},
+  {c:'RAL 4003',n:'Heather Violet',h:'#CB6D8E',t:'RAL'},{c:'RAL 4005',n:'Blue Lilac',h:'#6C6094',t:'RAL'},
+  {c:'RAL 4009',n:'Pastel Violet',h:'#A5809A',t:'RAL'},
+  {c:'RAL 5000',n:'Violet Blue',h:'#314F6F',t:'RAL'},{c:'RAL 5002',n:'Ultramarine',h:'#20214F',t:'RAL'},
+  {c:'RAL 5005',n:'Signal Blue',h:'#154889',t:'RAL'},{c:'RAL 5010',n:'Gentian Blue',h:'#0E4C96',t:'RAL'},
+  {c:'RAL 5012',n:'Light Blue',h:'#3B83BD',t:'RAL'},{c:'RAL 5015',n:'Sky Blue',h:'#2278AC',t:'RAL'},
+  {c:'RAL 5018',n:'Turquoise Blue',h:'#21888F',t:'RAL'},{c:'RAL 5021',n:'Water Blue',h:'#068490',t:'RAL'},
+  {c:'RAL 6001',n:'Emerald Green',h:'#286940',t:'RAL'},{c:'RAL 6002',n:'Leaf Green',h:'#2D6030',t:'RAL'},
+  {c:'RAL 6005',n:'Moss Green',h:'#1C4A2A',t:'RAL'},{c:'RAL 6011',n:'Reseda Green',h:'#598556',t:'RAL'},
+  {c:'RAL 6019',n:'Pastel Green',h:'#B0D7A2',t:'RAL'},{c:'RAL 6027',n:'Light Green',h:'#79C7C0',t:'RAL'},
+  {c:'RAL 7001',n:'Silver Grey',h:'#8C969D',t:'RAL'},{c:'RAL 7004',n:'Signal Grey',h:'#9DA3A6',t:'RAL'},
+  {c:'RAL 7016',n:'Anthracite Grey',h:'#383E42',t:'RAL'},{c:'RAL 7035',n:'Light Grey',h:'#CBD0CC',t:'RAL'},
+  {c:'RAL 7040',n:'Window Grey',h:'#9DA4A9',t:'RAL'},
+  {c:'RAL 8004',n:'Copper Brown',h:'#8E3A26',t:'RAL'},{c:'RAL 8011',n:'Hazelnut Brown',h:'#4F2B1A',t:'RAL'},
+  {c:'RAL 8017',n:'Chocolate Brown',h:'#442320',t:'RAL'},{c:'RAL 8028',n:'Terra Brown',h:'#4E3B26',t:'RAL'},
+  {c:'RAL 9001',n:'Cream White',h:'#F4F4F4',t:'RAL'},{c:'RAL 9002',n:'Grey White',h:'#E7EBDA',t:'RAL'},
+  {c:'RAL 9003',n:'Signal White',h:'#F4F4F4',t:'RAL'},{c:'RAL 9004',n:'Signal Black',h:'#282828',t:'RAL'},
+  {c:'RAL 9005',n:'Jet Black',h:'#0A0A0A',t:'RAL'},{c:'RAL 9010',n:'Pure White',h:'#F7F7F7',t:'RAL'},
+  {c:'RAL 9016',n:'Traffic White',h:'#F6F6F6',t:'RAL'},
+  {c:'RGB White',n:'White',h:'#FFFFFF',t:'RGB'},{c:'RGB Black',n:'Black',h:'#000000',t:'RGB'},
+  {c:'RGB Light Grey',n:'Light Grey',h:'#D3D3D3',t:'RGB'},{c:'RGB Grey',n:'Mid Grey',h:'#808080',t:'RGB'},
+  {c:'RGB Dark Grey',n:'Dark Grey',h:'#404040',t:'RGB'},{c:'RGB Red',n:'Pure Red',h:'#FF0000',t:'RGB'},
+  {c:'RGB Orange',n:'Orange',h:'#FF8000',t:'RGB'},{c:'RGB Yellow',n:'Yellow',h:'#FFFF00',t:'RGB'},
+  {c:'RGB Green',n:'Pure Green',h:'#00FF00',t:'RGB'},{c:'RGB Dark Green',n:'Dark Green',h:'#006400',t:'RGB'},
+  {c:'RGB Blue',n:'Pure Blue',h:'#0000FF',t:'RGB'},{c:'RGB Light Blue',n:'Light Blue',h:'#ADD8E6',t:'RGB'},
+  {c:'RGB Navy',n:'Navy Blue',h:'#000080',t:'RGB'},{c:'RGB Cyan',n:'Cyan',h:'#00FFFF',t:'RGB'},
+  {c:'RGB Turquoise',n:'Turquoise',h:'#40E0D0',t:'RGB'},{c:'RGB Violet',n:'Violet',h:'#8000FF',t:'RGB'},
+  {c:'RGB Pink',n:'Pink',h:'#FF69B4',t:'RGB'},{c:'RGB Brown',n:'Brown',h:'#8B4513',t:'RGB'},
+  {c:'RGB Beige',n:'Beige',h:'#F5F5DC',t:'RGB'},{c:'RGB Cream',n:'Cream',h:'#FFFDD0',t:'RGB'},
+  {c:'RGB Salmon',n:'Salmon',h:'#FA8072',t:'RGB'},{c:'RGB Coral',n:'Coral',h:'#FF6347',t:'RGB'},
+  {c:'RGB Ochre',n:'Ochre',h:'#CC7700',t:'RGB'},{c:'RGB Gold',n:'Gold',h:'#FFD700',t:'RGB'},
+  {c:'RGB Silver',n:'Silver',h:'#C0C0C0',t:'RGB'},{c:'RGB Burgundy',n:'Burgundy',h:'#800000',t:'RGB'},
+  {c:'VAL 100',n:'Snow White',h:'#F8F8F8',t:'VAL'},{c:'VAL 110',n:'Ivory White',h:'#F5F0E8',t:'VAL'},
+  {c:'VAL 200',n:'Sun Yellow',h:'#F5D800',t:'VAL'},{c:'VAL 300',n:'Warm Orange',h:'#F08030',t:'VAL'},
+  {c:'VAL 400',n:'Passion Red',h:'#C02030',t:'VAL'},{c:'VAL 500',n:'Soft Lilac',h:'#C0A0D0',t:'VAL'},
+  {c:'VAL 600',n:'Sky Blue',h:'#80B8E0',t:'VAL'},{c:'VAL 700',n:'Mint Green',h:'#90D0B0',t:'VAL'},
+  {c:'VAL 800',n:'Pearl Grey',h:'#D0D0D0',t:'VAL'},{c:'VAL 900',n:'Earth Brown',h:'#906040',t:'VAL'},
+  {c:'BRU 001',n:'Total White',h:'#FAFAFA',t:'BRU'},{c:'BRU 002',n:'Off White',h:'#F5F0E5',t:'BRU'},
+  {c:'BRU 010',n:'Bruguer Cream',h:'#EDE0C0',t:'BRU'},{c:'BRU 020',n:'Golden Ochre',h:'#D0A040',t:'BRU'},
+  {c:'BRU 030',n:'Tile Orange',h:'#C06030',t:'BRU'},{c:'BRU 040',n:'English Red',h:'#A02020',t:'BRU'},
+  {c:'BRU 070',n:'Mediterranean Blue',h:'#2060A0',t:'BRU'},{c:'BRU 090',n:'Olive Green',h:'#608030',t:'BRU'},
+  {c:'BRU 110',n:'Cement Grey',h:'#909090',t:'BRU'},{c:'BRU 130',n:'Walnut Brown',h:'#704020',t:'BRU'}
+];
+
+function fltC(tipo, btn) {
+  if (PRO_TABS.includes(tipo) && !isPro) { openPro(); return; }
+  cFiltro = tipo;
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderC(tipo);
+}
+function buscarC() {
+  var q = document.getElementById('csearch').value.trim().toLowerCase();
+  var data = CD.filter(c => (cFiltro === 'ALL' ? true : c.t === cFiltro) && (c.c.toLowerCase().includes(q) || c.n.toLowerCase().includes(q)));
+  drawGrid(data);
+}
+function renderC(tipo) { var data = tipo === 'ALL' ? CD : CD.filter(c => c.t === tipo); drawGrid(data); }
+function drawGrid(data) {
+  document.getElementById('cgrid').innerHTML = data.slice(0, 120).map(c => {
+    var isProColor = PRO_TABS.includes(c.t);
+    var locked = isProColor && !isPro;
+    return `
+      <div class="ccard${locked ? ' locked' : ''}" onclick="${locked ? 'openPro()' : "selC('" + c.c.replace(/'/g, "\\'") + "')"}" id="cc-${c.c.replace(/[\s']/g, '_')}">
+        <div class="cswatch" style="background:${c.h}"></div>
+        ${locked ? '<div class="ccard-lock">🔒</div>' : ''}
+        <div class="cinfo"><div class="ccode">${c.c}</div><div class="cname">${c.n}</div></div>
+      </div>`;
+  }).join('');
+}
+function selC(cod) {
+  var c = CD.find(x => x.c === cod); if (!c) return;
+  if (PRO_TABS.includes(c.t) && !isPro) { openPro(); return; }
+  cSel = c;
+  document.getElementById('cprev-sw').style.background = c.h;
+  document.getElementById('cprev-cod').textContent = c.c;
+  document.getElementById('cprev-nom').textContent = c.n + ' · ' + c.h;
+  document.getElementById('cprev-box').style.display = 'block';
+  document.querySelectorAll('.ccard').forEach(el => el.classList.remove('sel'));
+  var el = document.getElementById('cc-' + cod.replace(/[\s']/g, '_'));
+  if (el) el.classList.add('sel');
+}
+function copiarC() {
+  if (!cSel) return;
+  var txt = cSel.c + ' ' + cSel.h;
+  if (navigator.clipboard) navigator.clipboard.writeText(txt);
+  toast('✓ Copied: ' + txt);
+}
+
+var CLAVES = {
+  'LITE-2025-01': 'lite', 'LITE-2025-02': 'lite', 'LITE-2025-03': 'lite',
+  'PRBA-2026-01': 'lite', 'TEST-LITE-01': 'lite', 'DEMO-LITE-00': 'lite',
+  'TRY1-2026-01': 'trial', 'TRY1-2026-02': 'trial', 'TRY1-2026-03': 'trial',
+  'PROP-2025-01': 'pro', 'PROX-2026-01': 'pro', 'MAST-ER26-JM': 'pro'
+};
+var keyTabActual = 'lite';
+function openClave() {
+  document.getElementById('modal-clave').classList.add('open');
+  document.getElementById('key-input').value = '';
+  document.getElementById('key-input').className = 'key-input';
+  document.getElementById('key-status').textContent = '';
+  setKeyTab('lite');
+}
+function closeClave() { document.getElementById('modal-clave').classList.remove('open'); }
+function setKeyTab(tab) {
+  keyTabActual = tab;
+  var btnL = document.getElementById('ktab-lite');
+  var btnP = document.getElementById('ktab-pro');
+  var info = document.getElementById('key-info');
+  if (tab === 'lite') {
+    btnL.style.background='var(--az)';btnL.style.borderColor='var(--az)';btnL.style.color='white';
+    btnP.style.background='white';btnP.style.borderColor='#e2e8f0';btnP.style.color='#64748b';
+    info.innerHTML='Enter your <b>Lite</b> activation code.<br>Format: XXXX-XXXX-XX (12 characters)';
+  } else {
+    btnP.style.background='var(--pro)';btnP.style.borderColor='var(--pro)';btnP.style.color='white';
+    btnL.style.background='white';btnL.style.borderColor='#e2e8f0';btnL.style.color='#64748b';
+    info.innerHTML='Enter your <b>Pro ⭐</b> code.<br>Format: XXXX-XXXX-XX · Unlocks all features';
+  }
+  document.getElementById('key-input').value='';
+}
+function formatKey(el) {
+  var v=el.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  var out='';
+  for(var i=0;i<v.length&&i<12;i++){if(i===4||i===8)out+='-';out+=v[i];}
+  el.value=out;
+}
+function checkKeyLive() {
+  var v=document.getElementById('key-input').value.trim().toUpperCase();
+  var st=document.getElementById('key-status');
+  var inp=document.getElementById('key-input');
+  if(v.length<12){inp.className='key-input';st.textContent='';return;}
+  var tipo=CLAVES[v];
+  if(!tipo){inp.className='key-input err';st.className='key-status err';st.textContent='✗ Invalid code — please check';}
+  else if(tipo==='pro'){inp.className='key-input ok';st.className='key-status ok';st.textContent='⭐ Valid Pro code — tap Activate';}
+  else if(tipo==='trial'){inp.className='key-input ok';st.className='key-status ok';st.textContent='🎉 15-day trial — tap Activate';}
+  else{inp.className='key-input ok';st.className='key-status ok';st.textContent='✓ Valid Lite code — tap Activate';}
+}
+function activarClave() {
+  var v=document.getElementById('key-input').value.trim().toUpperCase();
+  var tipo=CLAVES[v];
+  if(!tipo){document.getElementById('key-input').className='key-input err';document.getElementById('key-status').className='key-status err';document.getElementById('key-status').textContent='✗ Incorrect code. Please check the characters.';return;}
+  var usadas=JSON.parse(localStorage.getItem('pal_keys_used_en')||'[]');
+  if(usadas.includes(v)){document.getElementById('key-status').className='key-status err';document.getElementById('key-status').textContent='✗ This code has already been activated on this device';return;}
+  usadas.push(v);localStorage.setItem('pal_keys_used_en',JSON.stringify(usadas));
+  if(tipo==='pro'){isPro=true;localStorage.setItem('pal_pro','1');localStorage.setItem('pal_plan','pro');closeClave();closePro();renderList();toast('⭐ PainterApp Pro activated!');}
+  else if(tipo==='trial'){isPro=true;localStorage.setItem('pal_pro','1');localStorage.setItem('pal_plan','trial');localStorage.setItem('pal_trial_date',Date.now().toString());closeClave();closePro();renderList();toast('🎉 Trial activated · 15 days free!');}
+  else{localStorage.setItem('pal_lite','1');localStorage.setItem('pal_plan','lite');closeClave();toast('✓ PainterApp Lite activated · Happy painting!');}
+}
+function desactivarPro(){isPro=false;localStorage.removeItem('pal_pro');localStorage.removeItem('pal_plan');closePro();renderList();toast('Lite mode (demo reset)');}
+
+document.addEventListener('DOMContentLoaded',function(){
+  if(new URLSearchParams(window.location.search).get('pro')==='1'){isPro=true;localStorage.setItem('pal_pro','1');}
+  var fechaEl=document.getElementById('cli-fecha');
+  if(fechaEl)fechaEl.value=new Date().toISOString().split('T')[0];
+  renderC('NCS');
+});
+</script>
+
+<div class="toast" id="toast"></div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-badge">🎨 The professional painter's app</div>
+  <h1 class="hero-titulo">PainterApp</h1>
+  <div class="hero-lite">LITE</div>
+  <p class="hero-sub">📱 Quotes in 2 minutes<br>straight from your phone</p>
+  <div class="hero-precio">
+    <div class="hero-precio-main">£5 <span>one-off · Forever</span></div>
+    <div class="hero-precio-sub">No subscription · No surprises</div>
+  </div>
+  <button class="hero-cta" onclick="entrar()">Open the app</button>
+  <p class="hero-nota">No sign-up · Works offline</p>
+  <button class="hero-clave" onclick="entrar();setTimeout(()=>openClave(),300)">🔑 I already have a code</button>
+  <div class="hero-feats">
+    <div class="hero-feat"><span style="font-size:24px">🎤</span><span class="hero-feat-text">Voice dictation</span></div>
+    <div class="hero-feat"><span style="font-size:24px">📄</span><span class="hero-feat-text">Professional PDF</span></div>
+    <div class="hero-feat"><span style="font-size:24px">📱</span><span class="hero-feat-text">WhatsApp send</span></div>
+    <div class="hero-feat"><span style="font-size:24px">🎨</span><span class="hero-feat-text">NCS + RAL chart</span></div>
+    <div class="hero-feat"><span style="font-size:24px">📐</span><span class="hero-feat-text">Surface calc.</span></div>
+    <div class="hero-feat"><span style="font-size:24px">💾</span><span class="hero-feat-text">All saved locally</span></div>
+  </div>
+</section>
+
+<!-- APP SHELL -->
+<div class="app-shell" id="appshell">
+  <div class="app-bar">
+    <div class="app-bar-logo">Painter<span>App</span> <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif">Lite</span></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="app-bar-right" id="bar-sub">My Quotes</div>
+      <div style="background:rgba(255,255,255,.12);color:white;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;cursor:pointer" onclick="openClave()">🔑</div>
+      <div class="app-bar-pro" onclick="openPro()">⭐ PRO</div>
+    </div>
+  </div>
+
+  <!-- PAGE: MY QUOTES -->
+  <div class="page active" id="page-list">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 16px">
+      <div>
+        <div class="page-title">My Quotes</div>
+        <div class="page-sub" id="pcount">0 saved</div>
+      </div>
+      <button class="btn btn-am btn-sm" onclick="irNuevo()">+ New</button>
+    </div>
+    <div class="pro-banner" onclick="openPro()">
+      <div class="pro-banner-ico">⭐</div>
+      <div class="pro-banner-txt">
+        <div class="pro-banner-tit">Upgrade to PainterApp Pro</div>
+        <div class="pro-banner-sub">Client history · Valentine & Bruguer colours · Unlimited items</div>
+      </div>
+      <div class="pro-banner-btn">See Pro</div>
+    </div>
+    <div id="plist"></div>
+  </div>
+
+  <!-- PAGE: NEW QUOTE -->
+  <div class="page" id="page-nuevo">
+    <div class="page-title" id="ntit">New Quote</div>
+    <div class="page-sub">Fill in the details and add line items</div>
+    <div class="card">
+      <div class="card-hdr">📋 Client</div>
+      <div class="ig">
+        <label class="il">Client name</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="cli-nombre" placeholder="e.g. John Smith" style="flex:1">
+          <button class="mic" onclick="mic('cli-nombre')" id="mic-cn">🎤</button>
+        </div>
+      </div>
+      <div class="ig">
+        <label class="il">Job / Address</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="cli-obra" placeholder="e.g. 5 High Street, Flat 2" style="flex:1">
+          <button class="mic" onclick="mic('cli-obra')" id="mic-co">🎤</button>
+        </div>
+      </div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Phone</label><input class="if" id="cli-tel" placeholder="07..." type="tel"></div>
+        <div class="ig"><label class="il">Date</label><input class="if" id="cli-fecha" type="date"></div>
+      </div>
+      <div class="ig"><label class="il">Notes</label><textarea class="if" id="cli-notas" rows="2" placeholder="Observations, agreed colours..."></textarea></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">
+        <div class="toggle-wrap"><label class="sw"><input type="checkbox" id="vat" onchange="recalc()"><span class="swt"></span></label><span class="toggle-lbl">VAT 20%</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hdr">🔨 Add line item</div>
+      <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Type of work</div>
+      <div class="chips">
+        <span class="chip active" onclick="setTipo(this,'Interior painting')">Interior</span>
+        <span class="chip" onclick="setTipo(this,'Exterior painting')">Exterior</span>
+        <span class="chip" onclick="setTipo(this,'Gloss doors')">Gloss</span>
+        <span class="chip" onclick="setTipo(this,'Ceiling')">Ceiling</span>
+        <span class="chip" onclick="setTipo(this,'Surface preparation')">Prep</span>
+        <span class="chip" onclick="setTipo(this,'Filler / Render')">Filler</span>
+        <span class="chip" onclick="setTipo(this,'Varnish')">Varnish</span>
+        <span class="chip" onclick="setTipo(this,'Other')">Other</span>
+      </div>
+      <div class="ig">
+        <label class="il">Description</label>
+        <div style="display:flex;gap:6px">
+          <input class="if" id="part-desc" placeholder="e.g. Living room 2 coats" style="flex:1">
+          <button class="mic" onclick="mic('part-desc')" id="mic-pd">🎤</button>
+        </div>
+      </div>
+      <div class="ir3">
+        <div class="ig"><label class="il">m² / Units</label><input class="if" id="part-m2" type="number" placeholder="0" step="0.01" oninput="calcP()"></div>
+        <div class="ig"><label class="il">£/m²</label><input class="if" id="part-eur" type="number" placeholder="0" step="0.01" oninput="calcP()"></div>
+        <div class="ig"><label class="il">Total</label><input class="if" id="part-tot" type="number" placeholder="0" step="0.01" style="background:#f8fafc"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addPart()">+ Add line item</button>
+      <div style="margin-top:10px;padding:10px;background:#faf5ff;border-radius:12px;border:1px solid #e9d5ff">
+        <div style="font-size:11px;font-weight:800;color:var(--pro);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">✏️ Custom item</div>
+        <div class="ig" style="margin-bottom:6px"><input class="if" id="libre-desc" placeholder="Custom description..." style="border-color:#e9d5ff"></div>
+        <div class="ir2">
+          <div class="ig"><input class="if" id="libre-tot" type="number" placeholder="Amount £" step="0.01" style="border-color:#e9d5ff"></div>
+          <button class="btn btn-sm" style="background:var(--pro);color:white;margin-top:0;align-self:flex-end;height:44px" onclick="addLibre()">+ Add</button>
+        </div>
+        <div style="font-size:10px;color:#94a3b8;margin-top:4px" id="libre-hint">1 custom item included in Lite · <span style="color:var(--pro);cursor:pointer;font-weight:800" onclick="openPro()">Pro = unlimited</span></div>
+      </div>
+    </div>
+    <div class="card" id="rescard" style="display:none">
+      <div class="card-hdr">📦 Quote items</div>
+      <div class="part-list" id="plist2"></div>
+      <div class="total-box">
+        <div class="total-row"><span class="tl">Subtotal (ex. VAT)</span><span class="tv" id="t-sub">£0.00</span></div>
+        <div class="total-row" id="t-imp-row" style="display:none"><span class="tl">VAT 20%</span><span class="tv" id="t-imp">£0.00</span></div>
+        <div class="total-row"><span class="tl">TOTAL</span><span class="tv big" id="t-tot">£0.00</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-am" onclick="genPDF()">📄 PDF</button>
+        <button class="btn btn-vd" onclick="envWA()">📱 WhatsApp</button>
+      </div>
+      <button class="btn btn-primary" onclick="guardar()" style="margin-top:8px">💾 Save quote</button>
+    </div>
+  </div>
+
+  <!-- PAGE: COLOUR CHART -->
+  <div class="page" id="page-colores">
+    <div class="page-title">Colour Chart</div>
+    <div class="page-sub">NCS · RAL · RGB — tap to copy the code</div>
+    <div id="cprev-box" style="display:none" class="card">
+      <div class="card-hdr">🎨 Selected colour</div>
+      <div class="cprev">
+        <div class="cprev-sw" id="cprev-sw"></div>
+        <div style="flex:1">
+          <div class="cprev-cod" id="cprev-cod">—</div>
+          <div class="cprev-nom" id="cprev-nom">—</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="copiarC()">Copy</button>
+      </div>
+    </div>
+    <div class="color-tabs">
+      <button class="ctab active" onclick="fltC('NCS',this)">NCS</button>
+      <button class="ctab" onclick="fltC('RAL',this)">RAL</button>
+      <button class="ctab" onclick="fltC('RGB',this)">RGB</button>
+      <button class="ctab" onclick="fltC('ALL',this)">All</button>
+      <button class="ctab pro-tab" onclick="fltC('VAL',this)">🔒 Valentine</button>
+      <button class="ctab pro-tab" onclick="fltC('BRU',this)">🔒 Bruguer</button>
+    </div>
+    <div class="ig" style="margin-bottom:12px"><input class="if" id="csearch" placeholder="Search code or name..." oninput="buscarC()"></div>
+    <div class="cgrid" id="cgrid"></div>
+  </div>
+
+  <!-- PAGE: CALCULATOR -->
+  <div class="page" id="page-calc">
+    <div class="page-title">Calculator</div>
+    <div class="page-sub">Surface by sections — facades and rooms</div>
+    <div class="card">
+      <div class="card-hdr">📐 New section</div>
+      <div class="ig"><label class="il">Section name</label><input class="if" id="t-nom" placeholder="e.g. Front facade, Living room..."></div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Width (m)</label><input class="if" id="t-a" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+        <div class="ig"><label class="il">Height (m)</label><input class="if" id="t-h" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+      </div>
+      <div class="ir2">
+        <div class="ig"><label class="il">Openings to deduct (m²)</label><input class="if" id="t-huecos" type="number" placeholder="0.00" step="0.01" oninput="calcT()"></div>
+        <div class="ig"><label class="il">Section total (m²)</label><input class="if" id="t-tot2" readonly style="background:#f8fafc;font-weight:800;color:var(--az)"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addT()">+ Add section</button>
+    </div>
+    <div class="card" id="tcard" style="display:none">
+      <div class="card-hdr">📊 Summary</div>
+      <div class="tramo-list" id="tlist"></div>
+      <div class="calc-total">
+        <span class="calc-total-l">TOTAL SURFACE</span>
+        <span class="calc-total-v" id="tsum">0.00 m²</span>
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px" onclick="usarEnPresup()">↗ Use in quote</button>
+    </div>
+  </div>
+
+  <!-- PAGE: PRICE GUIDE (PRO) -->
+  <div class="page" id="page-tarifa">
+    <div class="page-title">Price Guide</div>
+    <div class="page-sub">43 professional items · New build & Renovation</div>
+    <div style="position:relative;margin-bottom:12px">
+      <div style="filter:blur(3px);pointer-events:none;opacity:.6">
+        <div class="card">
+          <div class="card-hdr">📐 1. Scaffolding & Access</div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Tubular scaffolding, erection and dismantling</div><div class="part-sub">m² · New: £9.22/m²</div></div><div class="part-price">£9.22</div></div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Scissor lift hire (16m)</div><div class="part-sub">day · New: £100/day</div></div><div class="part-price">£100</div></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr">🖌️ 2. Surface Preparation</div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Pressure washing facades</div><div class="part-sub">m² · New: £1.85/m²</div></div><div class="part-price">£1.85</div></div>
+          <div class="part-item"><div class="part-info"><div class="part-desc">Scraping and sanding</div><div class="part-sub">m² · New: £2.40/m²</div></div><div class="part-price">£2.40</div></div>
+        </div>
+      </div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,20,40,.7);border-radius:16px;padding:24px;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">🔒</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:white;letter-spacing:1px;margin-bottom:6px">Pro Feature</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.8);margin-bottom:6px;font-weight:600">43 items · New build & Renovation</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:20px;line-height:1.5">Market rates with 20% discount applied<br>Add to quote in 1 tap</div>
+        <button class="btn btn-pro" style="padding:14px 32px;font-size:15px" onclick="openPro()">⭐ Unlock with Pro</button>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:10px">£4.99/month · Cancel any time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: PAINT CALCULATOR (PRO) -->
+  <div class="page" id="page-litros">
+    <div class="page-title">Paint Calculator</div>
+    <div class="page-sub">Exact litres · 15L and 4L tins · Coats</div>
+    <div style="position:relative;margin-bottom:12px">
+      <div style="filter:blur(3px);pointer-events:none;opacity:.6">
+        <div class="card">
+          <div class="card-hdr">⚡ Quick Mode</div>
+          <div class="ig"><label class="il">Floor area (m²)</label>
+            <div style="display:flex;align-items:center;gap:8px"><input class="if" value="110" readonly style="max-width:100px"><span style="color:#64748b;font-size:13px">m²</span></div>
+          </div>
+          <div style="background:#002060;border-radius:12px;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+            <div><div style="font-size:10px;color:rgba(255,255,255,.6)">LITRES</div><div style="font-size:20px;font-weight:900;color:white">57 L</div></div>
+            <div><div style="font-size:10px;color:rgba(255,255,255,.6)">15L TINS</div><div style="font-size:20px;font-weight:900;color:white">3</div></div>
+            <div><div style="font-size:10px;color:rgba(255,255,255,.6)">4L TINS</div><div style="font-size:20px;font-weight:900;color:white">3</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,20,40,.7);border-radius:16px;padding:24px;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">🔒</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:white;letter-spacing:1px;margin-bottom:6px">Pro Feature</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.8);margin-bottom:6px;font-weight:600">Exact paint calculator</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:20px;line-height:1.5">Calculate litres, 15L and 4L tins<br>Based on m², coats and coverage</div>
+        <button class="btn btn-pro" style="padding:14px 32px;font-size:15px" onclick="openPro()">⭐ Unlock with Pro</button>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:10px">£4.99/month · Cancel any time</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="bnav-btn active" id="bn0" onclick="goPage('list',0)"><span class="ico">📋</span>Quotes</button>
+    <button class="bnav-btn" id="bn1" onclick="goPage('nuevo',1)"><span class="ico">➕</span>New</button>
+    <button class="bnav-btn" id="bn2" onclick="goPage('colores',2)"><span class="ico">🎨</span>Colours</button>
+    <button class="bnav-btn" id="bn3" onclick="goPage('calc',3)"><span class="ico">📐</span>Measure</button>
+    <button class="bnav-btn bnav-pro" id="bn4" onclick="goProPage('tarifa')"><span class="ico">📋🔒</span>Prices</button>
+    <button class="bnav-btn bnav-pro" id="bn5" onclick="goProPage('litros')"><span class="ico">🧮🔒</span>Paint</button>
+  </nav>
+</div>
+
+<!-- MODAL VIEW QUOTE -->
+<div class="overlay" id="modal-ver">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closeM()">✕</button>
+    <div class="sheet-title" id="m-tit">Quote</div>
+    <div id="m-body"></div>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn btn-am" onclick="genPDFid()">📄 PDF</button>
+      <button class="btn btn-vd" onclick="envWAid()">📱 WhatsApp</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost btn-sm" style="flex:1" onclick="editarP()">✏️ Edit</button>
+      <button class="btn btn-red btn-sm" style="flex:1" onclick="eliminarP()">🗑️ Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ACTIVATION CODE -->
+<div class="overlay" id="modal-clave">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closeClave()">✕</button>
+    <div class="sheet-title">🔑 Enter activation code</div>
+    <div style="display:flex;gap:8px;margin-bottom:20px">
+      <button id="ktab-lite" onclick="setKeyTab('lite')" style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--az);background:var(--az);color:white;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">Lite Code</button>
+      <button id="ktab-pro" onclick="setKeyTab('pro')" style="flex:1;padding:10px;border-radius:10px;border:2px solid #e2e8f0;background:white;color:#64748b;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif">Pro Code ⭐</button>
+    </div>
+    <div id="key-info" style="background:#f0f4f8;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#64748b;font-weight:600;line-height:1.5">
+      Enter your <b>Lite</b> activation code.<br>Format: XXXX-XXXX-XX (12 characters)
+    </div>
+    <input class="key-input" id="key-input" maxlength="14" placeholder="XXXX-XXXX-XX" oninput="formatKey(this)" onkeyup="checkKeyLive()">
+    <div class="key-status" id="key-status"></div>
+    <button class="btn btn-primary" style="margin-top:16px" onclick="activarClave()">🔑 Activate</button>
+    <div style="display:flex;align-items:center;gap:10px;margin:16px 0">
+      <div style="flex:1;height:1px;background:#e2e8f0"></div>
+      <span style="font-size:11px;color:#94a3b8;font-weight:700">Don't have a code?</span>
+      <div style="flex:1;height:1px;background:#e2e8f0"></div>
+    </div>
+    <div style="background:#f8fafc;border-radius:12px;padding:14px;text-align:center">
+      <div style="font-size:13px;font-weight:800;color:var(--tx);margin-bottom:4px">Get your code via WhatsApp</div>
+      <div style="font-size:11px;color:#64748b;margin-bottom:10px">Lite: £5 one-off · Pro: £4.99/month</div>
+      <button class="btn btn-vd btn-sm" style="width:100%;justify-content:center"
+        onclick="window.open('https://wa.me/34643223301?text=Hello%2C%20I%20want%20to%20activate%20PainterApp%20Lite','_blank')">
+        📱 Request code via WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRO -->
+<div class="overlay" id="modal-pro">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button style="float:right;background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;margin-top:-4px" onclick="closePro()">✕</button>
+    <div class="pro-modal-header">
+      <div class="pro-modal-ico">⭐</div>
+      <div class="pro-modal-tit">PainterApp PRO</div>
+      <div class="pro-modal-sub">Everything a professional painter needs</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;text-align:center">
+      <div style="background:#f0f4f8;border:1.5px solid #cbd5e1;border-radius:12px;padding:10px 8px">
+        <div style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Lite · £5</div>
+        <div style="font-size:12px;color:#002060;font-weight:800;line-height:1.8">✓ Basic quotes<br>✓ Simple PDF<br>✓ WhatsApp<br>✓ Surface calc.<br>✓ NCS + RAL<br>✓ 1 custom item</div>
+      </div>
+      <div style="background:#ede9fe;border:2px solid #7c3aed;border-radius:12px;padding:10px 8px">
+        <div style="font-size:11px;font-weight:900;color:#7c3aed;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Pro · £4.99/mo</div>
+        <div style="font-size:12px;color:#002060;font-weight:800;line-height:1.8">✓ All above +<br>⭐ Price Guide<br>⭐ Paint calc.<br>⭐ Valentine & Bruguer<br>⭐ Client history<br>⭐ Unlimited items</div>
+      </div>
+    </div>
+    <div class="pro-feat-list">
+      <div class="pro-feat-item"><span>📋</span><div>Professional Price Guide<small>43 items · New build & Renovation · market rates with 20% discount</small></div></div>
+      <div class="pro-feat-item"><span>🧮</span><div>Paint calculator (litres)<small>Calculate litres, 15L and 4L tins by m², coats and coverage</small></div></div>
+      <div class="pro-feat-item"><span>🎨</span><div>Valentine & Bruguer chart<small>500+ brand colours with exact references</small></div></div>
+      <div class="pro-feat-item"><span>✏️</span><div>Unlimited custom items<small>Add any personalised line item without limits</small></div></div>
+      <div class="pro-feat-item"><span>👥</span><div>Client history<small>Access all your clients and previous jobs</small></div></div>
+    </div>
+    <div style="display:flex;gap:10px;background:#f8fafc;border-radius:14px;padding:14px;margin-bottom:14px">
+      <div class="pro-price-opt sel" id="popt-m" onclick="selPlan('m')">
+        <div class="ppo-price">£4.99</div>
+        <div class="ppo-period">/ month</div>
+      </div>
+      <div class="pro-price-opt" id="popt-y" onclick="selPlan('y')">
+        <div class="ppo-price">£29</div>
+        <div class="ppo-period">/ year</div>
+        <div class="ppo-save">Save £31</div>
+      </div>
+    </div>
+    <button class="btn btn-pro" onclick="activarPro()">⭐ Activate Pro now</button>
+    <p style="text-align:center;font-size:11px;color:#94a3b8;margin-top:10px">Cancel any time · Secure payment</p>
+    <p style="text-align:center;font-size:10px;color:#cbd5e1;margin-top:6px;cursor:pointer" onclick="desactivarPro()">[ Demo mode: reset Pro ]</p>
+  </div>
+</div>
+
+</body>
+</html>
