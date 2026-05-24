@@ -727,208 +727,198 @@ function genPDF(id) {
   var d = buildData(id);
   if (!d || !d.partidas.length) { toast('Sin datos para PDF'); return; }
   var doc = new jspdf.jsPDF({ unit: 'mm', format: 'a4' });
-  var W = 210, M = 18;
+  var W = 210, M = 15, y = 0;
 
-  // ══════════════════════════════════════
-  // PÁGINA 1 — PORTADA
-  // ══════════════════════════════════════
-  // Fondo navy completo
-  doc.setFillColor(15, 22, 40); doc.rect(0, 0, W, 297, 'F');
-  // Franja dorada superior (5mm)
-  doc.setFillColor(255, 184, 0); doc.rect(0, 0, W, 5, 'F');
-  // Franja dorada inferior
-  doc.setFillColor(255, 184, 0); doc.rect(0, 292, W, 5, 'F');
+  // Datos del perfil del pintor
+  var profNombre = localStorage.getItem('prof_nombre') || 'Pintor Profesional';
+  var profCif    = localStorage.getItem('prof_cif')    || '';
+  var profMovil  = localStorage.getItem('prof_movil')  || d.tel || '';
 
-  // Nombre empresa / pintor (grande, blanco)
-  var empresa = localStorage.getItem('prof_nombre') || d.empresa || d.pintor || 'Pintor Profesional';
-  doc.setTextColor(255, 255, 255); doc.setFontSize(28); doc.setFont('helvetica', 'bold');
-  doc.text(empresa.toUpperCase(), W / 2, 80, { align: 'center' });
+  // ══════════════════════════════════════════════════════
+  // CABECERA — franja navy con datos del pintor
+  // ══════════════════════════════════════════════════════
+  doc.setFillColor(15, 22, 40);
+  doc.rect(0, 0, W, 36, 'F');
+  doc.setFillColor(255, 184, 0);
+  doc.rect(0, 0, W, 3, 'F');
 
-  // Línea dorada decorativa
-  doc.setDrawColor(255, 184, 0); doc.setLineWidth(0.8);
-  doc.line(M + 20, 88, W - M - 20, 88);
+  // Nombre empresa (izquierda)
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+  doc.text(profNombre.toUpperCase(), M, 14);
+  // CIF y teléfono
+  doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+  doc.setTextColor(160, 175, 200);
+  var linf = '';
+  if (profCif)   linf += 'CIF: ' + profCif;
+  if (profMovil) linf += (linf ? '   ·   ' : '') + 'Tel: ' + profMovil;
+  if (linf) doc.text(linf, M, 21);
 
-  // PRESUPUESTO label
-  doc.setTextColor(255, 184, 0); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-  doc.text('P R E S U P U E S T O   P R O F E S I O N A L', W / 2, 100, { align: 'center' });
-
-  // Número de referencia (grande)
-  doc.setTextColor(255, 255, 255); doc.setFontSize(40); doc.setFont('helvetica', 'bold');
-  doc.text('Nº ' + (d.ref || '—'), W / 2, 125, { align: 'center' });
-
-  // Línea separadora
-  doc.setDrawColor(255, 184, 0); doc.setLineWidth(0.3);
-  doc.line(M + 30, 133, W - M - 30, 133);
-
-  // Para quién
-  doc.setTextColor(138, 151, 176); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
-  doc.text('PREPARADO PARA', W / 2, 145, { align: 'center' });
-  doc.setTextColor(255, 255, 255); doc.setFontSize(18); doc.setFont('helvetica', 'bold');
-  doc.text(d.cliente || '—', W / 2, 155, { align: 'center' });
-  if (d.obra) {
-    doc.setTextColor(138, 151, 176); doc.setFontSize(10); doc.setFont('helvetica', 'normal');
-    doc.text(d.obra, W / 2, 163, { align: 'center' });
-  }
-
-  // 3 stats en recuadros
-  var statsY = 195, sw = 50, sg = 8, sx0 = (W - (sw * 3 + sg * 2)) / 2;
-  [
-    { label: 'FECHA', val: fmtF(d.fecha) },
-    { label: 'VALIDEZ', val: '30 días' },
-    { label: 'IMPORTE', val: fmt(d.total) + ' €' }
-  ].forEach(function(s, i) {
-    var sx = sx0 + i * (sw + sg);
-    doc.setFillColor(26, 35, 64); doc.roundedRect(sx, statsY, sw, 22, 3, 3, 'F');
-    doc.setDrawColor(255, 184, 0); doc.setLineWidth(0.4);
-    doc.roundedRect(sx, statsY, sw, 22, 3, 3, 'S');
-    doc.setTextColor(138, 151, 176); doc.setFontSize(7); doc.setFont('helvetica', 'bold');
-    doc.text(s.label, sx + sw / 2, statsY + 7, { align: 'center' });
-    doc.setTextColor(255, 184, 0); doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-    doc.text(s.val, sx + sw / 2, statsY + 16, { align: 'center' });
-  });
-
-  // Footer portada
-  doc.setDrawColor(255, 184, 0); doc.setLineWidth(0.3);
-  doc.line(M, 263, W - M, 263);
-  doc.setTextColor(138, 151, 176); doc.setFontSize(8); doc.setFont('helvetica', 'normal');
-  var telPDF = d.tel || localStorage.getItem('prof_movil') || ''; if (telPDF) doc.text('Tel: ' + telPDF, M, 271);
-  doc.text('Generado con PintorApp', W - M, 271, { align: 'right' });
-
-  // ══════════════════════════════════════
-  // PÁGINA 2 — PRESUPUESTO DETALLADO
-  // ══════════════════════════════════════
-  doc.addPage();
-
-  // Cabecera azul navy (40mm)
-  doc.setFillColor(15, 22, 40); doc.rect(0, 0, W, 40, 'F');
-  // Franja dorada top
-  doc.setFillColor(255, 184, 0); doc.rect(0, 0, W, 4, 'F');
-
-  // Nombre empresa en cabecera
-  doc.setTextColor(255, 255, 255); doc.setFontSize(16); doc.setFont('helvetica', 'bold');
-  doc.text(empresa.toUpperCase(), M, 22);
-  doc.setTextColor(138, 151, 176); doc.setFontSize(8); doc.setFont('helvetica', 'normal');
-  var telHdr = localStorage.getItem('prof_movil') || d.tel || ''; if (telHdr) doc.text('Tel: ' + telHdr, M, 30);
-
-  // Badge presupuesto (derecha)
-  var bx2 = W - M - 52;
-  doc.setFillColor(26, 35, 64); doc.roundedRect(bx2, 8, 52, 26, 2, 2, 'F');
+  // Badge PRESUPUESTO (derecha)
+  var bx = W - M - 55;
+  doc.setFillColor(26, 35, 64);
+  doc.roundedRect(bx, 6, 55, 24, 2, 2, 'F');
   doc.setDrawColor(255, 184, 0); doc.setLineWidth(0.4);
-  doc.roundedRect(bx2, 8, 52, 26, 2, 2, 'S');
+  doc.roundedRect(bx, 6, 55, 24, 2, 2, 'S');
   doc.setTextColor(255, 184, 0); doc.setFontSize(7); doc.setFont('helvetica', 'bold');
-  doc.text('PRESUPUESTO', bx2 + 26, 14, { align: 'center' });
-  doc.setTextColor(255, 255, 255); doc.setFontSize(13); doc.setFont('helvetica', 'bold');
-  doc.text('Nº ' + (d.ref || '—'), bx2 + 26, 22, { align: 'center' });
-  doc.setTextColor(138, 151, 176); doc.setFontSize(7); doc.setFont('helvetica', 'normal');
-  doc.text(fmtF(d.fecha), bx2 + 26, 29, { align: 'center' });
+  doc.text('PRESUPUESTO', bx + 27.5, 12, { align: 'center' });
+  doc.setTextColor(255, 255, 255); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+  doc.text('Nº ' + (d.ref || '001'), bx + 27.5, 20, { align: 'center' });
+  doc.setTextColor(160, 175, 200); doc.setFontSize(7); doc.setFont('helvetica', 'normal');
+  doc.text(fmtF(d.fecha), bx + 27.5, 27, { align: 'center' });
 
-  // Franja datos cliente (fondo gris claro)
-  doc.setFillColor(244, 246, 251); doc.rect(0, 40, W, 22, 'F');
-  doc.setDrawColor(220, 225, 235); doc.setLineWidth(0.3);
-  doc.line(0, 62, W, 62);
-  var cols = [M, 85, 155];
-  var labels2 = ['CLIENTE', 'OBRA / TRABAJO', 'TELÉFONO'];
-  var vals2 = [d.cliente || '—', d.obra || '—', d.tel || '—'];
-  labels2.forEach(function(lb, i) {
-    doc.setTextColor(138, 151, 176); doc.setFontSize(7); doc.setFont('helvetica', 'bold');
-    doc.text(lb, cols[i], 48);
+  y = 44;
+
+  // ══════════════════════════════════════════════════════
+  // DATOS DEL CLIENTE — franja gris claro
+  // ══════════════════════════════════════════════════════
+  doc.setFillColor(244, 246, 251);
+  doc.rect(0, 38, W, 18, 'F');
+  doc.setDrawColor(220, 226, 236); doc.setLineWidth(0.25);
+  doc.line(0, 56, W, 56);
+
+  var cols3 = [M, 90, 155];
+  var labels3 = ['CLIENTE', 'OBRA / DIRECCIÓN', 'TELÉFONO'];
+  var vals3 = [
+    d.cliente || '—',
+    d.obra || '—',
+    d.tel || '—'
+  ];
+  labels3.forEach(function(lb, i) {
+    doc.setTextColor(138, 151, 176); doc.setFontSize(6.5); doc.setFont('helvetica', 'bold');
+    doc.text(lb, cols3[i], 44);
     doc.setTextColor(26, 35, 64); doc.setFontSize(9); doc.setFont('helvetica', 'bold');
-    doc.text(vals2[i].substring(0, 22), cols[i], 56);
+    doc.text(String(vals3[i]).substring(0,26), cols3[i], 51);
   });
 
-  // Etiqueta sección partidas
-  var y = 72;
-  doc.setTextColor(255, 184, 0); doc.setFontSize(7); doc.setFont('helvetica', 'bold');
-  doc.text('PARTIDAS DEL PRESUPUESTO', M, y);
-  doc.setDrawColor(255, 184, 0); doc.setLineWidth(0.3);
-  doc.line(M + 62, y - 1, W - M, y - 1);
-  y += 6;
+  y = 64;
 
-  // Cabecera tabla (navy)
-  doc.setFillColor(15, 22, 40); doc.rect(M, y, W - M * 2, 8, 'F');
-  doc.setTextColor(200, 210, 230); doc.setFontSize(7.5); doc.setFont('helvetica', 'bold');
-  doc.text('DESCRIPCIÓN', M + 2, y + 5.5);
-  doc.text('CANTIDAD', 122, y + 5.5);
-  doc.text('PRECIO', 148, y + 5.5);
-  doc.text('TOTAL', 175, y + 5.5, { align: 'right' });
-  y += 8;
+  // ══════════════════════════════════════════════════════
+  // TABLA DE PARTIDAS
+  // ══════════════════════════════════════════════════════
+  // Etiqueta sección
+  doc.setTextColor(255, 184, 0); doc.setFontSize(6.5); doc.setFont('helvetica', 'bold');
+  doc.text('DETALLE DEL PRESUPUESTO', M, y);
+  doc.setDrawColor(255, 184, 0); doc.setLineWidth(0.25);
+  doc.line(M + 54, y - 0.5, W - M, y - 0.5);
+  y += 5;
 
-  // Filas partidas
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  // Cabecera tabla
+  doc.setFillColor(15, 22, 40);
+  doc.rect(M, y, W - M*2, 7, 'F');
+  doc.setTextColor(200, 210, 230); doc.setFontSize(7); doc.setFont('helvetica', 'bold');
+  doc.text('DESCRIPCIÓN',    M + 2,   y + 4.8);
+  doc.text('M² / UNID.',     122,     y + 4.8);
+  doc.text('€/M²',           148,     y + 4.8);
+  doc.text('TOTAL',          W-M-2,   y + 4.8, { align: 'right' });
+  y += 7;
+
+  // Filas
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
   d.partidas.forEach(function(p, i) {
-    if (y > 255) { doc.addPage(); y = 20; }
+    if (y > 220) { doc.addPage(); y = 20; }
     if (i % 2 === 0) {
-      doc.setFillColor(244, 246, 251); doc.rect(M, y, W - M * 2, 9, 'F');
+      doc.setFillColor(248, 250, 253);
+      doc.rect(M, y, W - M*2, 8, 'F');
     }
-    doc.setDrawColor(230, 235, 245); doc.setLineWidth(0.2);
-    doc.line(M, y + 9, W - M, y + 9);
+    doc.setDrawColor(230, 235, 244); doc.setLineWidth(0.2);
+    doc.line(M, y + 8, W - M, y + 8);
+
     doc.setTextColor(26, 35, 64);
-    doc.text(p.desc.substring(0, 50), M + 2, y + 6);
-    doc.text(p.m2 ? p.m2 + ' m²' : '—', 122, y + 6);
-    doc.text(p.eur ? fmt(p.eur) + ' €/m²' : '—', 148, y + 6);
+    doc.text(String(p.desc).substring(0, 52), M + 2, y + 5.5);
+    doc.text(p.m2 ? String(p.m2) + ' m²' : '—', 122, y + 5.5);
+    doc.text(p.eur ? fmt(p.eur) + ' €' : '—', 148, y + 5.5);
     doc.setFont('helvetica', 'bold');
-    doc.text(fmt(p.tot) + ' €', 175, y + 6, { align: 'right' });
+    doc.text(fmt(p.tot) + ' €', W - M - 2, y + 5.5, { align: 'right' });
     doc.setFont('helvetica', 'normal');
-    y += 9;
+    y += 8;
   });
 
-  // Totales
   y += 6;
-  var tw = 82, tx = W - M - tw;
-  // Subtotal
-  doc.setFillColor(244, 246, 251); doc.rect(tx, y, tw, 8, 'F');
-  doc.setTextColor(138, 151, 176); doc.setFontSize(8.5); doc.setFont('helvetica', 'normal');
-  doc.text('Base imponible', tx + 2, y + 5.5);
+
+  // ══════════════════════════════════════════════════════
+  // TOTALES (derecha)
+  // ══════════════════════════════════════════════════════
+  var tw = 78, tx = W - M - tw;
+
+  doc.setFillColor(244, 246, 251);
+  doc.rect(tx, y, tw, 7, 'F');
+  doc.setTextColor(120, 130, 150); doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+  doc.text('Base imponible', tx + 2, y + 5);
   doc.setTextColor(26, 35, 64); doc.setFont('helvetica', 'bold');
-  doc.text(fmt(d.sub) + ' €', tx + tw - 2, y + 5.5, { align: 'right' });
-  y += 8;
-  // Comunidad
+  doc.text(fmt(d.sub) + ' €', tx + tw - 2, y + 5, { align: 'right' });
+  y += 7;
+
   if (d.comunidad) {
-    doc.setFillColor(244, 246, 251); doc.rect(tx, y, tw, 8, 'F');
-    doc.setTextColor(138, 151, 176); doc.setFontSize(8.5); doc.setFont('helvetica', 'normal');
-    doc.text('Gastos comunidad 10%', tx + 2, y + 5.5);
+    doc.setFillColor(244, 246, 251); doc.rect(tx, y, tw, 7, 'F');
+    doc.setTextColor(120, 130, 150); doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+    doc.text('Comunidad 10%', tx + 2, y + 5);
     doc.setTextColor(26, 35, 64); doc.setFont('helvetica', 'bold');
-    doc.text(fmt(d.comAmt) + ' €', tx + tw - 2, y + 5.5, { align: 'right' });
-    y += 8;
+    doc.text(fmt(d.comAmt) + ' €', tx + tw - 2, y + 5, { align: 'right' });
+    y += 7;
   }
-  // IVA / IGIC
   if (d.rate) {
-    doc.setFillColor(244, 246, 251); doc.rect(tx, y, tw, 8, 'F');
-    doc.setTextColor(138, 151, 176); doc.setFontSize(8.5); doc.setFont('helvetica', 'normal');
-    doc.text(d.igic ? 'IGIC 7%' : 'IVA 21%', tx + 2, y + 5.5);
+    doc.setFillColor(244, 246, 251); doc.rect(tx, y, tw, 7, 'F');
+    doc.setTextColor(120, 130, 150); doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+    doc.text(d.igic ? 'IGIC 7%' : 'IVA 21%', tx + 2, y + 5);
     doc.setTextColor(26, 35, 64); doc.setFont('helvetica', 'bold');
-    doc.text(fmt(d.tax) + ' €', tx + tw - 2, y + 5.5, { align: 'right' });
-    y += 8;
+    doc.text(fmt(d.tax) + ' €', tx + tw - 2, y + 5, { align: 'right' });
+    y += 7;
   }
-  // TOTAL FINAL (navy + dorado)
-  doc.setFillColor(15, 22, 40); doc.rect(tx, y, tw, 12, 'F');
-  doc.setTextColor(200, 210, 230); doc.setFontSize(8); doc.setFont('helvetica', 'bold');
-  doc.text('TOTAL PRESUPUESTO', tx + 2, y + 8);
-  doc.setTextColor(255, 184, 0); doc.setFontSize(13); doc.setFont('helvetica', 'bold');
-  doc.text(fmt(d.total) + ' €', tx + tw - 2, y + 8.5, { align: 'right' });
-  y += 18;
 
-  // Nota si existe
+  // Total final
+  doc.setFillColor(15, 22, 40);
+  doc.rect(tx, y, tw, 11, 'F');
+  doc.setTextColor(200, 215, 235); doc.setFontSize(8); doc.setFont('helvetica', 'bold');
+  doc.text('TOTAL', tx + 3, y + 7.5);
+  doc.setTextColor(255, 184, 0); doc.setFontSize(13);
+  doc.text(fmt(d.total) + ' €', tx + tw - 2, y + 7.5, { align: 'right' });
+  y += 17;
+
+  // ══════════════════════════════════════════════════════
+  // FORMA DE PAGO
+  // ══════════════════════════════════════════════════════
+  doc.setFillColor(248, 250, 253);
+  doc.roundedRect(M, y, W - M*2, 22, 2, 2, 'F');
+  doc.setDrawColor(220, 226, 236); doc.setLineWidth(0.25);
+  doc.roundedRect(M, y, W - M*2, 22, 2, 2, 'S');
+
+  doc.setTextColor(255, 184, 0); doc.setFontSize(7); doc.setFont('helvetica', 'bold');
+  doc.text('FORMA DE PAGO', M + 3, y + 6);
+  doc.setTextColor(26, 35, 64); doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+  doc.text('50% al inicio de los trabajos · 50% a la finalización', M + 3, y + 12);
+  doc.setTextColor(100, 116, 139); doc.setFontSize(7.5);
+  doc.text('Bizum · Transferencia bancaria · Efectivo', M + 3, y + 18);
+  y += 28;
+
+  // Notas si existen
   if (d.notas) {
-    doc.setFillColor(248, 249, 252); doc.rect(M, y, W - M * 2, 12, 'F');
-    doc.setDrawColor(255, 184, 0); doc.setLineWidth(1.2);
-    doc.line(M, y, M, y + 12);
-    doc.setLineWidth(0.3);
-    doc.setTextColor(100, 116, 139); doc.setFontSize(8); doc.setFont('helvetica', 'italic');
-    doc.text('Nota: ' + d.notas.substring(0, 90), M + 4, y + 7.5);
-    y += 16;
+    doc.setFillColor(255, 251, 235);
+    doc.roundedRect(M, y, W - M*2, 14, 2, 2, 'F');
+    doc.setDrawColor(255, 184, 0); doc.setLineWidth(0.8);
+    doc.line(M, y, M, y + 14);
+    doc.setLineWidth(0.2);
+    doc.setTextColor(100, 116, 139); doc.setFontSize(7.5); doc.setFont('helvetica', 'italic');
+    doc.text('Notas: ' + String(d.notas).substring(0, 95), M + 4, y + 9);
+    y += 18;
   }
 
-  // Footer página 2
-  doc.setFillColor(15, 22, 40); doc.rect(0, 279, W, 18, 'F');
-  doc.setTextColor(255, 184, 0); doc.setFontSize(10); doc.setFont('helvetica', 'bold');
-  doc.text(empresa.toUpperCase(), M, 290);
-  doc.setTextColor(138, 151, 176); doc.setFontSize(7); doc.setFont('helvetica', 'normal');
-  doc.text('Generado con PintorApp', W / 2, 290, { align: 'center' });
-  doc.text('Pág. 2', W - M, 290, { align: 'right' });
+  // ══════════════════════════════════════════════════════
+  // FOOTER
+  // ══════════════════════════════════════════════════════
+  doc.setFillColor(15, 22, 40);
+  doc.rect(0, 279, W, 18, 'F');
+  doc.setFillColor(255, 184, 0);
+  doc.rect(0, 294, W, 3, 'F');
+
+  doc.setTextColor(255, 255, 255); doc.setFontSize(8.5); doc.setFont('helvetica', 'bold');
+  doc.text(profNombre.toUpperCase(), M, 289);
+  doc.setTextColor(160, 175, 200); doc.setFontSize(7); doc.setFont('helvetica', 'normal');
+  doc.text('Presupuesto válido 30 días · Sin compromiso', W/2, 289, { align: 'center' });
+  doc.text('Generado con PintorApp', W - M, 289, { align: 'right' });
 
   doc.save('presupuesto-' + (d.ref || 'borrador') + '.pdf');
-  toast('✓ PDF premium generado');
+  toast('✓ PDF generado');
 }
 function genPDFid(id) { genPDF(id || verId); }
 
