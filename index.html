@@ -477,7 +477,13 @@ function mic(id) {
   recog = new SR();
   recog.lang = 'es-ES'; recog.continuous = false; recog.interimResults = false;
   if (btn) btn.classList.add('on');
-  recog.onresult = e => { document.getElementById(id).value = e.results[0][0].transcript; if (id === 'part-desc') calcP(); };
+  recog.onresult = e => {
+      var txt = e.results[0][0].transcript;
+      // Mayúscula inicial en cada palabra
+      txt = txt.replace(/(^|\s)([a-záéíóúüñ])/gi, function(m, s, c) { return s + c.toUpperCase(); });
+      document.getElementById(id).value = txt;
+      if (id === 'part-desc') calcP();
+    };
   recog.onend = () => { recog = null; if (btn) btn.classList.remove('on'); };
   recog.onerror = () => { recog = null; if (btn) btn.classList.remove('on'); toast('Error micrófono'); };
   recog.start();
