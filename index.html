@@ -923,31 +923,63 @@ function genPDF(id) {
   doc.text('Presupuesto válido 30 días · Sin compromiso', W/2, 289, { align: 'center' });
   doc.text('Generado con PintorApp', W - M, 289, { align: 'right' });
 
-  // Generar blob del PDF
-  var pdfBlob = doc.output('blob');
   var fileName = 'presupuesto-' + (d.ref || 'borrador') + '.pdf';
+  var pdfBlob = doc.output('blob');
+  var pdfUrl = URL.createObjectURL(pdfBlob);
 
-  // Intentar Web Share API (móvil) — comparte directamente con WhatsApp
+  // Mostrar modal de opciones: Descargar / Compartir / WhatsApp
+  var tel = d.tel ? d.tel.replace(/\D/g,'') : '';
+  var waMsg = encodeURIComponent('🎨 Te adjunto el presupuesto Nº ' + (d.ref||'') + ' para ' + (d.cliente||'') + '. Importe total: ' + fmt(d.total) + ' €.\nEn un momento te lo envío adjunto por aquí.');
+  var waUrl = tel ? 'https://wa.me/' + tel + '?text=' + waMsg : 'https://wa.me?text=' + waMsg;
+
+  // Crear modal
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,20,50,.85);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
+  overlay.innerHTML = '<div style="background:white;border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px">' +
+    '<div style="width:40px;height:4px;background:#e2e8f0;border-radius:2px;margin:0 auto 20px"></div>' +
+    '<div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:#0f1628;letter-spacing:1px;margin-bottom:6px">📄 Presupuesto listo</div>' +
+    '<div style="font-size:13px;color:#64748b;margin-bottom:20px">' + fileName + '</div>' +
+    '<div style="display:flex;flex-direction:column;gap:10px">' +
+      // Botón 1: Ver/Abrir PDF
+      '<a href="' + pdfUrl + '" target="_blank" style="display:flex;align-items:center;gap:12px;background:#f1f5f9;border-radius:12px;padding:14px 16px;text-decoration:none;color:#1a2340">' +
+        '<span style="font-size:24px">📄</span>' +
+        '<div><div style="font-weight:700;font-size:14px">Ver PDF</div><div style="font-size:12px;color:#64748b">Ábrelo y compártelo desde ahí</div></div>' +
+      '</a>' +
+      // Botón 2: Descargar
+      '<a id="pdf-dl-btn" href="' + pdfUrl + '" download="' + fileName + '" style="display:flex;align-items:center;gap:12px;background:#f1f5f9;border-radius:12px;padding:14px 16px;text-decoration:none;color:#1a2340">' +
+        '<span style="font-size:24px">⬇️</span>' +
+        '<div><div style="font-weight:700;font-size:14px">Descargar PDF</div><div style="font-size:12px;color:#64748b">Guárdalo y envíalo por WhatsApp</div></div>' +
+      '</a>' +
+      // Botón 3: WhatsApp texto (aviso de adjuntar)
+      '<a href="' + waUrl + '" target="_blank" style="display:flex;align-items:center;gap:12px;background:#dcfce7;border-radius:12px;padding:14px 16px;text-decoration:none;color:#166534">' +
+        '<span style="font-size:24px">💬</span>' +
+        '<div><div style="font-weight:700;font-size:14px">Abrir WhatsApp</div><div style="font-size:12px;color:#16a34a">Descarga el PDF y adjúntalo al chat</div></div>' +
+      '</a>' +
+      // Botón compartir nativo si disponible
+      '<button id="pdf-share-btn" style="display:none;align-items:center;gap:12px;background:#002060;border:none;border-radius:12px;padding:14px 16px;width:100%;cursor:pointer;color:white;text-align:left">' +
+        '<span style="font-size:24px">📤</span>' +
+        '<div><div style="font-weight:700;font-size:14px">Compartir directamente</div><div style="font-size:12px;color:rgba(255,255,255,.7)">Elige WhatsApp u otra app</div></div>' +
+      '</button>' +
+    '</div>' +
+    '<button onclick="this.closest('div').parentElement.remove()" style="margin-top:16px;width:100%;background:none;border:none;color:#94a3b8;font-size:14px;cursor:pointer">Cancelar</button>' +
+  '</div>';
+
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) overlay.remove(); });
+
+  // Activar botón compartir nativo si está disponible
+  var shareBtn = overlay.querySelector('#pdf-share-btn');
   if (navigator.share && navigator.canShare) {
     var file = new File([pdfBlob], fileName, { type: 'application/pdf' });
     if (navigator.canShare({ files: [file] })) {
-      navigator.share({
-        files: [file],
-        title: 'Presupuesto ' + (d.ref || ''),
-        text: '🎨 Te adjunto el presupuesto. ' + buildWA(d).split('\n').slice(0,3).join(' · ')
-      }).then(function() {
-        toast('✓ PDF compartido');
-      }).catch(function() {
-        // Si cancela, descarga normal
-        doc.save(fileName);
-        toast('✓ PDF descargado');
+      shareBtn.style.display = 'flex';
+      shareBtn.addEventListener('click', function() {
+        navigator.share({ files: [file], title: fileName }).catch(function(){});
       });
-      return;
     }
   }
-  // Fallback: descarga directa (PC o navegador sin Share API)
-  doc.save(fileName);
-  toast('✓ PDF descargado — compártelo por WhatsApp');
+
+  toast('✓ PDF generado');
 }
 function genPDFid(id) { genPDF(id || verId); }
 
